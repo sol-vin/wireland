@@ -76,6 +76,8 @@ module Wireland::App
 
   @@info_id : UInt64? = nil
 
+  @@tick_hold_time = 0.0
+
   @@last_active_pulses = [] of UInt64
   @@last_pulses = [] of UInt64
 
@@ -207,7 +209,6 @@ module Wireland::App
 
     #   collision = false
 
-      
     #   while y + a[:height] < height
     #     while x + a[:width] < width
     #       #puts "#{sorted_by_height_desc[a_i][:id]} - #{x},#{y}"
@@ -254,7 +255,6 @@ module Wireland::App
 
     # puts "OLD: #{old_width} X #{old_height}"
     # puts "NEW: #{width} X #{height}"
-
 
     {atlas: atlas_final, width: width, height: height, fill: (area / (width * height)) || 0}
   end
@@ -449,7 +449,11 @@ module Wireland::App
         @@solid_pulses = !@@solid_pulses
       end
 
-      if R.key_released?(Keys::TICK)
+      if R.key_pressed?(Keys::TICK)
+        @@tick_hold_time = R.get_time
+      end
+
+      if R.key_released?(Keys::TICK) || (R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 0.1)
         @@circuit.increase_ticks
         @@circuit.pulse_inputs
         @@circuit.pre_tick
@@ -460,6 +464,7 @@ module Wireland::App
         @@last_pulses = @@circuit.components.select(&.high?).map(&.id)
 
         @@circuit.post_tick
+        @@tick_hold_time = R.get_time
       end
 
       if R.key_released?(Keys::RESET)
@@ -557,11 +562,13 @@ module Wireland::App
           end
 
           c.xy.each do |xy|
-            R.draw_rectangle(
-              xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2,
-              xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2,
-              Scale::CIRCUIT,
-              Scale::CIRCUIT,
+            R.draw_rectangle_rec(
+              R::Rectangle.new(
+                x: (xy[:x] * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
+                y: (xy[:y] * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                width: Scale::CIRCUIT,
+                height: Scale::CIRCUIT
+              ),
               special_color
             )
           end
@@ -712,8 +719,8 @@ module Wireland::App
   end
 
   def self.draw_hud
-    R.draw_text(R.get_fps.to_s, 0, 0, 40, @@pallette.wire)
-    R.draw_text(@@circuit.ticks.to_s, 0, 50, 40, @@pallette.alt_wire)
+    R.draw_text(R.get_fps.to_s, 10, 10, 40, @@pallette.wire)
+    R.draw_text(@@circuit.ticks.to_s, 10, 60, 40, @@pallette.alt_wire)
     # R.draw_text(R.get_fps, 0, 40, 14, @@pallette.white)
   end
 
