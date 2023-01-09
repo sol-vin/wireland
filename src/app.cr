@@ -77,6 +77,8 @@ module Wireland::App
   @@info_id : UInt64? = nil
 
   @@tick_hold_time = 0.0
+  @@tick_long_hold_time = 0.0
+  @@tick_long_hold = false
 
   @@last_active_pulses = [] of UInt64
   @@last_pulses = [] of UInt64
@@ -453,7 +455,12 @@ module Wireland::App
         @@tick_hold_time = R.get_time
       end
 
-      if R.key_released?(Keys::TICK) || (R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 0.1)
+      if R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 1.0 && !@@tick_long_hold
+        @@tick_long_hold_time = R.get_time
+        @@tick_long_hold = true
+      end
+
+      if (R.key_released?(Keys::TICK) && !@@tick_long_hold) || (R.key_down?(Keys::TICK) && @@tick_long_hold && (R.get_time - @@tick_long_hold_time) > 0.1)
         @@circuit.increase_ticks
         @@circuit.pulse_inputs
         @@circuit.pre_tick
@@ -465,6 +472,9 @@ module Wireland::App
 
         @@circuit.post_tick
         @@tick_hold_time = R.get_time
+        @@tick_long_hold_time = R.get_time
+      elsif R.key_released?(Keys::TICK) && @@tick_long_hold
+        @@tick_long_hold = false
       end
 
       if R.key_released?(Keys::RESET)
