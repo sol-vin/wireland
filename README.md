@@ -1,27 +1,17 @@
-# helloworld
+# wireland
 
-TODO: Write a description here
+An esoteric logic simulator inspired by TTL. 
 
 ## Installation
 
-TODO: Write installation instructions here
+1. Install Crystal
+2. `shards install`
+3. Install Raylib from `lib/raylib-cr/rsrc`
+4. `shards build app`
 
 ## Usage
 
-TODO: Write usage instructions here
+Run `./bin/app`
+## I did this
 
-## Development
-
-TODO: Write development instructions here
-
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/helloworld/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-## Contributors
-
-- [Ian Rash](https://github.com/your-github-user) - creator and maintainer
+- [Ian Rash](https://github.com/sol-vin) - creator and maintainer
