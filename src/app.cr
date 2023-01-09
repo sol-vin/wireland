@@ -196,51 +196,181 @@ module Wireland::App
 
     sorted_by_height_desc = atlas.sort { |a, b| b[:bounds][:y] + b[:bounds][:height] <=> a[:bounds][:y] + a[:bounds][:height] }
 
-    (sorted_by_height_desc.size/2).to_i.times do |a_i|
-      a = sorted_by_height_desc[a_i][:bounds]
-      a_id = sorted_by_height_desc[a_i][:id]
+    3.times do
+      last_a_id = -1
+      index = 0
+      (sorted_by_height_desc.size).to_i.times do |a_i|
+        a = sorted_by_height_desc[index][:bounds]
+        a_id = sorted_by_height_desc[index][:id]
 
-      no_match_found = true
-      best_match = {
-        x:      0,
-        y:      0,
-        width:  0,
-        height: 0,
-      }
+        if a_id == last_a_id
+          index += 1
+          next 
+        end
 
-      r = {
-        x:      0,
-        y:      0,
-        width:  a[:width],
-        height: a[:height],
-      }
-      sorted_by_height_desc.size.times do |a_b_i|
-        b = sorted_by_height_desc[a_b_i][:bounds]
+        top_match_found = false
+        right_match_found = false
+        left_match_found = false
+        bottom_match_found = false
 
-        x = b[:x] + b[:width] + 1
-        y = b[:y]
-
-        r = {
-          x:      x,
-          y:      y,
+        r_top = {
+          x:      0,
+          y:      0,
+          width:  a[:width],
+          height: a[:height],
+        }
+        
+        r_right = {
+          x:      0,
+          y:      0,
           width:  a[:width],
           height: a[:height],
         }
 
-        next if r[:x] + r[:width] > width
-
-        collision = sorted_by_height_desc.any? { |b| b[:id] != a_id && _aabb_vs_aabb?(r, b[:bounds]) }
-        if !collision && (no_match_found || r[:y] + r[:height] < best_match[:y] + best_match[:height])
-          best_match = r
-          no_match_found = false
-        end
-      end
-
-      if !no_match_found
-        sorted_by_height_desc[a_i] = {
-          bounds: best_match,
-          id:     a_id,
+        r_left = {
+          x:      0,
+          y:      0,
+          width:  a[:width],
+          height: a[:height],
         }
+        r_bottom = {
+          x:      0,
+          y:      0,
+          width:  a[:width],
+          height: a[:height],
+        }
+
+        (sorted_by_height_desc.size-1).downto(0) do |b_i|
+          b = sorted_by_height_desc[b_i][:bounds]
+
+          # Check top side
+          x = b[:x] - a[:width]
+          y = b[:y] - a[:height] - 1
+          next if y < 0 || x + a[:width] >= width || y + a[:height] >= height
+
+          x = 0 if x < 0
+
+          until (x > b[:x] + b[:width]) || (x + a[:width] >= width)
+            r_top = {
+              x:      x,
+              y:      y,
+              width:  a[:width],
+              height: a[:height],
+            }
+
+            collision = sorted_by_height_desc.any? { |b| _aabb_vs_aabb?(r_top, b[:bounds]) }
+            if !collision
+              top_match_found = true
+              break
+            end
+
+            x += Scale::CIRCUIT.to_i
+          end
+
+          # Check right side
+          x = b[:x] + b[:width] + 1
+          y = b[:y] - a[:height]
+
+          next if x < 0 || y + a[:height] >= height || x + a[:width] >= width
+
+          y = 0 if y < 0
+
+          until (y > b[:y] + b[:height]) || (y + a[:height] >= height)
+            r_right = {
+              x:      x,
+              y:      y,
+              width:  a[:width],
+              height: a[:height],
+            }
+
+            collision = sorted_by_height_desc.any? { |b| _aabb_vs_aabb?(r_right, b[:bounds]) }
+            if !collision
+              right_match_found = true
+              break
+            end
+
+            y += Scale::CIRCUIT.to_i
+          end
+          
+          # Check left side
+          x = b[:x] - a[:width] - 1
+          y = b[:y] - a[:height]
+
+          next if x < 0 || y + a[:height] >= height || x + a[:width] >= width
+
+          y = 0 if y < 0
+
+          until (y > b[:y] + b[:height]) || (y + a[:height] >= height)
+            r_left = {
+              x:      x,
+              y:      y,
+              width:  a[:width],
+              height: a[:height],
+            }
+
+            collision = sorted_by_height_desc.any? { |b| _aabb_vs_aabb?(r_left, b[:bounds]) }
+            if !collision
+              left_match_found = true
+              break
+            end
+
+            y += Scale::CIRCUIT.to_i
+          end
+
+          unless top_match_found
+            # Check bottom side
+            x = b[:x] - a[:width]
+            y = b[:y] + b[:height] + 1
+            next if y < 0 || x + a[:width] >= width || y + a[:height] >= height
+
+            x = 0 if x < 0
+
+            until (x > b[:x] + b[:width]) || (x + a[:width] >= width)
+              r_bottom = {
+                x:      x,
+                y:      y,
+                width:  a[:width],
+                height: a[:height],
+              }
+
+              collision = sorted_by_height_desc.any? { |b| _aabb_vs_aabb?(r_bottom, b[:bounds]) }
+              if !collision
+                bottom_match_found = true
+                break
+              end
+
+              x += Scale::CIRCUIT.to_i
+            end
+          end
+        end
+
+        if top_match_found || bottom_match_found || left_match_found || right_match_found
+          rs = [] of Rectangle
+
+          rs << r_top if top_match_found
+          rs << r_bottom if bottom_match_found
+          rs << r_right if right_match_found
+          rs << r_left if left_match_found
+
+          rs.sort! {|a, b| a[:y] + a[:height] <=> b[:y] + b[:height]}
+
+          rect = {
+            bounds: rs[0],
+            id:     a_id,
+          }
+          
+          sorted_by_height_desc.each_with_index do |a_b, i|
+            if (a_b[:bounds][:y] + a_b[:bounds][:height] > rs[0][:y] + rs[0][:height])
+              sorted_by_height_desc.delete_at(index)
+              sorted_by_height_desc.insert(i, rect)
+              break
+            end
+
+            sorted_by_height_desc.delete_at(index)
+            sorted_by_height_desc << rect
+            break
+          end
+        end
       end
     end
 
@@ -287,7 +417,11 @@ module Wireland::App
       bounds
     end
 
+    start_time = R.get_time
     atlas = _pack_boxes(@@component_bounds)
+    end_time = R.get_time
+    puts "Packed #{@@circuit.components.size} in #{end_time - start_time}"
+
     @@component_atlas = atlas[:atlas]
     render_texture = R.load_render_texture(atlas[:width], atlas[:height])
 
@@ -297,7 +431,9 @@ module Wireland::App
     @@circuit.components.each do |c|
       c.xy.each do |xy|
         R.draw_rectangle(
-          @@component_atlas[c.id][:x] + ((xy[:x] * Scale::CIRCUIT) - @@component_bounds[c.id][:x]) + margin,
+          @@component_atlas[c.id][:x] +
+            ((xy[:x] * Scale::CIRCUIT) -
+            @@component_bounds[c.id][:x]) + margin,
           @@component_atlas[c.id][:y] + ((xy[:y] * Scale::CIRCUIT) - @@component_bounds[c.id][:y]) + margin,
           Scale::CIRCUIT - (margin*1.5),
           Scale::CIRCUIT - (margin*1.5),
