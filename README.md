@@ -12,6 +12,7 @@ An esoteric logic simulator inspired by TTL.
 ## Usage
 
 Run `./bin/app`
+Load `.png` files from `rsrc`
 ## I did this
 
 - [Ian Rash](https://github.com/sol-vin) - creator and maintainer
