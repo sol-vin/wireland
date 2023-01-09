@@ -191,70 +191,72 @@ module Wireland::App
       }
     end
 
-    old_height = height
-    old_width = width
+    # old_height = height
+    # old_width = width
 
-    sorted_by_height_desc = atlas.sort { |a, b| b[:bounds][:y] + b[:bounds][:height] <=> a[:bounds][:y] + a[:bounds][:height] }
+    # sorted_by_height_desc = atlas.sort {|a,b| b[:bounds][:y] + b[:bounds][:height] <=> a[:bounds][:y] + a[:bounds][:height]}
 
-    (sorted_by_height_desc.size/2).to_i.times do |a_i|
-      a = sorted_by_height_desc[a_i][:bounds]
-      a_id = sorted_by_height_desc[a_i][:id]
+    # sorted_by_height_desc.size.times do |a_i|
+    #   a = sorted_by_height_desc[a_i][:bounds]
 
-      no_match_found = true
-      best_match = {
-        x:      0,
-        y:      0,
-        width:  0,
-        height: 0,
-      }
+    #   x = 0
+    #   y = 0
 
-      r = {
-        x:      0,
-        y:      0,
-        width:  a[:width],
-        height: a[:height],
-      }
-      sorted_by_height_desc.size.times do |a_b_i|
-        b = sorted_by_height_desc[a_b_i][:bounds]
+    #   r = {
+    #     x: 0,
+    #     y: 0,
+    #     width: 0,
+    #     height: 0
+    #   }
 
-        x = b[:x] + b[:width] + 1
-        y = b[:y]
+    #   collision = false
 
-        r = {
-          x:      x,
-          y:      y,
-          width:  a[:width],
-          height: a[:height],
-        }
+    #   while y + a[:height] < height
+    #     while x + a[:width] < width
+    #       #puts "#{sorted_by_height_desc[a_i][:id]} - #{x},#{y}"
+    #       r = {
+    #         x: x + a[:width],
+    #         y: y + a[:height],
+    #         width: a[:width],
+    #         height: a[:height]
+    #       }
+    #       collision = sorted_by_height_desc.any? {|b| _aabb_vs_aabb?(r, b[:bounds])}
+    #       break unless collision
+    #       x += Scale::CIRCUIT.to_i
+    #       if x + a[:width] >= width
+    #         x = 0
+    #         break
+    #       end
+    #     end
+    #     break unless collision
+    #     y += Scale::CIRCUIT.to_i
+    #   end
 
-        next if r[:x] + r[:width] > width
+    #   unless collision
+    #     r = {
+    #       x: x + a[:width],
+    #       y: y + a[:height],
+    #       width: a[:width],
+    #       height: a[:height]
+    #     }
+    #     sorted_by_height_desc[a_i] = {
+    #       bounds: r,
+    #       id: sorted_by_height_desc[a_i][:id]
+    #     }
+    #   end
+    # end
 
-        collision = sorted_by_height_desc.any? { |b| b[:id] != a_id && _aabb_vs_aabb?(r, b[:bounds]) }
-        if !collision && (no_match_found || r[:y] + r[:height] < best_match[:y] + best_match[:height])
-          best_match = r
-          no_match_found = false
-        end
-      end
-
-      if !no_match_found
-        sorted_by_height_desc[a_i] = {
-          bounds: best_match,
-          id:     a_id,
-        }
-      end
-    end
-
-    atlas_final = sorted_by_height_desc.sort do |a, b|
+    atlas_final = atlas.sort do |a, b|
       a[:id] <=> b[:id]
     end.map do |a_b|
       a_b[:bounds]
     end
 
-    highest_y = atlas_final.sort { |a, b| b[:y] + b[:height] <=> a[:y] + a[:height] }[0]
-    height = highest_y[:y] + highest_y[:height]
+    # highest_y = atlas_final.sort {|a,b| b[:y] + b[:height] <=> a[:y] + a[:height]}[0]
+    # height = highest_y[:y] + highest_y[:height]
 
-    puts "OLD: #{old_width} X #{old_height}"
-    puts "NEW: #{width} X #{height}"
+    # puts "OLD: #{old_width} X #{old_height}"
+    # puts "NEW: #{width} X #{height}"
 
     {atlas: atlas_final, width: width, height: height, fill: (area / (width * height)) || 0}
   end
