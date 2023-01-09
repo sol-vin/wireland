@@ -13,11 +13,7 @@ class Wireland::Component::Buffer < Wireland::Component
 
   def on_high
     # Buffer can only accept pulses from something that is not also connected to it. (one way input only) This must be Start or DiodeOut or NotOut
-    if pulses.size > 0
-      state_queue << true
-    else
-      state_queue << false
-    end
+    state_queue << true
   end
 
   def on_low

@@ -601,11 +601,13 @@ module Wireland::App
           )
         elsif @@show_pulses
           c.xy.each do |xy|
-            R.draw_rectangle(
-              xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2,
-              xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2,
-              Scale::CIRCUIT,
-              Scale::CIRCUIT,
+            R.draw_rectangle_rec(
+              R::Rectangle.new(
+                x: (xy[:x] * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
+                y: (xy[:y] * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                width: Scale::CIRCUIT,
+                height: Scale::CIRCUIT
+              ),
               color
             )
           end
@@ -719,8 +721,8 @@ module Wireland::App
   end
 
   def self.draw_hud
-    R.draw_text(R.get_fps.to_s, 10, 10, 40, @@pallette.wire)
-    R.draw_text(@@circuit.ticks.to_s, 10, 60, 40, @@pallette.alt_wire)
+    R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@pallette.alt_wire)
+    R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@pallette.wire)
     # R.draw_text(R.get_fps, 0, 40, 14, @@pallette.white)
   end
 

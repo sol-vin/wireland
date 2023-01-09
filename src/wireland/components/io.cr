@@ -31,6 +31,10 @@ class Wireland::Component::InputOn < Wireland::Component
     true
   end
 
+  def self.output_whitelist
+    [*super, Wireland::Component::Buffer]
+  end
+
   include Wireland::IO
 
   @on = true
@@ -53,6 +57,10 @@ end
 class Wireland::Component::InputOff < Wireland::Component
   def self.allow_adjacent?
     true
+  end
+
+  def self.output_whitelist
+    [*super, Wireland::Component::Buffer]
   end
 
   include Wireland::IO
@@ -78,6 +86,10 @@ class Wireland::Component::InputToggleOn < Wireland::Component
     true
   end
 
+  def self.output_whitelist
+    [*super, Wireland::Component::Buffer]
+  end
+
   include Wireland::IO
 
   @on = true 
@@ -101,6 +113,10 @@ end
 class Wireland::Component::InputToggleOff < Wireland::Component
   def self.allow_adjacent?
     true
+  end
+
+  def self.output_whitelist
+    [*super, Wireland::Component::Buffer]
   end
 
   include Wireland::IO
