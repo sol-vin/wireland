@@ -648,35 +648,37 @@ module Wireland::App
 
       center_x = Screen::WIDTH/2
 
+      title_size = 60
+      text_size = 30
+
+      offset = title_size + 20
+
       text = "#{@@circuit[info_id].class.to_s.split("::").last}"
-      text_size = 40
-      text_length = R.measure_text(text, text_size)
+      text_length = R.measure_text(text, title_size)
       R.draw_text(
         text,
         center_x - text_length/2,
         rect[:y] + 10,
-        text_size,
+        title_size,
         @@pallette.bg
       )
 
       text = "ID: #{@@info_id}"
-      text_size = 25
       text_length = R.measure_text(text, text_size)
       R.draw_text(
         text,
         rect[:x] + 30,
-        rect[:y] + 50,
+        rect[:y] + offset,
         text_size,
         @@pallette.bg
       )
 
       text = "HIGH: #{@@last_pulses.includes? info_id}"
-      text_size = 25
       text_length = R.measure_text(text, text_size)
       R.draw_text(
         text,
         rect[:x] + 30,
-        rect[:y] + 50 + (text_size + 10),
+        rect[:y] + offset + (text_size + 10),
         text_size,
         @@pallette.bg
       )
@@ -684,45 +686,41 @@ module Wireland::App
       if @@circuit[info_id].is_a?(Wireland::IO)
         io = @@circuit[info_id].as(Wireland::IO)
         text = "ON: #{io.on?}"
-        text_size = 25
         text_length = R.measure_text(text, text_size)
         R.draw_text(
           text,
           rect[:x] + 30,
-          rect[:y] + 50 + (text_size + 10) * 2,
+          rect[:y] + offset + (text_size + 10) * 2,
           text_size,
           @@pallette.bg
         )
       elsif @@circuit[info_id].is_a?(Wireland::RelayPole)
         text = "CONDUCTIVE: #{@@circuit[info_id].conductive?}"
-        text_size = 25
         text_length = R.measure_text(text, text_size)
         R.draw_text(
           text,
           rect[:x] + 30,
-          rect[:y] + 50 + (text_size + 10) * 2,
+          rect[:y] + offset + (text_size + 10) * 2,
           text_size,
           @@pallette.bg
         )
       elsif @@circuit[info_id].class.active?
         text = "ACTIVE: #{@@last_active_pulses.includes?(info_id)}"
-        text_size = 25
         text_length = R.measure_text(text, text_size)
         R.draw_text(
           text,
           rect[:x] + 30,
-          rect[:y] + 50 + (text_size + 10)*2,
+          rect[:y] + offset + (text_size + 10)*2,
           text_size,
           @@pallette.bg
         )
 
         text = "WILL ACTIVE: #{@@circuit.active_pulses.keys.includes?(info_id)}"
-        text_size = 25
         text_length = R.measure_text(text, text_size)
         R.draw_text(
           text,
           rect[:x] + 30,
-          rect[:y] + 50 + (text_size + 10)*3,
+          rect[:y] + offset + (text_size + 10)*3,
           text_size,
           @@pallette.bg
         )
