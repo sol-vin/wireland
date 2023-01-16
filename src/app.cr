@@ -104,30 +104,24 @@ module Wireland::App
     return !(a_right_b || a_left_b || a_above_b || a_below_b)
   end
 
-  # Adapted from https://github.com/mapbox/potpack/blob/main/index.js
   private def self._pack_boxes(boxes : Array(Rectangle))
     area = 0
     max_width = 0
 
+    # Adapted from https://github.com/mapbox/potpack/blob/main/index.js
     atlas_boxes = boxes.map_with_index do |box, i|
       area += box[:width] * box[:height]
       max_width = Math.max(box[:width], max_width)
-      {bounds: box, id: i}
-    end
-
-    atlas_boxes.sort! { |a, b| b[:bounds][:height] <=> a[:bounds][:width] }
-    atlas_boxes.map! do |a_b|
       {
-        bounds: {
+          bounds: {
           x:      0,
           y:      0,
-          width:  a_b[:bounds][:width],
-          height: a_b[:bounds][:height],
-        },
-
-        id: a_b[:id],
+          width:  box[:width],
+          height: box[:height],
+        }, 
+        id: i
       }
-    end
+    end.sort { |a, b| b[:bounds][:height] <=> a[:bounds][:height] }
 
     start_width = Math.max((Math.sqrt(area / 0.95)).ceil, max_width)
     spaces = [{x: 0, y: 0, width: start_width, height: Int32::MAX}]
@@ -137,8 +131,8 @@ module Wireland::App
 
     atlas = atlas_boxes.map do |a_b|
       box = a_b[:bounds]
-      (spaces.size - 1).downto(0) do |space_i|
-        space = spaces[space_i]
+      spaces.sort!{|a,b| a[:y] <=> b[:y]}
+      spaces.each_with_index do |space, space_i|
         next if (box[:width] > space[:width] || box[:height] > space[:height])
 
         box = {
@@ -152,8 +146,7 @@ module Wireland::App
         width = Math.max(width, box[:x] + box[:width])
 
         if box[:width] == space[:width] && box[:height] == space[:height]
-          last = spaces.pop
-          spaces << last if space_i < spaces.size
+          spaces.delete_at(space_i)
         elsif box[:height] == space[:height]
           spaces[space_i] = {
             x:      space[:x] + box[:width],
@@ -169,19 +162,21 @@ module Wireland::App
             height: space[:height] - box[:height],
           }
         else
-          spaces << {
-            x:      space[:x] + box[:width],
-            y:      space[:y],
-            width:  space[:width] - box[:width],
-            height: box[:height],
-          }
+          spaces.delete_at(space_i)
 
-          spaces[space_i] = {
+          spaces.push({
             x:      space[:x],
             y:      space[:y] + box[:height],
             width:  space[:width],
             height: space[:height] - box[:height],
-          }
+          })
+
+          spaces.push({
+            x:      space[:x] + box[:width],
+            y:      space[:y],
+            width:  space[:width] - box[:width],
+            height: box[:height],
+          })
         end
         break
       end
@@ -191,72 +186,11 @@ module Wireland::App
       }
     end
 
-    # old_height = height
-    # old_width = width
-
-    # sorted_by_height_desc = atlas.sort {|a,b| b[:bounds][:y] + b[:bounds][:height] <=> a[:bounds][:y] + a[:bounds][:height]}
-
-    # sorted_by_height_desc.size.times do |a_i|
-    #   a = sorted_by_height_desc[a_i][:bounds]
-
-    #   x = 0
-    #   y = 0
-
-    #   r = {
-    #     x: 0,
-    #     y: 0,
-    #     width: 0,
-    #     height: 0
-    #   }
-
-    #   collision = false
-
-    #   while y + a[:height] < height
-    #     while x + a[:width] < width
-    #       #puts "#{sorted_by_height_desc[a_i][:id]} - #{x},#{y}"
-    #       r = {
-    #         x: x + a[:width],
-    #         y: y + a[:height],
-    #         width: a[:width],
-    #         height: a[:height]
-    #       }
-    #       collision = sorted_by_height_desc.any? {|b| _aabb_vs_aabb?(r, b[:bounds])}
-    #       break unless collision
-    #       x += Scale::CIRCUIT.to_i
-    #       if x + a[:width] >= width
-    #         x = 0
-    #         break
-    #       end
-    #     end
-    #     break unless collision
-    #     y += Scale::CIRCUIT.to_i
-    #   end
-
-    #   unless collision
-    #     r = {
-    #       x: x + a[:width],
-    #       y: y + a[:height],
-    #       width: a[:width],
-    #       height: a[:height]
-    #     }
-    #     sorted_by_height_desc[a_i] = {
-    #       bounds: r,
-    #       id: sorted_by_height_desc[a_i][:id]
-    #     }
-    #   end
-    # end
-
     atlas_final = atlas.sort do |a, b|
       a[:id] <=> b[:id]
     end.map do |a_b|
       a_b[:bounds]
     end
-
-    # highest_y = atlas_final.sort {|a,b| b[:y] + b[:height] <=> a[:y] + a[:height]}[0]
-    # height = highest_y[:y] + highest_y[:height]
-
-    # puts "OLD: #{old_width} X #{old_height}"
-    # puts "NEW: #{width} X #{height}"
 
     {atlas: atlas_final, width: width, height: height, fill: (area / (width * height)) || 0}
   end
@@ -290,6 +224,7 @@ module Wireland::App
     end
 
     atlas = _pack_boxes(@@component_bounds)
+
     @@component_atlas = atlas[:atlas]
     render_texture = R.load_render_texture(atlas[:width], atlas[:height])
 
