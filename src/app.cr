@@ -40,6 +40,7 @@ module Wireland::App
     SOLID_PULSES = R::KeyboardKey::W
     TICK         = R::KeyboardKey::Space
     RESET        = R::KeyboardKey::R
+    PLAY         = R::KeyboardKey::Enter
   end
 
   module Mouse
@@ -73,6 +74,9 @@ module Wireland::App
   @@show_help = false
   @@show_pulses = false
   @@solid_pulses = false
+  @@play = false
+  @@play_time = 0.0
+  @@play_tick_time = 0.5
 
   @@info_id : UInt64? = nil
 
@@ -96,14 +100,6 @@ module Wireland::App
     !(@@circuit_texture.width == 0 && @@circuit_texture.height == 0)
   end
 
-  private def self._aabb_vs_aabb?(a : Rectangle, b : Rectangle)
-    a_right_b = a[:x] > b[:x] + b[:width]
-    a_left_b = a[:x] + a[:width] < b[:x]
-    a_above_b = a[:y] + a[:height] < b[:y]
-    a_below_b = a[:y] > b[:y] + b[:height]
-    return !(a_right_b || a_left_b || a_above_b || a_below_b)
-  end
-
   private def self._pack_boxes(boxes : Array(Rectangle))
     area = 0
     max_width = 0
@@ -113,13 +109,13 @@ module Wireland::App
       area += box[:width] * box[:height]
       max_width = Math.max(box[:width], max_width)
       {
-          bounds: {
+        bounds: {
           x:      0,
           y:      0,
           width:  box[:width],
           height: box[:height],
-        }, 
-        id: i
+        },
+        id: i,
       }
     end.sort { |a, b| b[:bounds][:height] <=> a[:bounds][:height] }
 
@@ -131,7 +127,7 @@ module Wireland::App
 
     atlas = atlas_boxes.map do |a_b|
       box = a_b[:bounds]
-      spaces.sort!{|a,b| a[:y] <=> b[:y]}
+      spaces.sort! { |a, b| a[:y] <=> b[:y] }
       spaces.each_with_index do |space, space_i|
         next if (box[:width] > space[:width] || box[:height] > space[:height])
 
@@ -390,25 +386,24 @@ module Wireland::App
         @@tick_hold_time = R.get_time
       end
 
+      if R.key_released?(Keys::PLAY)
+        @@play = !@@play
+        @@play_time = R.get_time
+      end
+
+      if @@play && ((R.get_time - @@play_time) > @@play_tick_time)
+        tick
+        @@play_time = R.get_time
+      end
+
       if R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 1.0 && !@@tick_long_hold
         @@tick_long_hold_time = R.get_time
         @@tick_long_hold = true
       end
 
       if (R.key_released?(Keys::TICK) && !@@tick_long_hold) || (R.key_down?(Keys::TICK) && @@tick_long_hold && (R.get_time - @@tick_long_hold_time) > 0.1)
-        @@circuit.increase_ticks
-        @@circuit.pulse_inputs
-        @@circuit.pre_tick
-
-        @@last_active_pulses = @@circuit.active_pulses.keys
-
-        @@circuit.mid_tick
-        @@last_pulses = @@circuit.components.select(&.high?).map(&.id)
-
-        @@circuit.post_tick
-        @@tick_hold_time = R.get_time
-        @@tick_long_hold_time = R.get_time
-      elsif R.key_released?(Keys::TICK) && @@tick_long_hold
+        tick
+      elsif R.key_up?(Keys::TICK) && @@tick_long_hold
         @@tick_long_hold = false
       end
 
@@ -416,6 +411,21 @@ module Wireland::App
         reset
       end
     end
+  end
+
+  def self.tick
+    @@circuit.increase_ticks
+    @@circuit.pulse_inputs
+    @@circuit.pre_tick
+
+    @@last_active_pulses = @@circuit.active_pulses.keys
+
+    @@circuit.mid_tick
+    @@last_pulses = @@circuit.components.select(&.high?).map(&.id)
+
+    @@circuit.post_tick
+    @@tick_hold_time = R.get_time
+    @@tick_long_hold_time = R.get_time
   end
 
   def self.handle_io_mouse
@@ -663,6 +673,135 @@ module Wireland::App
     end
   end
 
+  def self.draw_help
+    if @@show_help
+      width = Screen::WIDTH/2
+      height = Screen::HEIGHT/2
+
+      rect = {
+        x:      width/2,
+        y:      height/2,
+        width:  width,
+        height: height,
+      }
+
+      R.draw_rectangle(
+        rect[:x],
+        rect[:y],
+        width,
+        height + 40,
+        @@pallette.wire
+      )
+
+      center_x = Screen::WIDTH/2
+
+      title_size = 60
+      text_size = 30
+
+      offset = title_size + 20
+
+      text = "Help"
+      text_length = R.measure_text(text, title_size)
+      R.draw_text(
+        text,
+        center_x - text_length/2,
+        rect[:y] + 10,
+        title_size,
+        @@pallette.bg
+      )
+
+      text = "Space - Increase Tick"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "R - Reset"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10),
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Left Click - Input Interact"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 2,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Middle Mouse - Pan"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 3,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Mouse Wheel - Zoom"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 4,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Right Click - Show Info"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 5,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Q - Show Pulses"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 6,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "W - Solid Pulses"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 7,
+        text_size,
+        @@pallette.bg
+      )
+
+      text = "Enter - Play"
+      text_length = R.measure_text(text, text_size)
+      R.draw_text(
+        text,
+        rect[:x] + 30,
+        rect[:y] + offset + (text_size + 10) * 8,
+        text_size,
+        @@pallette.bg
+      )
+    end
+  end
+
   def self.draw_hud
     R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@pallette.alt_wire)
     R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@pallette.wire)
@@ -698,10 +837,11 @@ module Wireland::App
       if is_circuit_loaded?
         draw_circuit
         draw_components
-        draw_component_atlas
+        # draw_component_atlas
       end
       R.end_mode_2d
       draw_info
+      draw_help
       draw_hud
 
       R.end_drawing
