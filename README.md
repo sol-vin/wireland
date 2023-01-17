@@ -1,4 +1,4 @@
-![logo](rsrc/wireland.png)
+![logo](rsrc/images/wireland.png)
 
 # wireland
 
