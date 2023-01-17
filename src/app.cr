@@ -205,10 +205,13 @@ module Wireland::App
   end
 
   def self.load_circuit(file)
+    puts "Loading circuit from #{file}"
     @@circuit = W::Circuit.new(file, @@pallette)
+    puts "Loaded circuit from #{file}"
     R.unload_texture(@@circuit_texture) if is_circuit_loaded?
     @@circuit_texture = R.load_texture(file)
 
+    puts "Resetting circuit"
     reset
 
     R.unload_texture(@@component_texture) if @@component_texture.width != 0 && @@component_texture.height != 0
@@ -232,7 +235,9 @@ module Wireland::App
       bounds
     end
 
+    puts "Packing boxes"
     atlas = _pack_boxes(@@component_bounds)
+    puts "Finished packing boxes"
 
     @@component_atlas = atlas[:atlas]
     render_texture = R.load_render_texture(atlas[:width], atlas[:height])
@@ -250,9 +255,13 @@ module Wireland::App
           R::WHITE
         )
       end
+
+
       R.set_window_title("wireland #{((1.0 - ((@@circuit.last_id - c.id)/@@circuit.last_id)) * 100).floor}%")
     end
     R.end_texture_mode
+    puts "Finished drawing atlas texture"
+
     delimit = ""
     {% if flag?(:windows) %}
       delimit = "\\"
@@ -299,7 +308,9 @@ module Wireland::App
         @@camera.target.x = 0
         @@camera.target.y = 0
 
+        start_time = R.get_time
         load_circuit(circuit_file)
+        puts "Total time: #{R.get_time - start_time}"
       end
     end
   end
