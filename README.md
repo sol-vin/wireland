@@ -1,3 +1,5 @@
+![logo](rsrc/wireland.png)
+
 # wireland
 
 An esoteric logic simulator inspired by TTL. 

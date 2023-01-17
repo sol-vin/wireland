@@ -7,8 +7,11 @@ class Wireland::Circuit
   def load(image : R::Image, pallette : Wireland::Pallette = Wireland::Pallette::DEFAULT) : Array(WC)
     raise "No file" if image.width <= 0
 
+    start_time = R.get_time
     pallette.load_into_components
+    puts "Pallette loaded in #{R.get_time - start_time}"
 
+    start_time = R.get_time
     # List of pixels that are in our pallette
     component_points = {} of WC.class => Array(Point)
     WC.all.each { |c| component_points[c] = [] of Point }
@@ -20,9 +23,10 @@ class Wireland::Circuit
         end
       end
     end
+    puts "Pixels sorted in #{R.get_time - start_time}"
 
+    start_time = R.get_time
     components = [] of WC
-
     id = 0_u64
     # Go through each component point
     component_points.each do |component_class, pixel_xy|
@@ -45,6 +49,7 @@ class Wireland::Circuit
         end
       end
     end
+    puts "Components shaped in #{R.get_time - start_time}"
 
     adjacent = [
       {x: 0, y: -1},
@@ -53,6 +58,7 @@ class Wireland::Circuit
       {x: 1, y: 0},
     ]
 
+    start_time = R.get_time
     # Connect each of the components
     components.each do |component|
       # Select only components that are valid output destinations
@@ -68,6 +74,7 @@ class Wireland::Circuit
         component.connects << vc.id if is_vc_neighbors && vc.id != component.id
       end
     end
+    puts "Components connected in #{R.get_time - start_time}"
     @last_id = components.sort { |a,b| b.id <=> a.id }[0].id
     # Setup all the components. Cross, Tunnel, etc
     components
