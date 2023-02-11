@@ -82,6 +82,10 @@ module Wireland::App
 
   @@logo_texture = R::Texture.new
 
+  @@tick_texture = R::Texture.new
+  @@play_texture = R::Texture.new
+
+
   @@camera = R::Camera2D.new
   @@camera.zoom = Screen::Zoom::LIMIT_LOWER
   @@camera.offset.x = Screen::WIDTH/2
@@ -298,6 +302,7 @@ module Wireland::App
   # Handles when files are dropped into the window, specifically .pal and .png files.
   def self.handle_dropped_files
     if R.file_dropped?
+      draw_loading
       dropped_files = R.load_dropped_files
       # Go through all the files dropped
       files = [] of String
@@ -736,7 +741,7 @@ module Wireland::App
     end
   end
 
-  def draw_loading
+  def self.draw_loading
     text = "Loading"
     text_size = 60
     text_length = R.measure_text(text, text_size)
@@ -756,14 +761,76 @@ module Wireland::App
   end
 
   def self.draw_ticks_counter
-    width = Screen::WIDTH * 0.05
-    height = Screen::HEIGHT * 0.05
+    scale_w = 0.1
+    scale_h = 0.05
+    margin_x = 0.05
+    margin_y = 0.1
 
-    i_width = width - width*0.1
-    i_height = height - height*0.1
+    width = Screen::WIDTH * scale_w
+    height = Screen::HEIGHT * scale_h
+    x = Screen::WIDTH - width
+    y = Screen::HEIGHT - height
 
-    R.draw_rectangle(Screen::WIDTH - width, Screen::HEIGHT - height, width, height, @@palette.wire)
-    R.draw_rectangle_lines(Screen::WIDTH - width + (width-i_width/2), Screen::HEIGHT - height + (height-i_height/2), i_width, i_height, @@palette.bg)
+
+    i_width = width - width*margin_x
+    i_height = height - height*margin_y
+    i_margin_x = ((width-i_width)/2)
+    i_margin_y = ((height-i_height)/2)
+
+    i_x = x + i_margin_x
+    i_y = y + i_margin_y
+
+    text = (@@circuit.ticks).to_s
+    text_size = i_height - i_height*margin_y
+    text_length = R.measure_text(text, text_size)
+
+    text_x = i_x + i_width - text_length - i_margin_x*3
+    text_y = i_y + i_margin_y
+
+    
+
+
+    icon_dst = R::Rectangle.new(
+      x: i_x + i_margin_x, 
+      y: i_y + i_margin_y,
+      width: text_size,
+      height: text_size
+    )
+
+    if (text_length + text_size) > i_width
+      i_width = text_length + text_size + i_width*margin_x
+      width = i_width + i_width*margin_x
+      x = Screen::WIDTH - width
+      i_x = x + i_margin_x
+      clock_dst = R::Rectangle.new(
+        x: text_x - text_size, 
+        y: text_y,
+        width: text_size,
+        height: text_size
+      )  
+    end
+
+
+    R.draw_rectangle(x, y, width, height, @@palette.wire)
+    R.draw_rectangle_lines(i_x, i_y, i_width, i_height, @@palette.bg)
+    R.draw_text(text, text_x, text_y, text_size, @@palette.bg)
+    if @@play
+      icon_src = R::Rectangle.new(
+        x: 0,
+        y: 0,
+        width: @@play_texture.width,
+        height: @@play_texture.height
+      )
+      R.draw_texture_pro(@@play_texture, icon_src, icon_dst, V2.zero, 0, R::WHITE)
+    else
+      icon_src = R::Rectangle.new(
+        x: 0,
+        y: 0,
+        width: @@tick_texture.width,
+        height: @@tick_texture.height
+      )
+      R.draw_texture_pro(@@tick_texture, icon_src, icon_dst, V2.zero, 0, R::WHITE)
+    end
   end
 
   def self.run
@@ -771,6 +838,8 @@ module Wireland::App
     R.set_target_fps(30)
 
     @@logo_texture = R.load_texture("rsrc/sim/logo.png")
+    @@tick_texture = R.load_texture("rsrc/sim/clock.png")
+    @@play_texture = R.load_texture("rsrc/sim/play.png")
 
     until R.close_window?
       handle_dropped_files
@@ -823,16 +892,20 @@ module Wireland::App
         draw_components
       end
       R.end_mode_2d
-      draw_info
-      draw_help
-      #draw_debug_hud
-
+      if is_circuit_loaded?
+        draw_info
+        draw_help
+        draw_ticks_counter
+        #draw_debug_hud
+      end
       R.end_drawing
     end
 
     R.unload_texture(@@circuit_texture) if is_circuit_loaded?
     R.unload_texture(@@component_texture) if is_component_loaded?
     R.unload_texture(@@logo_texture)
+    R.unload_texture(@@tick_texture)
+    R.unload_texture(@@play_texture)
 
     R.close_window
   end
