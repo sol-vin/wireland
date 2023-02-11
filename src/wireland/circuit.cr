@@ -4,15 +4,15 @@ class Wireland::Circuit
   alias WC = Wireland::Component
   alias R = Raylib
 
-  def load(image : R::Image, pallette : Wireland::Pallette = Wireland::Pallette::DEFAULT) : Array(WC)
-    raise "No file" if image.width <= 0
+  def load(image : R::Image, palette : Wireland::Palette = Wireland::Palette::DEFAULT) : Array(WC)
+    raise "No file" if image.width == 0
 
     start_time = R.get_time
-    pallette.load_into_components
-    puts "Pallette loaded in #{R.get_time - start_time}"
+    palette.load_into_components
+    puts "Palette loaded in #{R.get_time - start_time}"
 
     start_time = R.get_time
-    # List of pixels that are in our pallette
+    # List of pixels that are in our palette
     component_points = {} of WC.class => Array(Point)
     WC.all.each { |c| component_points[c] = [] of Point }
     image.width.times do |x|
@@ -143,7 +143,7 @@ class Wireland::Circuit
   end
 
   # Palette of colors that will be loaded into our component classes.
-  property pallette : Wireland::Pallette = Wireland::Pallette::DEFAULT
+  property palette : Wireland::Palette = Wireland::Palette::DEFAULT
 
   # List of all components in this circuit
   property components = [] of WC
@@ -158,25 +158,25 @@ class Wireland::Circuit
   def initialize
   end
 
-  def initialize(filename : String, pallette_file : String)
-    @pallette = Wireland::Pallette.new(pallette_file)
+  def initialize(filename : String, palette_file : String)
+    @palette = Wireland::Palette.new(palette_file)
     image = R.load_image(filename)
-    @components = load(image, @pallette)
+    @components = load(image, @palette)
     R.unload_image image
     components.each(&.setup)
     reset
   end
 
-  def initialize(filename : String, @pallette : Wireland::Pallette = Wireland::Pallette::DEFAULT)
+  def initialize(filename : String, @palette : Wireland::Palette = Wireland::Palette::DEFAULT)
     image = R.load_image(filename)
-    @components = load(image, @pallette)
+    @components = load(image, @palette)
     R.unload_image image
     components.each(&.setup)
     reset
   end
 
-  def initialize(image : R::Image, @pallette : Wireland::Pallette = Wireland::Pallette::DEFAULT)
-    @components = load(image, pallette)
+  def initialize(image : R::Image, @palette : Wireland::Palette = Wireland::Palette::DEFAULT)
+    @components = load(image, palette)
     components.each(&.setup)
     reset
   end

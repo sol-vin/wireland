@@ -47,9 +47,9 @@ class Wireland::Component::InputOn < Wireland::Component
 
   def color
     if on?
-      parent.pallette.input_on
+      parent.palette.input_on
     else
-      parent.pallette.input_off
+      parent.palette.input_off
     end
   end
 end
@@ -74,9 +74,9 @@ class Wireland::Component::InputOff < Wireland::Component
   
   def color
     if on?
-      parent.pallette.input_on
+      parent.palette.input_on
     else
-      parent.pallette.input_off
+      parent.palette.input_off
     end
   end
 end
@@ -103,9 +103,9 @@ class Wireland::Component::InputToggleOn < Wireland::Component
   
   def color
     if on?
-      parent.pallette.input_toggle_on
+      parent.palette.input_toggle_on
     else
-      parent.pallette.input_toggle_off
+      parent.palette.input_toggle_off
     end
   end
 end
@@ -129,9 +129,9 @@ class Wireland::Component::InputToggleOff < Wireland::Component
 
   def color
     if on?
-      parent.pallette.input_toggle_on
+      parent.palette.input_toggle_on
     else
-      parent.pallette.input_toggle_off
+      parent.palette.input_toggle_off
     end
   end
 end
@@ -153,9 +153,9 @@ class Wireland::Component::OutputOn < Wireland::Component
 
   def color
     if on?
-      parent.pallette.output_off
+      parent.palette.output_off
     else
-      parent.pallette.output_on
+      parent.palette.output_on
     end
   end
 end
@@ -177,9 +177,9 @@ class Wireland::Component::OutputOff < Wireland::Component
 
   def color
     if on?
-      parent.pallette.output_on
+      parent.palette.output_on
     else
-      parent.pallette.output_off
+      parent.palette.output_off
     end
   end
 end

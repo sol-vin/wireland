@@ -1,8 +1,8 @@
 require "./spec_helper"
 
-describe Wireland::Pallette do
+describe Wireland::Palette do
   it "should be able to read a palette in" do
-    palette = Wireland::Pallette.new("rsrc/wireland.pal")
-    palette = Wireland::Pallette.new("rsrc/wireland-alt.pal")
+    palette = Wireland::Palette.new("rsrc/wireland.pal")
+    palette = Wireland::Palette.new("rsrc/wireland-alt.pal")
   end
 end

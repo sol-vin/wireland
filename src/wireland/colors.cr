@@ -34,12 +34,12 @@ module Wireland::DefaultColors
   BLACK = R::Color.new(r: 0x18, g: 0x14, b: 0x25, a: 0xFF)
 end
 
-struct Wireland::Pallette
+struct Wireland::Palette
   alias DC = Wireland::DefaultColors
   alias WC = Wireland::Component
   alias R = Raylib
 
-  DEFAULT = Wireland::Pallette.new(
+  DEFAULT = Wireland::Palette.new(
     start: DC::LIGHT_GREEN,
     buffer: DC::DARK_BLUE,
     wire: DC::WHITE,
@@ -213,7 +213,7 @@ struct Wireland::Pallette
         r = u8s[0]
         g = u8s[1]
         b = u8s[2]
-        raise "invalid color #{[r, g, b]} in pallette " if [r, g, b].any? { |i| i < 0 || i > 255 }
+        raise "invalid color #{[r, g, b]} in palette " if [r, g, b].any? { |i| i < 0 || i > 255 }
 
         return R::Color.new(r: r, g: g, b: b, a: 255)
       end

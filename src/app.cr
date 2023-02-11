@@ -72,7 +72,7 @@ module Wireland::App
     W - Solid Pulses].sub("\n", "").gsub("\r", "")
   end
 
-  @@pallette = W::Pallette::DEFAULT
+  @@palette = W::Palette::DEFAULT
   @@circuit = W::Circuit.new
   @@circuit_texture = R::Texture.new
 
@@ -219,7 +219,7 @@ module Wireland::App
   # Loads the circuit from a file
   def self.load_circuit(file)
     puts "Loading circuit from #{file}"
-    @@circuit = W::Circuit.new(file, @@pallette)
+    @@circuit = W::Circuit.new(file, @@palette)
     puts "Loaded circuit from #{file}"
     R.unload_texture(@@circuit_texture) if is_circuit_loaded?
     @@circuit_texture = R.load_texture(file)
@@ -306,8 +306,8 @@ module Wireland::App
       R.unload_dropped_files(dropped_files)
 
       # Find the first palette file
-      if pallette_file = files.find { |f| /\.pal$/ =~ f }
-        @@pallette = W::Pallette.new(pallette_file)
+      if palette_file = files.find { |f| /\.pal$/ =~ f }
+        @@palette = W::Palette.new(palette_file)
       end
 
       # Find the first png file
@@ -581,7 +581,7 @@ module Wireland::App
                 height: @@component_atlas[c.id][:height],
               ),
               V2.new(x: @@component_bounds[c.id][:x] - @@circuit_texture.width/2, y: @@component_bounds[c.id][:y] - @@circuit_texture.height/2),
-              @@pallette.bg
+              @@palette.bg
             )
           end
         end
@@ -631,7 +631,7 @@ module Wireland::App
       rect[:y],
       width,
       height,
-      @@pallette.wire
+      @@palette.wire
     )
 
     center_x = Screen::WIDTH/2
@@ -647,7 +647,7 @@ module Wireland::App
       center_x - text_length/2,
       rect[:y] + 10,
       title_size,
-      @@pallette.bg
+      @@palette.bg
     )
 
     text_bounds = R.measure_text_ex(R.get_font_default, text, max_text_size, 1.0)
@@ -662,7 +662,7 @@ module Wireland::App
       V2.new(x: rect[:x] + 30, y: rect[:y] + offset),
       text_size,
       1.0,
-      @@pallette.bg
+      @@palette.bg
     )
   end
 
@@ -699,11 +699,11 @@ module Wireland::App
   end
 
   def self.draw_hud
-    R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@pallette.alt_wire)
-    R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@pallette.wire)
-    R.draw_text("#{@@camera.zoom}\n#{@@play_speeds[@@play_speed]}", 10, 60, 40, @@pallette.wire)
+    R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@palette.alt_wire)
+    R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@palette.wire)
+    R.draw_text("#{@@camera.zoom}\n#{@@play_speeds[@@play_speed]}", 10, 60, 40, @@palette.wire)
 
-    # R.draw_text(R.get_fps, 0, 40, 14, @@pallette.white)
+    # R.draw_text(R.get_fps, 0, 40, 14, @@palette.white)
   end
 
   def self.run
@@ -725,12 +725,12 @@ module Wireland::App
       end
 
       R.begin_drawing
-      R.clear_background(@@pallette.bg)
+      R.clear_background(@@palette.bg)
       if !is_circuit_loaded?
         text = "Drop a .pal or .png to begin!"
         text_size = 30
         text_length = R.measure_text(text, text_size)
-        R.draw_text(text, Screen::WIDTH/2 - text_length/2, Screen::HEIGHT/2 - text_size/2, text_size, @@pallette.wire)
+        R.draw_text(text, Screen::WIDTH/2 - text_length/2, Screen::HEIGHT/2 - text_size/2, text_size, @@palette.wire)
       end
       R.begin_mode_2d @@camera
       if is_circuit_loaded?
