@@ -80,6 +80,8 @@ module Wireland::App
   @@component_atlas = Array(Rectangle).new
   @@component_bounds = Array(Rectangle).new
 
+  @@logo_texture = R::Texture.new
+
   @@camera = R::Camera2D.new
   @@camera.zoom = Screen::Zoom::LIMIT_LOWER
   @@camera.offset.x = Screen::WIDTH/2
@@ -307,7 +309,43 @@ module Wireland::App
 
       # Find the first palette file
       if palette_file = files.find { |f| /\.pal$/ =~ f }
-        @@palette = W::Palette.new(palette_file)
+        new_palette = W::Palette.new(palette_file)
+
+        image = R.load_image_from_texture(@@logo_texture)
+
+        # Replace the color black with transparency
+        R.image_color_replace(pointerof(image), @@palette.start, new_palette.start)
+        R.image_color_replace(pointerof(image), @@palette.buffer, new_palette.buffer)
+        R.image_color_replace(pointerof(image), @@palette.wire, new_palette.wire)
+        R.image_color_replace(pointerof(image), @@palette.alt_wire, new_palette.alt_wire)
+        R.image_color_replace(pointerof(image), @@palette.join, new_palette.join)
+        R.image_color_replace(pointerof(image), @@palette.cross, new_palette.cross)
+        R.image_color_replace(pointerof(image), @@palette.tunnel, new_palette.tunnel)
+        R.image_color_replace(pointerof(image), @@palette.input_on, new_palette.input_on)
+        R.image_color_replace(pointerof(image), @@palette.input_off, new_palette.input_off)
+        R.image_color_replace(pointerof(image), @@palette.input_toggle_on, new_palette.input_toggle_on)
+        R.image_color_replace(pointerof(image), @@palette.input_toggle_off, new_palette.input_toggle_off)
+        R.image_color_replace(pointerof(image), @@palette.output_on, new_palette.output_on)
+        R.image_color_replace(pointerof(image), @@palette.output_off, new_palette.output_off)
+        R.image_color_replace(pointerof(image), @@palette.not_in, new_palette.not_in)
+        R.image_color_replace(pointerof(image), @@palette.not_out, new_palette.not_out)
+        R.image_color_replace(pointerof(image), @@palette.switch, new_palette.switch)
+        R.image_color_replace(pointerof(image), @@palette.no_pole, new_palette.no_pole)
+        R.image_color_replace(pointerof(image), @@palette.nc_pole, new_palette.nc_pole)
+        R.image_color_replace(pointerof(image), @@palette.diode_in, new_palette.diode_in)
+        R.image_color_replace(pointerof(image), @@palette.diode_out, new_palette.diode_out)
+        R.image_color_replace(pointerof(image), @@palette.gpio, new_palette.gpio)
+        R.image_color_replace(pointerof(image), @@palette.bg, new_palette.bg)
+
+        #R.image_flip_vertical(pointerof(image))
+        # Reload the texture from the image
+        R.unload_texture(@@logo_texture)
+        @@logo_texture = R.load_texture_from_image(image)
+
+        # Clean up the old data
+        R.unload_image(image)
+
+        @@palette = new_palette
       end
 
       # Find the first png file
@@ -698,7 +736,18 @@ module Wireland::App
     end
   end
 
-  def self.draw_hud
+  def draw_loading
+    text = "Loading"
+    text_size = 60
+    text_length = R.measure_text(text, text_size)
+
+    R.begin_drawing
+    R.clear_background(@@palette.bg)
+    R.draw_text(text, Screen::WIDTH/2 - text_length/2, Screen::HEIGHT/2 - text_size/2, text_size, @@palette.wire)
+    R.end_drawing
+  end
+
+  def self.draw_debug_hud
     R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@palette.alt_wire)
     R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@palette.wire)
     R.draw_text("#{@@camera.zoom}\n#{@@play_speeds[@@play_speed]}", 10, 60, 40, @@palette.wire)
@@ -706,9 +755,22 @@ module Wireland::App
     # R.draw_text(R.get_fps, 0, 40, 14, @@palette.white)
   end
 
+  def self.draw_ticks_counter
+    width = Screen::WIDTH * 0.05
+    height = Screen::HEIGHT * 0.05
+
+    i_width = width - width*0.1
+    i_height = height - height*0.1
+
+    R.draw_rectangle(Screen::WIDTH - width, Screen::HEIGHT - height, width, height, @@palette.wire)
+    R.draw_rectangle_lines(Screen::WIDTH - width + (width-i_width/2), Screen::HEIGHT - height + (height-i_height/2), i_width, i_height, @@palette.bg)
+  end
+
   def self.run
     R.init_window(Screen::WIDTH, Screen::HEIGHT, "wireland")
-    R.set_target_fps(60)
+    R.set_target_fps(30)
+
+    @@logo_texture = R.load_texture("rsrc/sim/logo.png")
 
     until R.close_window?
       handle_dropped_files
@@ -727,10 +789,33 @@ module Wireland::App
       R.begin_drawing
       R.clear_background(@@palette.bg)
       if !is_circuit_loaded?
+        fade = Math.sin(R.get_time*10).abs.clamp(0.3, 1.0)
         text = "Drop a .pal or .png to begin!"
-        text_size = 30
+        text_size = 40
         text_length = R.measure_text(text, text_size)
-        R.draw_text(text, Screen::WIDTH/2 - text_length/2, Screen::HEIGHT/2 - text_size/2, text_size, @@palette.wire)
+
+        scale = 2
+        logo_width = text_length*scale
+        logo_height = (@@logo_texture.height/@@logo_texture.width) * text_length*scale
+
+        whole_height = logo_height + text_size
+
+        src = R::Rectangle.new(
+          x: 0,
+          y: 0,
+          width: @@logo_texture.width,
+          height: @@logo_texture.height
+        )
+
+        dst = R::Rectangle.new(
+          x: Screen::WIDTH/2 - logo_width/2,
+          y: Screen::HEIGHT/2 - whole_height/2,
+          width: logo_width,
+          height: logo_height
+        )
+        R.draw_texture_pro(@@logo_texture, src, dst, V2.zero, 0, R::WHITE)
+        R.draw_text(text, Screen::WIDTH/2 - text_length/2, dst.y + dst.height, text_size, R.fade(@@palette.wire, fade))
+
       end
       R.begin_mode_2d @@camera
       if is_circuit_loaded?
@@ -740,13 +825,14 @@ module Wireland::App
       R.end_mode_2d
       draw_info
       draw_help
-      draw_hud
+      #draw_debug_hud
 
       R.end_drawing
     end
 
     R.unload_texture(@@circuit_texture) if is_circuit_loaded?
-    R.unload_texture(@@component_texture) if @@component_texture.width != 0
+    R.unload_texture(@@component_texture) if is_component_loaded?
+    R.unload_texture(@@logo_texture)
 
     R.close_window
   end
