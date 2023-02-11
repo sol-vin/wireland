@@ -143,6 +143,10 @@ class Wireland::Component::OutputOn < Wireland::Component
 
   include Wireland::IO
 
+  def self.output_whitelist
+    Wireland::Component.none
+  end
+
   def on_tick
     if high?
       on
@@ -166,6 +170,10 @@ class Wireland::Component::OutputOff < Wireland::Component
   end
 
   include Wireland::IO
+
+  def self.output_whitelist
+    Wireland::Component.none
+  end
 
   def on_tick
     if high?

@@ -7,6 +7,9 @@ class Wireland::Circuit
   def load(image : R::Image, palette : Wireland::Palette = Wireland::Palette::DEFAULT) : Array(WC)
     raise "No file" if image.width == 0
 
+    @width = image.width
+    @height = image.height
+
     start_time = R.get_time
     palette.load_into_components
     puts "Palette loaded in #{R.get_time - start_time}"
@@ -149,6 +152,9 @@ class Wireland::Circuit
   property components = [] of WC
   # Number of ticks that have run since the circuit started.
   property ticks = 0_u128
+
+  property width = 0
+  property height = 0
 
   getter last_id = 0_u64
 

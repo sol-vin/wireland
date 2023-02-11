@@ -33,6 +33,7 @@ module Wireland::App
       LIMIT_UPPER = 8.0_f32
       # Unit to move zoom by
       UNIT = 0.1
+      DEFAULT = 2.0
     end
   end
 
@@ -72,11 +73,17 @@ module Wireland::App
     W - Solid Pulses].sub("\n", "").gsub("\r", "")
   end
 
+  # The palette used by Wireland.
   @@palette = W::Palette::DEFAULT
+  # The circuit object that contains all the stuff for running the simulation.
   @@circuit = W::Circuit.new
+  # The texture file of the circuit.
   @@circuit_texture = R::Texture.new
 
+  # TODO: Should I even do this?
   @@component_texture = R::Texture.new
+  
+  # The texture atlas for components.
   @@component_atlas = Array(Rectangle).new
   @@component_bounds = Array(Rectangle).new
 
@@ -118,6 +125,7 @@ module Wireland::App
 
     @@last_active_pulses.clear
     @@last_pulses.clear
+    @@camera.zoom = Screen::Zoom::DEFAULT
   end
 
   # Checks to see if the circuit texture is loaded.
@@ -356,12 +364,13 @@ module Wireland::App
       # Find the first png file
       if circuit_file = files.find { |f| /\.png$/ =~ f }
         # Load the file into texture memory.
-        @@camera.zoom = Screen::Zoom::LIMIT_LOWER
-        @@camera.target.x = 0
-        @@camera.target.y = 0
+        @@camera.zoom = Screen::Zoom::DEFAULT
+
 
         start_time = R.get_time
         load_circuit(circuit_file)
+        @@camera.target.x = @@circuit.width*1.5
+        @@camera.target.y = @@circuit.height*1.5
         puts "Total time: #{R.get_time - start_time}"
       end
     end
