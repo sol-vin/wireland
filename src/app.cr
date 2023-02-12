@@ -25,6 +25,7 @@ module Wireland::App
   module Screen
     WIDTH  = 1200
     HEIGHT =  800
+    SIZE = V2.new(x: WIDTH, y: HEIGHT)
 
     module Zoom
       # Smallest zoom possible
@@ -94,7 +95,7 @@ module Wireland::App
 
 
   @@camera = R::Camera2D.new
-  @@camera.zoom = Screen::Zoom::LIMIT_LOWER
+  @@camera.zoom = Screen::Zoom::DEFAULT
   @@camera.offset.x = Screen::WIDTH/2
   @@camera.offset.y = Screen::HEIGHT/2
 
@@ -125,7 +126,7 @@ module Wireland::App
 
     @@last_active_pulses.clear
     @@last_pulses.clear
-    @@camera.zoom = Screen::Zoom::DEFAULT
+    #@@camera.zoom = Screen::Zoom::DEFAULT
   end
 
   # Checks to see if the circuit texture is loaded.
@@ -770,8 +771,8 @@ module Wireland::App
   end
 
   def self.draw_ticks_counter
-    scale_w = 0.1
-    scale_h = 0.05
+    scale_w = 0.12
+    scale_h = 0.07
     margin_x = 0.05
     margin_y = 0.1
 
@@ -831,6 +832,9 @@ module Wireland::App
         height: @@play_texture.height
       )
       R.draw_texture_pro(@@play_texture, icon_src, icon_dst, V2.zero, 0, R::WHITE)
+      small_text_size = text_size/8
+
+      R.draw_text("X#{@@play_speeds[@@play_speed].to_s[0..4]}", icon_dst.x + text_size*0.1, icon_dst.y + text_size/2 - small_text_size/2, small_text_size, @@palette.wire)
     else
       icon_src = R::Rectangle.new(
         x: 0,
