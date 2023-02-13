@@ -523,6 +523,7 @@ module Wireland::App
   # Handle which input got clicked, and if it should turn on or off.
   def self.handle_io_mouse
     if R.mouse_button_released?(Mouse::INTERACT) && !@@show_help && !@@info_id
+      margin = 0.1
       screen_mouse = V2.new
       screen_mouse.x = R.get_mouse_x
       screen_mouse.y = R.get_mouse_y
@@ -531,8 +532,8 @@ module Wireland::App
 
       clicked_io = @@circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
         io.xy.any? do |xy|
-          min_xy = {x: xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2, y: xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2}
-          max_xy = {x: xy[:x] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.width/2, y: xy[:y] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.height/2}
+          min_xy = {x: xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2.0 - margin, y: xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2.0 - margin}
+          max_xy = {x: xy[:x] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.width/2.0  + margin, y: xy[:y] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.height/2.0 + margin}
 
           world_mouse.x > min_xy[:x] &&
             world_mouse.y > min_xy[:y] &&
