@@ -345,30 +345,24 @@ module Wireland::App
   # Handle which input got clicked, and if it should turn on or off.
   def self.handle_io_mouse
     if R.mouse_button_released?(Mouse::INTERACT) && !@@show_help && !@@info_id
-      margin = 0.1
       screen_mouse = V2.new
       screen_mouse.x = R.get_mouse_x
       screen_mouse.y = R.get_mouse_y
 
       world_mouse = R.get_screen_to_world_2d(screen_mouse, @@camera)
+      offset = @@circuit_texture.width/2.0
+      x = ((world_mouse.x + offset) / Scale::CIRCUIT).to_i
+      y = ((world_mouse.y + offset) / Scale::CIRCUIT).to_i - 6
+      puts [x, y]
 
       clicked_io = @@circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
-        # TODO: REWRITE THIS BETTER! Needs to check component bounds before checking component points
-        # TODO: Handle mouse down. If initial mouse down not on a clickable, stop checking until released
-        io.points.any? do |xy|
-          min_xy = {x: xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2.0 - margin, y: xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2.0 - margin}
-          max_xy = {x: xy[:x] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.width/2.0 + margin, y: xy[:y] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.height/2.0 + margin}
-
-          world_mouse.x > min_xy[:x] &&
-            world_mouse.y > min_xy[:y] &&
-            world_mouse.x < max_xy[:x] &&
-            world_mouse.y < max_xy[:y]
-        end
+        io.abs_data?(x, y)
       end
 
       if clicked_io
         clicked_io.as(Wireland::IO).toggle
       end
+
     end
   end
 
@@ -446,12 +440,12 @@ module Wireland::App
           end
         end
         if @@show_pulses && !@@solid_pulses && @@camera.zoom > 1.0
-          margin = 0.1
+          margin = 0.3
           c.points.each do |xy|
             R.draw_rectangle_rec(
               R::Rectangle.new(
-                x: (xy[:x] * Scale::CIRCUIT) - (margin * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
-                y: (xy[:y] * Scale::CIRCUIT) - (margin * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                x: (xy[:x] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
+                y: (xy[:y] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
                 width: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2),
                 height: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2)
               ),
