@@ -37,12 +37,197 @@ module Wireland::App
     TICK         = R::KeyboardKey::Space
     RESET        = R::KeyboardKey::R
     PLAY         = R::KeyboardKey::Enter
+
+    @@tick_hold_time = 0.0
+    @@tick_long_hold_time = 0.0
+    @@tick_long_hold = false
+
+    # Handles what keys do when pressed.
+    def self.update
+      if App.is_circuit_loaded?
+        if R.key_released?(Keys::HELP) && !Info.show?
+          Help.toggle
+        end
+
+        if !Help.show?
+          if R.key_released?(Keys::PULSES)
+            App.show_pulses = !App.show_pulses?
+          end
+
+          if R.key_released?(Keys::SOLID_PULSES)
+            App.solid_pulses = !App.solid_pulses?
+          end
+
+          if R.key_released?(Keys::PLAY) && R.key_up?(Keys::TICK)
+            App.play = !App.play?
+            App.play_time = R.get_time
+          end
+
+          # Tick when play is enabled
+          if App.play? && ((R.get_time - App.play_time) > App.play_speeds[App.play_speed])
+            App.tick
+            App.play_time = R.get_time
+          end
+
+          # Handle spacebar tick. When held down play
+          if !App.play?
+            if R.key_pressed?(Keys::TICK)
+              @@tick_hold_time = R.get_time
+            end
+
+            if R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 1.0 && !@@tick_long_hold
+              @@tick_long_hold_time = R.get_time
+              @@tick_long_hold = true
+            end
+
+            if (R.key_released?(Keys::TICK) && !@@tick_long_hold) || (R.key_down?(Keys::TICK) && @@tick_long_hold && (R.get_time - @@tick_long_hold_time) > 0.1)
+              App.tick
+            elsif R.key_up?(Keys::TICK) && @@tick_long_hold
+              @@tick_long_hold = false
+            end
+          end
+
+          if R.key_released?(Keys::RESET)
+            App.reset
+          end
+
+          if R.key_released?(R::KeyboardKey::Up)
+            App.play_speed -= 1
+            App.play_speed = 0 if App.play_speed < 0
+          elsif R.key_released?(R::KeyboardKey::Down)
+            App.play_speed += 1
+            App.play_speed = App.play_speeds.size - 1 if App.play_speed >= App.play_speeds.size
+          end
+        end
+      end
+    end
   end
 
   module Mouse
     CAMERA   = R::MouseButton::Middle
     INTERACT = R::MouseButton::Left
     INFO     = R::MouseButton::Right
+
+    SCALE = 2.0
+
+    class_getter position = V2.new
+    class_getter cursor_texture = R::Texture.new
+    class_getter selector_texture = R::Texture.new
+
+    @@previous_camera_mouse_drag_pos = V2.zero
+
+    CURSOR_TEXTURE_FILE   = "rsrc/sim/cursor.png"
+    SELECTOR_TEXTURE_FILE = "rsrc/sim/selector.png"
+
+    WEIRD_OFFSET_X = 0
+    WEIRD_OFFSET_Y = 5 # TODO: WHY? NO IDEA WHY THIS WORKS
+
+    def self.update
+      @@position.x = R.get_mouse_x
+      @@position.y = R.get_mouse_y
+    end
+
+    # Handle which input got clicked, and if it should turn on or off.
+    def self.handle_io
+      if R.mouse_button_pressed?(INTERACT) && !Help.show? && !Info.show?
+        world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
+        offset = App.circuit_texture.width/2.0
+        x = (((world_mouse.x + offset) / Scale::CIRCUIT) - WEIRD_OFFSET_X).to_i
+        y = (((world_mouse.y + offset) / Scale::CIRCUIT) - WEIRD_OFFSET_Y).to_i
+
+        clicked_io = App.circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
+          io.abs_data?(x, y)
+        end
+
+        if clicked_io
+          clicked_io.as(Wireland::IO).toggle
+        end
+      end
+    end
+
+    # Handles how the mouse moves the camera
+    def self.handle_camera
+      camera = App.camera
+      # Do the zoom stuff for MWheel
+      mouse_wheel = R.get_mouse_wheel_move * Screen::Zoom::UNIT
+      if !mouse_wheel.zero?
+        camera.zoom = camera.zoom + mouse_wheel
+
+        if camera.zoom < Screen::Zoom::LIMIT_LOWER
+          camera.zoom = Screen::Zoom::LIMIT_LOWER
+        elsif camera.zoom > Screen::Zoom::LIMIT_UPPER
+          camera.zoom = Screen::Zoom::LIMIT_UPPER
+        end
+      end
+
+      world_mouse = R.get_screen_to_world_2d(@@position, App.camera)
+
+      # Handle panning
+      if R.mouse_button_pressed?(CAMERA)
+        @@previous_camera_mouse_drag_pos = @@position
+      elsif R.mouse_button_down?(Mouse::CAMERA)
+        camera.target = camera.target - ((@@position - @@previous_camera_mouse_drag_pos) * 1/camera.zoom)
+
+        @@previous_camera_mouse_drag_pos = @@position
+      elsif R.mouse_button_released?(Mouse::CAMERA)
+        @@previous_camera_mouse_drag_pos.x = 0
+        @@previous_camera_mouse_drag_pos.y = 0
+      end
+
+      App.camera = camera
+    end
+
+    def self.load
+      @@cursor_texture = R.load_texture(CURSOR_TEXTURE_FILE)
+      @@selector_texture = R.load_texture(SELECTOR_TEXTURE_FILE)
+      setup
+    end
+
+    def self.setup
+      R.hide_cursor
+
+      image = R.load_image_from_texture(@@cursor_texture)
+
+      # Replace the color black with transparency
+      R.image_color_replace(pointerof(image), R::WHITE, App.palette.wire)
+      R.image_color_replace(pointerof(image), R::BLACK, App.palette.bg)
+
+      R.unload_texture(@@cursor_texture)
+      @@cursor_texture = R.load_texture_from_image(image)
+      R.unload_image(image)
+
+      image = R.load_image_from_texture(@@selector_texture)
+
+      # Replace the color black with transparency
+      R.image_color_replace(pointerof(image), R::WHITE, App.palette.wire)
+      R.image_color_replace(pointerof(image), R::BLACK, App.palette.bg)
+
+      R.unload_texture(@@selector_texture)
+      @@selector_texture = R.load_texture_from_image(image)
+      R.unload_image(image)
+    end
+
+    def self.draw
+      src = R::Rectangle.new(
+        x: 0,
+        y: 0,
+        width: @@cursor_texture.width,
+        height: @@cursor_texture.height
+      )
+
+      dst = R::Rectangle.new(
+        x: Mouse.position.x - (@@cursor_texture.width/2) * SCALE,
+        y: Mouse.position.y - (@@cursor_texture.height/2) * SCALE,
+        width: @@cursor_texture.width*SCALE,
+        height: @@cursor_texture.height*SCALE
+      )
+      R.draw_texture_pro(@@cursor_texture, src, dst, V2.zero, 0, R::WHITE)
+    end
+
+    def self.unload
+      R.unload_texture(@@cursor_texture)
+      R.unload_texture(@@selector_texture)
+    end
   end
 
   module Colors
@@ -64,47 +249,122 @@ module Wireland::App
     Mouse Wheel - Zoom
     Q - Show Pulses
     W - Solid Pulses].sub("\n", "").gsub("\r", "")
+
+    def self.draw
+      if show? && !Info.show?
+        App.draw_box(Help::TITLE, Help::TEXT)
+      end
+    end
+
+    @@show = false
+
+    def self.show?
+      @@show
+    end
+
+    def self.show
+      @@show = true
+    end
+
+    def self.hide
+      @@show = false
+    end
+
+    def self.toggle
+      @@show = !@@show
+    end
+  end
+
+  module Info
+    class_getter id : UInt64? = nil
+
+    # Draws an info box when id is valid
+    def self.draw
+      if (id = @@id) && !Help.show?
+        text = ""
+
+        text += "ID: #{id}"
+        text += "\nSize: #{App.circuit[id].size}"
+        text += "\n->: #{App.circuit[id].connects.size} - #{App.circuit[id].connects}"
+
+        if App.circuit[id].is_a?(Wireland::IO)
+          io = App.circuit[id].as(Wireland::IO)
+          text += "\nON: #{io.on?}"
+        elsif App.circuit[id].is_a?(Wireland::RelayPole)
+          text += "\nHIGH: #{App.last_pulses.includes? id}"
+          text += "\nCONDUCTIVE: #{App.circuit[id].conductive?}"
+        elsif App.circuit[id].class.active?
+          text += "\nHIGH: #{App.last_pulses.includes? id}"
+          text += "\nACTIVE: #{App.last_active_pulses.includes?(id)}"
+          text += "\nWILL ACTIVE: #{App.circuit.active_pulses.keys.includes?(id)}"
+        else
+          text += "\nHIGH: #{App.last_pulses.includes? id}"
+        end
+
+        App.draw_box("#{App.circuit[id].class.to_s.split("::").last}", text)
+      end
+    end
+
+    def self.reset
+      @@id = nil
+    end
+
+    def self.show?
+      !@@id.nil?
+    end
+
+    # When a component is right clicked, display a box.
+    def self.update
+      if !show? && R.mouse_button_released?(Mouse::INFO) && !Help.show?
+        world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
+        offset = App.circuit_texture.width/2.0
+        x = (((world_mouse.x + offset) / Scale::CIRCUIT) - Mouse::WEIRD_OFFSET_X).to_i
+        y = (((world_mouse.y + offset) / Scale::CIRCUIT) - Mouse::WEIRD_OFFSET_Y).to_i
+
+        clicked = App.circuit.components.find do |c|
+          c.abs_data?(x, y)
+        end
+
+        if clicked
+          @@id = clicked.id
+        end
+      elsif [Mouse::CAMERA, Mouse::INTERACT, Mouse::INFO].any? { |mb| R.mouse_button_released?(mb) }
+        reset
+      end
+    end
   end
 
   # The palette used by Wireland.
-  @@palette = W::Palette::DEFAULT
+  class_getter palette : Wireland::Palette = W::Palette::DEFAULT
   # The circuit object that contains all the stuff for running the simulation.
-  @@circuit = W::Circuit.new
+  class_getter circuit = W::Circuit.new
+
   # The texture file of the circuit.
-  @@circuit_texture = R::Texture.new
+  class_getter circuit_texture = R::Texture.new
 
   @@logo_texture = R::Texture.new
 
   @@tick_texture = R::Texture.new
   @@play_texture = R::Texture.new
 
-  @@camera = R::Camera2D.new
+  class_property camera : R::Camera2D = R::Camera2D.new
   @@camera.zoom = Screen::Zoom::DEFAULT
   @@camera.offset.x = Screen::WIDTH/2
   @@camera.offset.y = Screen::HEIGHT/2
 
-  @@previous_camera_mouse_drag_pos = V2.zero
+  class_property? show_pulses = false
+  class_property? solid_pulses = false
 
-  @@show_help = false
-  @@show_pulses = false
-  @@solid_pulses = false
-  @@play = false
-  @@play_time = 0.0
-  @@play_speed = 6
-  @@play_speeds = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
-
-  @@info_id : UInt64? = nil
-
-  @@tick_hold_time = 0.0
-  @@tick_long_hold_time = 0.0
-  @@tick_long_hold = false
-
-  @@last_active_pulses = [] of UInt64
-  @@last_pulses = [] of UInt64
+  class_property? play = false
+  class_property play_time = 0.0
+  class_property play_speed = 6
+  class_property play_speeds = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
+  class_getter last_active_pulses = [] of UInt64
+  class_getter last_pulses = [] of UInt64
 
   # Resets the simulation
   def self.reset
-    @@info_id = nil
+    Info.reset
     @@circuit.reset
     @@circuit.pulse_inputs
 
@@ -119,7 +379,7 @@ module Wireland::App
   end
 
   # Loads the circuit from a file
-  def self.load_circuit(file)
+  def self.load_circuit_file(file)
     puts "Loading circuit from #{file}"
     @@circuit = W::Circuit.new(file, @@palette)
     puts "Loaded circuit from #{file}"
@@ -145,185 +405,66 @@ module Wireland::App
 
       # Find the first palette file
       if palette_file = files.find { |f| /\.pal$/ =~ f }
-        new_palette = W::Palette.new(palette_file)
-
-        image = R.load_image_from_texture(@@logo_texture)
-
-        # Replace the color black with transparency
-        R.image_color_replace(pointerof(image), @@palette.start, new_palette.start)
-        R.image_color_replace(pointerof(image), @@palette.buffer, new_palette.buffer)
-        R.image_color_replace(pointerof(image), @@palette.wire, new_palette.wire)
-        R.image_color_replace(pointerof(image), @@palette.alt_wire, new_palette.alt_wire)
-        R.image_color_replace(pointerof(image), @@palette.join, new_palette.join)
-        R.image_color_replace(pointerof(image), @@palette.cross, new_palette.cross)
-        R.image_color_replace(pointerof(image), @@palette.tunnel, new_palette.tunnel)
-        R.image_color_replace(pointerof(image), @@palette.input_on, new_palette.input_on)
-        R.image_color_replace(pointerof(image), @@palette.input_off, new_palette.input_off)
-        R.image_color_replace(pointerof(image), @@palette.input_toggle_on, new_palette.input_toggle_on)
-        R.image_color_replace(pointerof(image), @@palette.input_toggle_off, new_palette.input_toggle_off)
-        R.image_color_replace(pointerof(image), @@palette.output_on, new_palette.output_on)
-        R.image_color_replace(pointerof(image), @@palette.output_off, new_palette.output_off)
-        R.image_color_replace(pointerof(image), @@palette.not_in, new_palette.not_in)
-        R.image_color_replace(pointerof(image), @@palette.not_out, new_palette.not_out)
-        R.image_color_replace(pointerof(image), @@palette.switch, new_palette.switch)
-        R.image_color_replace(pointerof(image), @@palette.no_pole, new_palette.no_pole)
-        R.image_color_replace(pointerof(image), @@palette.nc_pole, new_palette.nc_pole)
-        R.image_color_replace(pointerof(image), @@palette.diode_in, new_palette.diode_in)
-        R.image_color_replace(pointerof(image), @@palette.diode_out, new_palette.diode_out)
-        R.image_color_replace(pointerof(image), @@palette.gpio, new_palette.gpio)
-        R.image_color_replace(pointerof(image), @@palette.bg, new_palette.bg)
-
-        # R.image_flip_vertical(pointerof(image))
-        # Reload the texture from the image
-        R.unload_texture(@@logo_texture)
-        @@logo_texture = R.load_texture_from_image(image)
-
-        # Clean up the old data
-        R.unload_image(image)
-
-        @@palette = new_palette
+        load_palette(palette_file)
       end
 
       # Find the first png file
       if circuit_file = files.find { |f| /\.png$/ =~ f }
-        # Load the file into texture memory.
-        @@camera.zoom = Screen::Zoom::DEFAULT
-
-        start_time = R.get_time
         load_circuit(circuit_file)
-        @@camera.target.x = @@circuit.width*1.5
-        @@camera.target.y = @@circuit.height*1.5
-        puts "Total time: #{R.get_time - start_time}"
       end
     end
   end
 
-  # Handles how the mouse moves the camera
-  def self.handle_camera_mouse
-    # Do the zoom stuff for MWheel
-    mouse_wheel = R.get_mouse_wheel_move * Screen::Zoom::UNIT
-    if !mouse_wheel.zero?
-      new_zoom = @@camera.zoom + mouse_wheel
-      @@camera.zoom = new_zoom
+  def self.load_palette(palette_file)
+    new_palette = W::Palette.new(palette_file)
 
-      if @@camera.zoom < Screen::Zoom::LIMIT_LOWER
-        @@camera.zoom = Screen::Zoom::LIMIT_LOWER
-      elsif @@camera.zoom > Screen::Zoom::LIMIT_UPPER
-        @@camera.zoom = Screen::Zoom::LIMIT_UPPER
-      end
-    end
+    image = R.load_image_from_texture(@@logo_texture)
 
-    # Translate cursor coords
-    screen_mouse = V2.new
-    screen_mouse.x = R.get_mouse_x
-    screen_mouse.y = R.get_mouse_y
+    # Replace the color black with transparency
+    R.image_color_replace(pointerof(image), @@palette.start, new_palette.start)
+    R.image_color_replace(pointerof(image), @@palette.buffer, new_palette.buffer)
+    R.image_color_replace(pointerof(image), @@palette.wire, new_palette.wire)
+    R.image_color_replace(pointerof(image), @@palette.alt_wire, new_palette.alt_wire)
+    R.image_color_replace(pointerof(image), @@palette.join, new_palette.join)
+    R.image_color_replace(pointerof(image), @@palette.cross, new_palette.cross)
+    R.image_color_replace(pointerof(image), @@palette.tunnel, new_palette.tunnel)
+    R.image_color_replace(pointerof(image), @@palette.input_on, new_palette.input_on)
+    R.image_color_replace(pointerof(image), @@palette.input_off, new_palette.input_off)
+    R.image_color_replace(pointerof(image), @@palette.input_toggle_on, new_palette.input_toggle_on)
+    R.image_color_replace(pointerof(image), @@palette.input_toggle_off, new_palette.input_toggle_off)
+    R.image_color_replace(pointerof(image), @@palette.output_on, new_palette.output_on)
+    R.image_color_replace(pointerof(image), @@palette.output_off, new_palette.output_off)
+    R.image_color_replace(pointerof(image), @@palette.not_in, new_palette.not_in)
+    R.image_color_replace(pointerof(image), @@palette.not_out, new_palette.not_out)
+    R.image_color_replace(pointerof(image), @@palette.switch, new_palette.switch)
+    R.image_color_replace(pointerof(image), @@palette.no_pole, new_palette.no_pole)
+    R.image_color_replace(pointerof(image), @@palette.nc_pole, new_palette.nc_pole)
+    R.image_color_replace(pointerof(image), @@palette.diode_in, new_palette.diode_in)
+    R.image_color_replace(pointerof(image), @@palette.diode_out, new_palette.diode_out)
+    R.image_color_replace(pointerof(image), @@palette.gpio, new_palette.gpio)
+    R.image_color_replace(pointerof(image), @@palette.bg, new_palette.bg)
 
-    world_mouse = R.get_screen_to_world_2d(screen_mouse, @@camera)
+    # R.image_flip_vertical(pointerof(image))
+    # Reload the texture from the image
+    R.unload_texture(@@logo_texture)
+    @@logo_texture = R.load_texture_from_image(image)
 
-    # HAndle panning
-    if R.mouse_button_pressed?(Mouse::CAMERA)
-      @@previous_camera_mouse_drag_pos = screen_mouse
-    elsif R.mouse_button_down?(Mouse::CAMERA)
-      @@camera.target = @@camera.target - ((screen_mouse - @@previous_camera_mouse_drag_pos) * 1/@@camera.zoom)
+    # Clean up the old data
+    R.unload_image(image)
 
-      @@previous_camera_mouse_drag_pos = screen_mouse
-    elsif R.mouse_button_released?(Mouse::CAMERA)
-      @@previous_camera_mouse_drag_pos.x = 0
-      @@previous_camera_mouse_drag_pos.y = 0
-    end
+    @@palette = new_palette
+    Mouse.setup
   end
 
-  # When a component is right clicked, display a box.
-  def self.handle_info
-    if @@info_id.nil? && R.mouse_button_released?(Mouse::INFO) && !@@show_help
-      screen_mouse = V2.new
-      screen_mouse.x = R.get_mouse_x
-      screen_mouse.y = R.get_mouse_y
+  def self.load_circuit(circuit_file)
+    # Load the file into texture memory.
+    @@camera.zoom = Screen::Zoom::DEFAULT
 
-      world_mouse = R.get_screen_to_world_2d(screen_mouse, @@camera)
-
-      # Find which one got clicked
-      clicked = @@circuit.components.find do |c|
-        # TODO: REWRITE THIS BETTER! Should check bounds before checking points
-        c.points.any? do |xy|
-          min_xy = {x: xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2, y: xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2}
-          max_xy = {x: xy[:x] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.width/2, y: xy[:y] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.height/2}
-
-          world_mouse.x > min_xy[:x] &&
-            world_mouse.y > min_xy[:y] &&
-            world_mouse.x < max_xy[:x] &&
-            world_mouse.y < max_xy[:y]
-        end
-      end
-
-      # Set it
-      if clicked
-        @@info_id = clicked.id
-      end
-      # If any button gets clicked, close the info window
-    elsif [Mouse::CAMERA, Mouse::INTERACT, Mouse::INFO].any? { |mb| R.mouse_button_released?(mb) }
-      @@info_id = nil
-    end
-  end
-
-  # Handles what keys do when pressed.
-  def self.handle_keys
-    if is_circuit_loaded?
-      if R.key_released?(Keys::HELP) && !@@info_id
-        @@show_help = !@@show_help
-      end
-
-      if !@@show_help
-        if R.key_released?(Keys::PULSES)
-          @@show_pulses = !@@show_pulses
-        end
-
-        if R.key_released?(Keys::SOLID_PULSES)
-          @@solid_pulses = !@@solid_pulses
-        end
-
-        if R.key_released?(Keys::PLAY) && R.key_up?(Keys::TICK)
-          @@play = !@@play
-          @@play_time = R.get_time
-        end
-
-        # Tick when play is enabled
-        if @@play && ((R.get_time - @@play_time) > @@play_speeds[@@play_speed])
-          tick
-          @@play_time = R.get_time
-        end
-
-        # Handle spacebar tick. When held down play
-        if !@@play
-          if R.key_pressed?(Keys::TICK)
-            @@tick_hold_time = R.get_time
-          end
-
-          if R.key_down?(Keys::TICK) && (R.get_time - @@tick_hold_time) > 1.0 && !@@tick_long_hold
-            @@tick_long_hold_time = R.get_time
-            @@tick_long_hold = true
-          end
-
-          if (R.key_released?(Keys::TICK) && !@@tick_long_hold) || (R.key_down?(Keys::TICK) && @@tick_long_hold && (R.get_time - @@tick_long_hold_time) > 0.1)
-            tick
-          elsif R.key_up?(Keys::TICK) && @@tick_long_hold
-            @@tick_long_hold = false
-          end
-        end
-
-        if R.key_released?(Keys::RESET)
-          reset
-        end
-
-        if R.key_released?(R::KeyboardKey::Up)
-          @@play_speed -= 1
-          @@play_speed = 0 if @@play_speed < 0
-        elsif R.key_released?(R::KeyboardKey::Down)
-          @@play_speed += 1
-          @@play_speed = @@play_speeds.size - 1 if @@play_speed >= @@play_speeds.size
-        end
-      end
-    end
+    start_time = R.get_time
+    load_circuit_file(circuit_file)
+    @@camera.target.x = @@circuit.width*1.5
+    @@camera.target.y = @@circuit.height*1.5
+    puts "Total time: #{R.get_time - start_time}"
   end
 
   # Move the circuit forward a tick
@@ -340,30 +481,6 @@ module Wireland::App
     @@circuit.post_tick
     @@tick_hold_time = R.get_time
     @@tick_long_hold_time = R.get_time
-  end
-
-  # Handle which input got clicked, and if it should turn on or off.
-  def self.handle_io_mouse
-    if R.mouse_button_released?(Mouse::INTERACT) && !@@show_help && !@@info_id
-      screen_mouse = V2.new
-      screen_mouse.x = R.get_mouse_x
-      screen_mouse.y = R.get_mouse_y
-
-      world_mouse = R.get_screen_to_world_2d(screen_mouse, @@camera)
-      offset = @@circuit_texture.width/2.0
-      x = ((world_mouse.x + offset) / Scale::CIRCUIT).to_i
-      y = ((world_mouse.y + offset) / Scale::CIRCUIT).to_i - 6
-      puts [x, y]
-
-      clicked_io = @@circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
-        io.abs_data?(x, y)
-      end
-
-      if clicked_io
-        clicked_io.as(Wireland::IO).toggle
-      end
-
-    end
   end
 
   # Draw the circuit texture
@@ -521,39 +638,6 @@ module Wireland::App
     )
   end
 
-  # Draws an info box when info_id is valid
-  def self.draw_info
-    if (info_id = @@info_id) && !@@show_help
-      text = ""
-
-      text += "ID: #{@@info_id}"
-      text += "\nSize: #{@@circuit[info_id].size}"
-      text += "\n->: #{@@circuit[info_id].connects.size} - #{@@circuit[info_id].connects}"
-
-      if @@circuit[info_id].is_a?(Wireland::IO)
-        io = @@circuit[info_id].as(Wireland::IO)
-        text += "\nON: #{io.on?}"
-      elsif @@circuit[info_id].is_a?(Wireland::RelayPole)
-        text += "\nHIGH: #{@@last_pulses.includes? info_id}"
-        text += "\nCONDUCTIVE: #{@@circuit[info_id].conductive?}"
-      elsif @@circuit[info_id].class.active?
-        text += "\nHIGH: #{@@last_pulses.includes? info_id}"
-        text += "\nACTIVE: #{@@last_active_pulses.includes?(info_id)}"
-        text += "\nWILL ACTIVE: #{@@circuit.active_pulses.keys.includes?(info_id)}"
-      else
-        text += "\nHIGH: #{@@last_pulses.includes? info_id}"
-      end
-
-      draw_box("#{@@circuit[info_id].class.to_s.split("::").last}", text)
-    end
-  end
-
-  def self.draw_help
-    if @@show_help && !@@info_id
-      draw_box(Help::TITLE, Help::TEXT)
-    end
-  end
-
   def self.draw_loading
     text = "Loading"
     text_size = 60
@@ -566,11 +650,7 @@ module Wireland::App
   end
 
   def self.draw_debug_hud
-    R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, @@palette.alt_wire)
-    R.draw_text(@@circuit.ticks.to_s, 10, 10, 40, @@palette.wire)
-    R.draw_text("#{@@camera.zoom}\n#{@@play_speeds[@@play_speed]}", 10, 60, 40, @@palette.wire)
-
-    # R.draw_text(R.get_fps, 0, 40, 14, @@palette.white)
+    R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, R::MAGENTA)
   end
 
   def self.draw_ticks_counter
@@ -675,24 +755,26 @@ module Wireland::App
 
   def self.run
     R.init_window(Screen::WIDTH, Screen::HEIGHT, "wireland")
-    R.set_target_fps(30)
+    R.set_target_fps(60)
 
     @@logo_texture = R.load_texture("rsrc/sim/logo.png")
     @@tick_texture = R.load_texture("rsrc/sim/clock.png")
     @@play_texture = R.load_texture("rsrc/sim/play.png")
 
+    Mouse.load
+
     until R.close_window?
+      Mouse.update
       handle_dropped_files
 
       if is_circuit_loaded?
-        if @@info_id.nil? && !@@show_help
-          handle_camera_mouse
-
-          handle_io_mouse
+        if !Info.show? && !Help.show?
+          Mouse.handle_camera
+          Mouse.handle_io
         end
 
-        handle_keys
-        handle_info
+        Keys.update
+        Info.update
       end
 
       R.begin_drawing
@@ -707,11 +789,12 @@ module Wireland::App
       end
       R.end_mode_2d
       if is_circuit_loaded?
-        draw_info
-        draw_help
+        Info.draw
+        Help.draw
         draw_ticks_counter
-        # draw_debug_hud
+        draw_debug_hud
       end
+      Mouse.draw
       R.end_drawing
     end
 
@@ -720,6 +803,7 @@ module Wireland::App
     R.unload_texture(@@tick_texture)
     R.unload_texture(@@play_texture)
 
+    Mouse.unload
     R.close_window
   end
 end
