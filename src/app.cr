@@ -241,7 +241,7 @@ module Wireland::App
     TITLE = "Help!"
     TEXT  = %[
     Space - Tick
-    Enter - Play
+    Enter - Play, Up - Faster, Down - Slower
     R - Reset
     Left Click - Interact
     Right Click - Info
