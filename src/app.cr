@@ -120,7 +120,7 @@ module Wireland::App
     SELECTOR_TEXTURE_FILE = "rsrc/sim/selector.png"
 
     WEIRD_OFFSET_X = 0
-    WEIRD_OFFSET_Y = 5 # TODO: WHY? NO IDEA WHY THIS WORKS
+    WEIRD_OFFSET_Y = 6 # TODO: WHY? NO IDEA WHY THIS WORKS
 
     def self.update
       @@position.x = R.get_mouse_x
@@ -132,8 +132,8 @@ module Wireland::App
       if R.mouse_button_pressed?(INTERACT) && !Help.show? && !Info.show?
         world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
         offset = App.circuit_texture.width/2.0
-        x = (((world_mouse.x + offset) / Scale::CIRCUIT) - WEIRD_OFFSET_X).to_i
-        y = (((world_mouse.y + offset) / Scale::CIRCUIT) - WEIRD_OFFSET_Y).to_i
+        x = (((world_mouse.x + offset) / Scale::CIRCUIT)).to_i
+        y = (((world_mouse.y + offset) / Scale::CIRCUIT)).to_i
 
         clicked_io = App.circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
           io.abs_data?(x, y)
@@ -318,8 +318,8 @@ module Wireland::App
       if !show? && R.mouse_button_released?(Mouse::INFO) && !Help.show?
         world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
         offset = App.circuit_texture.width/2.0
-        x = (((world_mouse.x + offset) / Scale::CIRCUIT) - Mouse::WEIRD_OFFSET_X).to_i
-        y = (((world_mouse.y + offset) / Scale::CIRCUIT) - Mouse::WEIRD_OFFSET_Y).to_i
+        x = (((world_mouse.x + offset) / Scale::CIRCUIT)).to_i
+        y = (((world_mouse.y + offset) / Scale::CIRCUIT)).to_i
 
         clicked = App.circuit.components.find do |c|
           c.abs_data?(x, y)
