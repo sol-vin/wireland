@@ -66,7 +66,7 @@ class Wireland::Component
   getter size : Int32
 
   def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
-    @size = @data.reduce(0) {|acc, i| acc + (i ? 1 : 0)}
+    @size = @data.count(true)
   end
 
   def [](x, y)

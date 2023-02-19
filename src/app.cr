@@ -354,6 +354,7 @@ module Wireland::App
 
       clicked_io = @@circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
         # TODO: REWRITE THIS BETTER! Needs to check component bounds before checking component points
+        # TODO: Handle mouse down. If initial mouse down not on a clickable, stop checking until released
         io.points.any? do |xy|
           min_xy = {x: xy[:x] * Scale::CIRCUIT - @@circuit_texture.width/2.0 - margin, y: xy[:y] * Scale::CIRCUIT - @@circuit_texture.height/2.0 - margin}
           max_xy = {x: xy[:x] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.width/2.0 + margin, y: xy[:y] * Scale::CIRCUIT + Scale::CIRCUIT - @@circuit_texture.height/2.0 + margin}
