@@ -62,10 +62,10 @@ class Wireland::Component
   property? conductive : Bool = true
 
   getter bounds : Rectangle
-  getter data : Array(Bool)
+  getter data : BitArray
   getter size : Int32
 
-  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+  def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
     @size = @data.reduce(0) {|acc, i| acc + (i ? 1 : 0)}
   end
 
@@ -73,13 +73,24 @@ class Wireland::Component
     raise "Out of bounds #{x}, #{y} : #{id}:#{self.class}" if x < 0 || y < 0 || x >= bounds[:width] || y >= bounds[:height]
     @data[x + y * bounds[:width]]
   end
+  
+  def []?(x, y)
+    return nil if x < 0 || y < 0 || x >= bounds[:width] || y >= bounds[:height]
+    @data[x + y * bounds[:width]]
+  end
 
-  def a(x, y)
+  def abs_data(x, y)
     abs_x = x - bounds[:x]
     abs_y = y - bounds[:y]
 
-    raise "Out of bounds #{x}-><#{abs_x}, #{y}-><#{abs_y} : #{id}:#{self.class}" if abs_x < 0 || abs_y < 0 || abs_x >= bounds[:width] || abs_y >= bounds[:height]
-    @data[abs_x + abs_y * bounds[:width]]
+    self[abs_x, abs_y]
+  end
+
+  def abs_data?(x, y)
+    abs_x = x - bounds[:x]
+    abs_y = y - bounds[:y]
+
+    self[abs_x, abs_y]?
   end
 
   def setup

@@ -1,4 +1,5 @@
 require "raylib-cr"
+require "bit_array"
 
 alias R = Raylib
 alias V2 = R::Vector2
@@ -44,7 +45,7 @@ class Wireland::Circuit
         id += 1
       end
     end
-    puts "Components shaped in #{R.get_time - start_time}"
+    # puts "Components shaped in #{R.get_time - start_time}"
 
 
     adjacent = [
@@ -64,18 +65,32 @@ class Wireland::Circuit
         _rect_intersects?(c.bounds, component.bounds)
       end
 
-      valid_components.each do |vc|
-        # Is this component a neighbor for any point on our main component
-        is_vc_neighbors = component.points.any? do |c_point|
-          vc.points.any? do |vc_point|
-            adjacent.any? { |a_p| {x: c_point[:x] + a_p[:x], y: c_point[:y] + a_p[:y]} == vc_point }
+      valid_components.each do |valid_component|
+        # Calculate intersection
+        left_x = Math.max(valid_component.bounds[:x], component.bounds[:x])
+        right_x = Math.min(valid_component.bounds[:x] + valid_component.bounds[:width], component.bounds[:x] + component.bounds[:width])
+        top_y = Math.max(valid_component.bounds[:y], component.bounds[:y])
+        bottom_y = Math.min(valid_component.bounds[:y] + valid_component.bounds[:height], component.bounds[:y] + component.bounds[:height])
+
+        intersection = {
+          x: left_x - 1,
+          y: top_y - 1,
+          width:right_x - left_x + 2,
+          height: bottom_y - top_y + 2
+        }
+
+        next if [intersection[:width], intersection[:height]].any?{|i| i <= 0}
+
+        neighbors = (intersection[:x]..(intersection[:x]+intersection[:width])).any? do |x|
+          (intersection[:y]..(intersection[:y]+intersection[:height])).any? do |y|
+            component.abs_data?(x, y) && adjacent.any? {|a_p| valid_component.abs_data?(x + a_p[:x], y + a_p[:y]) }
           end
         end
 
-        component.connects << vc.id if is_vc_neighbors
+        component.connects << valid_component.id if neighbors
       end
     end
-    puts "Components connected in #{R.get_time - start_time}"
+    # puts "Components connected in #{R.get_time - start_time}"
     @last_id = components.sort { |a,b| b.id <=> a.id }[0].id
 
     @components = components
@@ -132,7 +147,7 @@ class Wireland::Circuit
     b_width = b_x_max - b_x + 1
     b_height = b_y_max - b_y + 1
 
-    shape_data = Array(Bool).new(b_width * b_height, false)
+    shape_data = BitArray.new(b_width * b_height)
     shape.each { |xy| shape_data[(xy[:x] - b_x) + (xy[:y] - b_y)  * b_width] = true } 
 
     # Output

@@ -27,7 +27,7 @@ class WC::Buffer < WC
 
   getter state_queue = [] of Bool
 
-  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+  def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
     super
     clear
   end

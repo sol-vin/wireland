@@ -533,7 +533,7 @@ module Wireland::App
 
       text += "ID: #{@@info_id}"
       text += "\nSize: #{@@circuit[info_id].size}"
-      text += "\n->: #{@@circuit[info_id].connects.size}"
+      text += "\n->: #{@@circuit[info_id].connects.size} - #{@@circuit[info_id].connects}"
 
       if @@circuit[info_id].is_a?(Wireland::IO)
         io = @@circuit[info_id].as(Wireland::IO)

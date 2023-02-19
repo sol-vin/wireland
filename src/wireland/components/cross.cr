@@ -1,8 +1,8 @@
 class WC::Cross < WC
   # This can technically only have a total of 4 directions
   getter directions = {} of Wireland::Direction => UInt64
-  
-  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+
+  def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
     super
   end
 

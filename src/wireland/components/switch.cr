@@ -13,7 +13,7 @@ class Wireland::Component::Switch < Wireland::Component
     poles.each(&.on) if high?
   end
   
-  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+  def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
     super
   end
 
