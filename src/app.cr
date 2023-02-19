@@ -23,7 +23,7 @@ module Wireland::App
       # Smallest zoom possible
       LIMIT_LOWER = 0.11_f32
       # Largest zoom possible
-      LIMIT_UPPER = 8.0_f32
+      LIMIT_UPPER = 12.0_f32
       # Unit to move zoom by
       UNIT    = 0.1
       DEFAULT = 2.0
@@ -112,15 +112,16 @@ module Wireland::App
 
     class_getter position = V2.new
     class_getter cursor_texture = R::Texture.new
+    class_getter small_cursor_texture = R::Texture.new
     class_getter selector_texture = R::Texture.new
 
     @@previous_camera_mouse_drag_pos = V2.zero
 
     CURSOR_TEXTURE_FILE   = "rsrc/sim/cursor.png"
+    SMALL_CURSOR_TEXTURE_FILE   = "rsrc/sim/smallcursor.png"
     SELECTOR_TEXTURE_FILE = "rsrc/sim/selector.png"
 
-    WEIRD_OFFSET_X = 0
-    WEIRD_OFFSET_Y = 6 # TODO: WHY? NO IDEA WHY THIS WORKS
+    SMALL_CURSOR_ZOOM_LIMIT = 5.0
 
     def self.update
       @@position.x = R.get_mouse_x
@@ -132,8 +133,8 @@ module Wireland::App
       if R.mouse_button_pressed?(INTERACT) && !Help.show? && !Info.show?
         world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
         offset = App.circuit_texture.width/2.0
-        x = (((world_mouse.x + offset) / Scale::CIRCUIT)).to_i
-        y = (((world_mouse.y + offset) / Scale::CIRCUIT)).to_i
+        x = (world_mouse.x / Scale::CIRCUIT).to_i
+        y = (world_mouse.y / Scale::CIRCUIT).to_i
 
         clicked_io = App.circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
           io.abs_data?(x, y)
@@ -179,6 +180,7 @@ module Wireland::App
 
     def self.load
       @@cursor_texture = R.load_texture(CURSOR_TEXTURE_FILE)
+      @@small_cursor_texture = R.load_texture(SMALL_CURSOR_TEXTURE_FILE)
       @@selector_texture = R.load_texture(SELECTOR_TEXTURE_FILE)
       setup
     end
@@ -218,14 +220,45 @@ module Wireland::App
       dst = R::Rectangle.new(
         x: Mouse.position.x - (@@cursor_texture.width/2) * SCALE,
         y: Mouse.position.y - (@@cursor_texture.height/2) * SCALE,
-        width: @@cursor_texture.width*SCALE,
-        height: @@cursor_texture.height*SCALE
+        width: @@cursor_texture.width * SCALE,
+        height: @@cursor_texture.height * SCALE
       )
-      R.draw_texture_pro(@@cursor_texture, src, dst, V2.zero, 0, R::WHITE)
+
+      if App.camera.zoom > SMALL_CURSOR_ZOOM_LIMIT
+        R.draw_texture_pro(@@small_cursor_texture, src, dst, V2.zero, 0, R::WHITE)
+      else
+        R.draw_texture_pro(@@cursor_texture, src, dst, V2.zero, 0, R::WHITE)
+      end
+    end
+
+    def self.draw_selector
+      world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
+      offset = App.circuit_texture.width/2.0
+      x = (world_mouse.x / Scale::CIRCUIT).to_i
+      y = (world_mouse.y / Scale::CIRCUIT).to_i
+
+      src = R::Rectangle.new(
+        x: 0,
+        y: 0,
+        width: @@selector_texture.width,
+        height: @@selector_texture.height
+      )
+
+      dst = R::Rectangle.new(
+        x: x * Scale::CIRCUIT,
+        y: y * Scale::CIRCUIT,
+        width: Scale::CIRCUIT,
+        height: Scale::CIRCUIT
+      )
+
+      if App.camera.zoom > SMALL_CURSOR_ZOOM_LIMIT
+        R.draw_texture_pro(@@selector_texture, src, dst, V2.zero, 0, R::WHITE)
+      end
     end
 
     def self.unload
       R.unload_texture(@@cursor_texture)
+      R.unload_texture(@@small_cursor_texture)
       R.unload_texture(@@selector_texture)
     end
   end
@@ -318,8 +351,8 @@ module Wireland::App
       if !show? && R.mouse_button_released?(Mouse::INFO) && !Help.show?
         world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
         offset = App.circuit_texture.width/2.0
-        x = (((world_mouse.x + offset) / Scale::CIRCUIT)).to_i
-        y = (((world_mouse.y + offset) / Scale::CIRCUIT)).to_i
+        x = (world_mouse.x / Scale::CIRCUIT).to_i
+        y = (world_mouse.y / Scale::CIRCUIT).to_i
 
         clicked = App.circuit.components.find do |c|
           c.abs_data?(x, y)
@@ -462,8 +495,8 @@ module Wireland::App
 
     start_time = R.get_time
     load_circuit_file(circuit_file)
-    @@camera.target.x = @@circuit.width*1.5
-    @@camera.target.y = @@circuit.height*1.5
+    @@camera.target.x = @@circuit_texture.width/2 * Scale::CIRCUIT
+    @@camera.target.y = @@circuit_texture.width/2 * Scale::CIRCUIT
     puts "Total time: #{R.get_time - start_time}"
   end
 
@@ -485,7 +518,7 @@ module Wireland::App
 
   # Draw the circuit texture
   def self.draw_circuit
-    R.draw_texture_ex(@@circuit_texture, V2.new(x: -@@circuit_texture.width/2, y: -@@circuit_texture.height/2), 0, Scale::CIRCUIT, R::WHITE)
+    R.draw_texture_ex(@@circuit_texture, V2.zero, 0, Scale::CIRCUIT, R::WHITE)
   end
 
   # Draw the component textures, such as if the component is conductive, or if the component is pulsed, pulsing, was pulsing, will pulse, etc.
@@ -532,8 +565,8 @@ module Wireland::App
           c.points.each do |xy|
             R.draw_rectangle_rec(
               R::Rectangle.new(
-                x: (xy[:x] * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
-                y: (xy[:y] * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                x: (xy[:x] * Scale::CIRCUIT),
+                y: (xy[:y] * Scale::CIRCUIT),
                 width: Scale::CIRCUIT,
                 height: Scale::CIRCUIT
               ),
@@ -546,8 +579,8 @@ module Wireland::App
             c.points.each do |xy|
               R.draw_rectangle_rec(
                 R::Rectangle.new(
-                  x: (xy[:x] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
-                  y: (xy[:y] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                  x: (xy[:x] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT),
+                  y: (xy[:y] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT),
                   width: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2),
                   height: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2)
                 ),
@@ -561,8 +594,8 @@ module Wireland::App
           c.points.each do |xy|
             R.draw_rectangle_rec(
               R::Rectangle.new(
-                x: (xy[:x] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
-                y: (xy[:y] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                x: (xy[:x] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT),
+                y: (xy[:y] * Scale::CIRCUIT) + (margin * Scale::CIRCUIT),
                 width: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2),
                 height: Scale::CIRCUIT - (margin * Scale::CIRCUIT * 2)
               ),
@@ -573,8 +606,8 @@ module Wireland::App
           c.points.each do |xy|
             R.draw_rectangle_rec(
               R::Rectangle.new(
-                x: (xy[:x] * Scale::CIRCUIT) - (@@circuit_texture.width / 2.0),
-                y: (xy[:y] * Scale::CIRCUIT) - (@@circuit_texture.height / 2.0),
+                x: (xy[:x] * Scale::CIRCUIT),
+                y: (xy[:y] * Scale::CIRCUIT),
                 width: Scale::CIRCUIT,
                 height: Scale::CIRCUIT
               ),
@@ -651,6 +684,8 @@ module Wireland::App
 
   def self.draw_debug_hud
     R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, R::MAGENTA)
+    R.draw_text(@@camera.zoom.to_s, Screen::WIDTH - 50, 55, 40, R::GREEN)
+
   end
 
   def self.draw_ticks_counter
@@ -786,6 +821,8 @@ module Wireland::App
       if is_circuit_loaded?
         draw_circuit
         draw_components
+
+        Mouse.draw_selector
       end
       R.end_mode_2d
       if is_circuit_loaded?
