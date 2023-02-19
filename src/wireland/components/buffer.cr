@@ -1,4 +1,4 @@
-class Wireland::Component::Buffer < Wireland::Component
+class WC::Buffer < WC
   def self.active?
     true
   end
@@ -27,8 +27,13 @@ class Wireland::Component::Buffer < Wireland::Component
 
   getter state_queue = [] of Bool
 
-  def setup
+  def initialize(@parent : Wireland::Circuit, @data : BitArray, @bounds : Rectangle)
+    super
+    clear
+  end
+
+  def clear
     @state_queue.clear
-    xy.size.times { @state_queue << false }
+    size.times { @state_queue << false }
   end
 end

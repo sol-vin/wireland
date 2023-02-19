@@ -5,9 +5,9 @@
 ### Crystal ###
 /docs/
 /lib/
+/bin/**
 !/bin/raylib.dll
-/bin/*.exe
-/bin/*.pdb
+
 /.shards/
 *.dwarf
 
