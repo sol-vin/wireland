@@ -1,22 +1,26 @@
+require "raylib-cr"
+
+alias R = Raylib
+alias V2 = R::Vector2
+alias W = Wireland
+alias WC = Wireland::Component
+
+alias Rectangle = NamedTuple(x: Int32, y: Int32, width: Int32, height: Int32)
+alias Point = NamedTuple(x: Int32, y: Int32)
+
 # The whole simulated program
 class Wireland::Circuit
-  alias Point = NamedTuple(x: Int32, y: Int32)
-  alias WC = Wireland::Component
-  alias R = Raylib
-
-  def load(image : R::Image, palette : Wireland::Palette = Wireland::Palette::DEFAULT) : Array(WC)
+  def load(image : R::Image, palette : Wireland::Palette = Wireland::Palette::DEFAULT)
     raise "No file" if image.width == 0
 
     @width = image.width
     @height = image.height
 
-    start_time = R.get_time
     palette.load_into_components
-    puts "Palette loaded in #{R.get_time - start_time}"
-
     start_time = R.get_time
-    # List of pixels that are in our palette
+
     component_points = {} of WC.class => Array(Point)
+
     WC.all.each { |c| component_points[c] = [] of Point }
     image.width.times do |x|
       image.height.times do |y|
@@ -26,33 +30,22 @@ class Wireland::Circuit
         end
       end
     end
-    puts "Pixels sorted in #{R.get_time - start_time}"
 
-    start_time = R.get_time
     components = [] of WC
     id = 0_u64
-    # Go through each component point
-    component_points.each do |component_class, pixel_xy|
-      pixel_xy.each do |xy|
-        # Ignore this point if it already has a component
-        next if components.any?(&.xy.any?(&.==(xy)))
-        # Does this component not connect itself as a shape? Things like Crossing, Tunnel.
-        if !component_class.allow_adjacent? && !component_class.allow_diags?
-          component = component_class.new self
-          component.xy = [xy]
-          component.id = id
-          components << component
-          id += 1
-        else
-          component = component_class.new self
-          component.xy = _get_component_shape(component_points, component_class, xy)
-          component.id = id
-          components << component
-          id += 1
-        end
+
+    component_points.each do |component_class, xy_data|
+      until xy_data.empty?
+        shape = _get_component_shape(xy_data, component_class)
+
+        component = component_class.new(self, shape[:data], shape[:bounds])
+        component.id = id
+        components << component
+        id += 1
       end
     end
     puts "Components shaped in #{R.get_time - start_time}"
+
 
     adjacent = [
       {x: 0, y: -1},
@@ -65,61 +58,94 @@ class Wireland::Circuit
     # Connect each of the components
     components.each do |component|
       # Select only components that are valid output destinations
-      valid_components = components.select { |c| component.class.output_whitelist.includes? c.class }
+      valid_components = components.select do |c|
+        c.id != component.id &&
+        component.class.output_whitelist.includes?(c.class) &&
+        _rect_intersects?(c.bounds, component.bounds)
+      end
+
       valid_components.each do |vc|
         # Is this component a neighbor for any point on our main component
-        is_vc_neighbors = component.xy.any? do |c_point|
-          vc.xy.any? do |vc_point|
+        is_vc_neighbors = component.points.any? do |c_point|
+          vc.points.any? do |vc_point|
             adjacent.any? { |a_p| {x: c_point[:x] + a_p[:x], y: c_point[:y] + a_p[:y]} == vc_point }
           end
         end
 
-        component.connects << vc.id if is_vc_neighbors && vc.id != component.id
+        component.connects << vc.id if is_vc_neighbors
       end
     end
     puts "Components connected in #{R.get_time - start_time}"
     @last_id = components.sort { |a,b| b.id <=> a.id }[0].id
-    # Setup all the components. Cross, Tunnel, etc
+
+    @components = components
+    components.each(&.setup)
     components
   end
+  
+  private def _rect_intersects?(a : Rectangle, b : Rectangle)
+    R.check_collision_recs?(
+      R::Rectangle.new(
+        x: a[:x] - 1,
+        y: a[:y] - 1,
+        width: a[:width] + 2,
+        height: a[:height] + 2,
+      ),
 
-  private def _get_tunnel_neighbors(component_points : Hash(WC.class, Array(Point)), xy : Point) : Array(Point)
-    new_points = component_points[WC::Tunnel].select do |point|
-      xy != point && (xy[:x] == point[:x] || xy[:y] == point[:y])
-    end
-
-    new_points
-  end
-
-  # Goes through the hash of component points to find the shape of an individual component from a starting point `xy`
-  private def _get_component_shape(component_points : Hash(WC.class, Array(Point)), com : WC.class, xy : Point) : Array(Point)
-    shape = [] of Point
-    neighbors = [xy]
-    shape.concat neighbors
-
-    until neighbors.empty?
-      shape.concat(
-        neighbors = neighbors.map do |n|
-          ns = _get_neighbors(component_points, com, n)
-          ns.concat(_get_tunnel_neighbors(component_points, n)) if com == WC::Tunnel
-          ns
-        end.flatten.uniq!.reject do |n|
-          shape.includes? n
-        end
+      R::Rectangle.new(
+        x: b[:x] - 1,
+        y: b[:y] - 1,
+        width: b[:width] + 2,
+        height: b[:height] + 2,
       )
-    end
-
-    shape
+    )
   end
 
-  # Gets a list of all adjacent neighbors of type `com` around point `xy`
-  private def _get_neighbors(component_points : Hash(WC.class, Array(Point)), com : WC.class, xy : Point) : Array(Point)
-    neighbors = _make_neighborhood(xy, com)
+  private def _get_component_shape(xy_data, component_class)
+    shape = [] of Point
+    new_points = [xy_data.pop] of Point
 
-    # If the neighbors are empty return nothing
-    return [] of Point if neighbors.empty?
+    until new_points.empty?
+      point = new_points.pop
+      shape << point
 
-    component_points[com].select { |p| neighbors.includes? p }
+      all_points = new_points + shape
+
+      if component_class == WC::Tunnel
+        connected_tunnels = xy_data.select{|xy| xy[:x] == point[:x] || xy[:y] == point[:y]}
+        connected_tunnels.each{|t| xy_data.delete t}
+        new_points.concat(connected_tunnels - all_points)
+      else
+        # Make the neighborhood and remove anything we already have in our list of points to explore.
+        neighborhood = _make_neighborhood(point, component_class) - all_points
+        connected_pixels = xy_data.select{|xy| neighborhood.any?{|nxy| nxy == xy}}
+        connected_pixels.each{|p| xy_data.delete p}
+        new_points.concat(connected_pixels)
+      end
+    end
+
+
+    b_x = shape.min_by {|a| a[:x]}[:x]
+    b_y = shape.min_by {|a| a[:y]}[:y]
+    b_x_max = shape.max_by {|a| a[:x]}[:x]
+    b_y_max = shape.max_by {|a| a[:y]}[:y]
+    b_width = b_x_max - b_x + 1
+    b_height = b_y_max - b_y + 1
+
+    shape_data = Array(Bool).new(b_width * b_height, false)
+    shape.each { |xy| shape_data[(xy[:x] - b_x) + (xy[:y] - b_y)  * b_width] = true } 
+
+    # Output
+    {
+      bounds: {
+        x: b_x,
+        y: b_y,
+        width: b_width,
+        height: b_height,
+      },
+
+      data: shape_data
+    }
   end
 
   # Creates a list of neighbor points around xy.
@@ -166,24 +192,20 @@ class Wireland::Circuit
 
   def initialize(filename : String, palette_file : String)
     @palette = Wireland::Palette.new(palette_file)
-    image = R.load_image(filename)
-    @components = load(image, @palette)
+    load(image, @palette)
     R.unload_image image
-    components.each(&.setup)
     reset
   end
 
   def initialize(filename : String, @palette : Wireland::Palette = Wireland::Palette::DEFAULT)
     image = R.load_image(filename)
-    @components = load(image, @palette)
+    load(image, @palette)
     R.unload_image image
-    components.each(&.setup)
     reset
   end
 
   def initialize(image : R::Image, @palette : Wireland::Palette = Wireland::Palette::DEFAULT)
-    @components = load(image, palette)
-    components.each(&.setup)
+    load(image, palette)
     reset
   end
 
@@ -244,9 +266,10 @@ class Wireland::Circuit
 
   def post_tick
     # Turn off all the poles, then flip them back on via on_tick where needed
-    components.select(&.is_a?(Wireland::RelayPole)).map(&.as(Wireland::RelayPole)).each(&.off)
-    components.select(&.is_a?(WC::InputOff)).map(&.as(WC::InputOff)).each(&.off)
-    components.select(&.is_a?(WC::InputOn)).map(&.as(WC::InputOn)).each(&.off)
+    components.map(&.as?(Wireland::RelayPole)).compact.each { |pole| pole.as(Wireland::RelayPole).off }
+    components.map(&.as?(WC::InputOff)).compact.each(&.off)
+    components.map(&.as?(WC::InputOn)).compact.each(&.on)
+
     components.each(&.on_tick)
     # Clear out all the pulses to start the next tick.
     components.each(&.pulses.clear)
@@ -269,15 +292,15 @@ class Wireland::Circuit
   def reset
     @ticks = 0
     active_pulses.clear
-    components.select(&.is_a?(WC::Buffer)).each(&.setup)
+    components.map(&.as?(WC::Buffer)).compact.each(&.clear)
     components.each(&.pulses.clear)
-    components.select(&.is_a?(Wireland::RelayPole)).map(&.as(Wireland::RelayPole)).each(&.off)
-    components.select(&.is_a?(WC::InputOff)).map(&.as(WC::InputOff)).each(&.off)
-    components.select(&.is_a?(WC::InputOn)).map(&.as(WC::InputOn)).each(&.on)
-    components.select(&.is_a?(WC::InputToggleOff)).map(&.as(WC::InputToggleOff)).each(&.off)
-    components.select(&.is_a?(WC::InputToggleOn)).map(&.as(WC::InputToggleOn)).each(&.on)
-    components.select(&.is_a?(WC::OutputOff)).map(&.as(WC::OutputOff)).each(&.off)
-    components.select(&.is_a?(WC::OutputOn)).map(&.as(WC::OutputOn)).each(&.on)
+    components.map(&.as?(Wireland::RelayPole)).compact.each { |pole| pole.as(Wireland::RelayPole).off }
+    components.map(&.as?(WC::InputOff)).compact.each(&.off)
+    components.map(&.as?(WC::InputOn)).compact.each(&.on)
+    components.map(&.as?(WC::InputToggleOff)).compact.each(&.off)
+    components.map(&.as?(WC::InputToggleOn)).compact.each(&.on)
+    components.map(&.as?(WC::OutputOff)).compact.each(&.off)
+    components.map(&.as?(WC::OutputOn)).compact.each(&.on)
     components.each(&.on_tick)
   end
 end

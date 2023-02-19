@@ -8,7 +8,7 @@ class Wireland::Component::Start < Wireland::Component
   end
 
   def on_tick
-    if parent.ticks < xy.size
+    if parent.ticks < size
       parent.active_pulse(id, connects.dup)
     end
   end

@@ -12,6 +12,10 @@ class Wireland::Component::Switch < Wireland::Component
   def on_tick
     poles.each(&.on) if high?
   end
+  
+  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+    super
+  end
 
   def setup
     adjacent = [
@@ -24,8 +28,8 @@ class Wireland::Component::Switch < Wireland::Component
     all_pole_components = parent.components.select(&.is_a?(Wireland::RelayPole)).map(&.as(Wireland::Component))
 
     neighbor_poles = all_pole_components.select do |pole_c|
-      pole_c.xy.any? do |pole_xy|
-        xy.any? do |xy|
+      pole_c.points.any? do |pole_xy|
+        points.any? do |xy|
           adjacent.any? do |a_point|
             pole_xy == {x: xy[:x] + a_point[:x], y: xy[:y] + a_point[:y]}
           end

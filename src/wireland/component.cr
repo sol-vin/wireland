@@ -1,16 +1,13 @@
 # A wire instruction like WIRE, ALTWIRE, JOIN, ETC
 class Wireland::Component
-  alias R = Raylib
-  alias Point = NamedTuple(x: Int32, y: Int32)
-
   # Holds a list of all classes inheriting this class
-  class_getter all : Array(Wireland::Component.class) = [] of Wireland::Component.class
+  class_getter all : Array(WC.class) = [] of WC.class
   # Empty list for easier definition for components
-  class_getter none : Array(Wireland::Component.class) = [] of Wireland::Component.class
+  class_getter none : Array(WC.class) = [] of WC.class
 
   # Adds all inheriting types to the class list
   macro inherited
-    Wireland::Component.all << {{@type.id}}
+    WC.all << {{@type.id}}
   end
 
   # Color of the component
@@ -36,16 +33,16 @@ class Wireland::Component
   end
 
   # List of `Component` classes that this component should not pulse out to.
-  def self.output_whitelist : Array(Wireland::Component.class)
-    Wireland::Component.all.reject do |c| 
-      c == Wireland::Component::Start || 
-      c == Wireland::Component::Buffer || 
-      c == Wireland::Component::DiodeOut || 
-      c == Wireland::Component::NotOut ||
-      c == Wireland::Component::InputOn || 
-      c == Wireland::Component::InputOff || 
-      c == Wireland::Component::InputToggleOn || 
-      c == Wireland::Component::InputToggleOff
+  def self.output_whitelist : Array(WC.class)
+    WC.all.reject do |c| 
+      c == WC::Start || 
+      c == WC::Buffer || 
+      c == WC::DiodeOut || 
+      c == WC::NotOut ||
+      c == WC::InputOn || 
+      c == WC::InputOff || 
+      c == WC::InputToggleOn || 
+      c == WC::InputToggleOff
     end
   end
 
@@ -64,13 +61,38 @@ class Wireland::Component
   # Can this component conduct in and out? Used by relay poles to turn off and on a component.
   property? conductive : Bool = true
 
-  # List of points on the original image where this component is.
-  property xy = [] of Point
+  getter bounds : Rectangle
+  getter data : Array(Bool)
+  getter size : Int32
 
-  def initialize(@parent : Wireland::Circuit)
+  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+    @size = @data.reduce(0) {|acc, i| acc + (i ? 1 : 0)}
+  end
+
+  def [](x, y)
+    raise "Out of bounds #{x}, #{y} : #{id}:#{self.class}" if x < 0 || y < 0 || x >= bounds[:width] || y >= bounds[:height]
+    @data[x + y * bounds[:width]]
+  end
+
+  def a(x, y)
+    abs_x = x - bounds[:x]
+    abs_y = y - bounds[:y]
+
+    raise "Out of bounds #{x}-><#{abs_x}, #{y}-><#{abs_y} : #{id}:#{self.class}" if abs_x < 0 || abs_y < 0 || abs_x >= bounds[:width] || abs_y >= bounds[:height]
+    @data[abs_x + abs_y * bounds[:width]]
   end
 
   def setup
+  end
+
+  def points : Array(Point)
+    ps = [] of Point
+    bounds[:width].times do |x|
+      bounds[:height].times do |y|
+         ps << {x: bounds[:x] + x, y: bounds[:y] + y} if self[x, y]
+      end
+    end
+    ps
   end
 
   def color : R::Color

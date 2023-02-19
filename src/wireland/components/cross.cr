@@ -1,9 +1,10 @@
-class Wireland::Component::Cross < Wireland::Component
-  alias Point = NamedTuple(x: Int32, y: Int32)
-  alias WC = Wireland::Component
-
+class WC::Cross < WC
   # This can technically only have a total of 4 directions
   getter directions = {} of Wireland::Direction => UInt64
+  
+  def initialize(@parent : Wireland::Circuit, @data : Array(Bool), @bounds : Rectangle)
+    super
+  end
 
   def setup
     adjacent_directions = {
@@ -19,8 +20,8 @@ class Wireland::Component::Cross < Wireland::Component
 
     (one_way_connections + connects).each do |c|
       direction = Wireland::Direction::None
-      parent[c].xy.each do |c_point|
-        adjacent_directions.select { |d, a| xy.includes?({x: c_point[:x] + a[:x], y: c_point[:y] + a[:y]}) }.keys.each do |d|
+      parent[c].points.each do |c_point|
+        adjacent_directions.select { |d, a| points.includes?({x: c_point[:x] + a[:x], y: c_point[:y] + a[:y]}) }.keys.each do |d|
           direction |= d
         end
       end
