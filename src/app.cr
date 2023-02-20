@@ -117,9 +117,9 @@ module Wireland::App
 
     @@previous_camera_mouse_drag_pos = V2.zero
 
-    CURSOR_TEXTURE_FILE   = "rsrc/sim/cursor.png"
-    SMALL_CURSOR_TEXTURE_FILE   = "rsrc/sim/smallcursor.png"
-    SELECTOR_TEXTURE_FILE = "rsrc/sim/selector.png"
+    CURSOR_TEXTURE_FILE       = "rsrc/sim/cursor.png"
+    SMALL_CURSOR_TEXTURE_FILE = "rsrc/sim/smallcursor.png"
+    SELECTOR_TEXTURE_FILE     = "rsrc/sim/selector.png"
 
     SMALL_CURSOR_ZOOM_LIMIT = 5.0
 
@@ -128,20 +128,36 @@ module Wireland::App
       @@position.y = R.get_mouse_y
     end
 
+    def self.get_component
+      world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
+      offset = App.circuit_texture.width/2.0
+      x = (world_mouse.x / Scale::CIRCUIT).to_i
+      y = (world_mouse.y / Scale::CIRCUIT).to_i
+
+      clicked = App.circuit.components.find do |c|
+        c.abs_data?(x, y)
+      end
+
+      clicked
+    end
+
     # Handle which input got clicked, and if it should turn on or off.
     def self.handle_io
-      if R.mouse_button_pressed?(INTERACT) && !Help.show? && !Info.show?
-        world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
-        offset = App.circuit_texture.width/2.0
-        x = (world_mouse.x / Scale::CIRCUIT).to_i
-        y = (world_mouse.y / Scale::CIRCUIT).to_i
+      if R.mouse_button_released?(INTERACT)
+        clicked_io = get_component
 
-        clicked_io = App.circuit.components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).find do |io|
-          io.abs_data?(x, y)
-        end
-
-        if clicked_io
+        if clicked_io.is_a?(WC::InputToggleOn | WC::InputToggleOff)
           clicked_io.as(Wireland::IO).toggle
+        elsif !App.play? && clicked_io.is_a?(WC::InputOn | WC::InputOff)
+          clicked_io.as(Wireland::IO).toggle
+        end
+      end
+
+      if App.play? && R.mouse_button_down?(INTERACT)
+        clicked_io = get_component
+
+        if clicked_io.is_a?(WC::InputOn | WC::InputOff)
+          clicked_io.as(Wireland::IO).down
         end
       end
     end
@@ -349,14 +365,7 @@ module Wireland::App
     # When a component is right clicked, display a box.
     def self.update
       if !show? && R.mouse_button_released?(Mouse::INFO) && !Help.show?
-        world_mouse = R.get_screen_to_world_2d(Mouse.position, App.camera)
-        offset = App.circuit_texture.width/2.0
-        x = (world_mouse.x / Scale::CIRCUIT).to_i
-        y = (world_mouse.y / Scale::CIRCUIT).to_i
-
-        clicked = App.circuit.components.find do |c|
-          c.abs_data?(x, y)
-        end
+        clicked = Mouse.get_component
 
         if clicked
           @@id = clicked.id
@@ -685,7 +694,6 @@ module Wireland::App
   def self.draw_debug_hud
     R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, R::MAGENTA)
     R.draw_text(@@camera.zoom.to_s, Screen::WIDTH - 50, 55, 40, R::GREEN)
-
   end
 
   def self.draw_ticks_counter
@@ -803,13 +811,13 @@ module Wireland::App
       handle_dropped_files
 
       if is_circuit_loaded?
+        Keys.update
+        Info.update
+
         if !Info.show? && !Help.show?
           Mouse.handle_camera
           Mouse.handle_io
         end
-
-        Keys.update
-        Info.update
       end
 
       R.begin_drawing

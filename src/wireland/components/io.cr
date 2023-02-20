@@ -24,6 +24,9 @@ module Wireland::IO
   def color : R::Color
     R::Color.new
   end
+
+  def down
+  end
 end
 
 class Wireland::Component::InputOn < Wireland::Component
@@ -52,6 +55,10 @@ class Wireland::Component::InputOn < Wireland::Component
       parent.palette.input_off
     end
   end
+
+  def down
+    off
+  end
 end
 
 class Wireland::Component::InputOff < Wireland::Component
@@ -78,6 +85,10 @@ class Wireland::Component::InputOff < Wireland::Component
     else
       parent.palette.input_off
     end
+  end
+
+  def down
+    on
   end
 end
 
