@@ -26,13 +26,6 @@ module Wireland::App
     end
   end
 
-  module Colors
-    HIGH                     = R::GREEN
-    WILL_LOSE_ACTIVE_PULSE   = R::RED
-    WILL_ACTIVE_PULSE        = R::SKYBLUE
-    IS_AND_WILL_ACTIVE_PULSE = R::MAGENTA
-  end
-
   # The palette used by Wireland.
   class_getter palette : W::Palette = W::Palette::DEFAULT
   # The circuit object that contains all the stuff for running the simulation.
@@ -40,10 +33,6 @@ module Wireland::App
 
   # The texture file of the circuit.
   class_getter circuit_texture = R::Texture.new
-
-
-  @@tick_texture = R::Texture.new
-  @@play_texture = R::Texture.new
 
   class_property camera : R::Camera2D = R::Camera2D.new
   @@camera.zoom = Screen::Zoom::DEFAULT
@@ -168,13 +157,13 @@ module Wireland::App
         color = R::Color.new
 
         if @@circuit.active_pulses.keys.includes?(c.id) && @@last_active_pulses.includes?(c.id)
-          color = Colors::IS_AND_WILL_ACTIVE_PULSE
+          color = @@palette.is_and_will_active
         elsif @@last_active_pulses.includes?(c.id)
-          color = Colors::WILL_LOSE_ACTIVE_PULSE
+          color = @@palette.is_active
         elsif @@circuit.active_pulses.keys.includes?(c.id)
-          color = Colors::WILL_ACTIVE_PULSE
+          color = @@palette.will_active
         elsif @@last_pulses.includes? c.id
-          color = Colors::HIGH
+          color = @@palette.high
         end
 
         if c.is_a?(Wireland::IO | Wireland::RelayPole)
@@ -184,11 +173,11 @@ module Wireland::App
             special_color = io.color
 
             if io.on? && @@last_active_pulses.includes?(c.id)
-              color = Colors::IS_AND_WILL_ACTIVE_PULSE
+              color = @@palette.is_and_will_active
             elsif io.on?
-              color = Colors::WILL_ACTIVE_PULSE
+              color = @@palette.will_active
             elsif io.off? && (@@last_active_pulses.includes?(c.id) || @@circuit.active_pulses.keys.includes?(c.id))
-              color = Colors::WILL_LOSE_ACTIVE_PULSE
+              color = @@palette.is_active
             end
           elsif c.is_a?(Wireland::IO)
             io = c.as(Wireland::IO)
@@ -308,10 +297,8 @@ module Wireland::App
 
   def self.draw_debug_hud
     R.draw_text(R.get_fps.to_s, Screen::WIDTH - 50, 10, 40, R::MAGENTA)
-    R.draw_text(@@camera.zoom.to_s, Screen::WIDTH - 50, 55, 40, R::GREEN)
+    # R.draw_text(@@camera.zoom.to_s, Screen::WIDTH - 50, 55, 40, R::GREEN)
   end
-
-  
 
   def self.run
     R.init_window(Screen::WIDTH, Screen::HEIGHT, "wireland")

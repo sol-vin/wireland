@@ -30,6 +30,13 @@ module Wireland::DefaultColors
   WHITE = R::Color.new(r: 0xFF, g: 0xFF, b: 0xFF, a: 0xFF)
   GREY  = R::Color.new(r: 0xC0, g: 0xCB, b: 0xDC, a: 0xFF)
   BLACK = R::Color.new(r: 0x18, g: 0x14, b: 0x25, a: 0xFF)
+
+  # SPECIAL
+  WILL_ACTIVE = R::Color.new(r: 0x0b, g: 0xff, b: 0xde, a: 0xFF)
+  IS_AND_WILL_ACTIVE = R::Color.new(r: 0xff, g: 0x00, b: 0xd8, a: 0xFF)
+  IS_ACTIVE = R::Color.new(r: 0xff, g: 0x00, b: 0x00, a: 0xFF)
+
+  HIGH = R::Color.new(r: 0x0b, g: 0xff, b: 0x00, a: 0xFF)
 end
 
 struct Wireland::Palette
@@ -82,6 +89,10 @@ struct Wireland::Palette
   getter diode_out : R::Color = DC::DARK_GREEN
   getter gpio : R::Color = DC::PURPLE
   getter bg : R::Color = DC::BLACK
+  getter will_active : R::Color = DC::WILL_ACTIVE
+  getter is_and_will_active : R::Color = DC::IS_AND_WILL_ACTIVE
+  getter is_active : R::Color = DC::IS_ACTIVE
+  getter high : R::Color = DC::HIGH
 
   def initialize(
     @start = DC::LIGHT_GREEN,
@@ -168,6 +179,14 @@ struct Wireland::Palette
           @gpio = _read_color(line)
         when 26
           @bg = _read_color(line)
+        when 27
+          @will_active = _read_color(line)
+        when 28
+          @is_and_will_active = _read_color(line)
+        when 29
+          @will_active = _read_color(line)
+        when 30
+          @high = _read_color(line)
         end
       end
       raise ".pal did not have enough colors. Only had #{index - 2}" if index < 26
