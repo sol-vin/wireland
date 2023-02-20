@@ -1,14 +1,6 @@
 require "raylib-cr"
 require "bit_array"
 
-alias R = Raylib
-alias V2 = R::Vector2
-alias W = Wireland
-alias WC = Wireland::Component
-
-alias Rectangle = NamedTuple(x: Int32, y: Int32, width: Int32, height: Int32)
-alias Point = NamedTuple(x: Int32, y: Int32)
-
 # The whole simulated program
 class Wireland::Circuit
   def load(image : R::Image, palette : Wireland::Palette = Wireland::Palette::DEFAULT)
@@ -20,19 +12,19 @@ class Wireland::Circuit
     palette.load_into_components
     start_time = R.get_time
 
-    component_points = {} of WC.class => Array(Point)
+    component_points = {} of Wireland::Component.class => Array(Point)
 
-    WC.all.each { |c| component_points[c] = [] of Point }
+    Wireland::Component.all.each { |c| component_points[c] = [] of Point }
     image.width.times do |x|
       image.height.times do |y|
         color = R.get_image_color(image, x, y)
-        if component = WC.all.find { |c| c.color == color }
+        if component = Wireland::Component.all.find { |c| c.color == color }
           component_points[component] << {x: x, y: y}
         end
       end
     end
 
-    components = [] of WC
+    components = [] of Wireland::Component
     id = 0_u64
 
     component_points.each do |component_class, xy_data|
@@ -126,7 +118,7 @@ class Wireland::Circuit
 
       all_points = new_points + shape
 
-      if component_class == WC::Tunnel
+      if component_class == Wireland::Component::Tunnel
         connected_tunnels = xy_data.select{|xy| xy[:x] == point[:x] || xy[:y] == point[:y]}
         connected_tunnels.each{|t| xy_data.delete t}
         new_points.concat(connected_tunnels - all_points)
@@ -164,7 +156,7 @@ class Wireland::Circuit
   end
 
   # Creates a list of neighbor points around xy.
-  private def _make_neighborhood(xy : Point, com : WC.class)
+  private def _make_neighborhood(xy : Point, com : Wireland::Component.class)
     diags = [
       {x: -1, y: -1},
       {x: -1, y: 1},
@@ -190,7 +182,7 @@ class Wireland::Circuit
   property palette : Wireland::Palette = Wireland::Palette::DEFAULT
 
   # List of all components in this circuit
-  property components = [] of WC
+  property components = [] of Wireland::Component
   # Number of ticks that have run since the circuit started.
   property ticks = 0_u128
 
@@ -253,7 +245,7 @@ class Wireland::Circuit
   end
 
   def pulse_inputs
-    inputs = components.select(&.is_a?(WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).map(&.as(Wireland::IO))
+    inputs = components.select(&.is_a?(Wireland::Component::InputOn | Wireland::Component::InputOff | Wireland::Component::InputToggleOn | Wireland::Component::InputToggleOff)).map(&.as(Wireland::IO))
     inputs.select(&.on?).each { |i| active_pulse(i.id, i.connects) }
     off_inputs = inputs.select(&.off?).map(&.id)
     @active_pulses.reject!{|c| off_inputs.includes? c}
@@ -282,8 +274,8 @@ class Wireland::Circuit
   def post_tick
     # Turn off all the poles, then flip them back on via on_tick where needed
     components.map(&.as?(Wireland::RelayPole)).compact.each { |pole| pole.as(Wireland::RelayPole).off }
-    components.map(&.as?(WC::InputOff)).compact.each(&.off)
-    components.map(&.as?(WC::InputOn)).compact.each(&.on)
+    components.map(&.as?(Wireland::Component::InputOff)).compact.each(&.off)
+    components.map(&.as?(Wireland::Component::InputOn)).compact.each(&.on)
 
     components.each(&.on_tick)
     # Clear out all the pulses to start the next tick.
@@ -307,15 +299,15 @@ class Wireland::Circuit
   def reset
     @ticks = 0
     active_pulses.clear
-    components.map(&.as?(WC::Buffer)).compact.each(&.clear)
+    components.map(&.as?(Wireland::Component::Buffer)).compact.each(&.clear)
     components.each(&.pulses.clear)
     components.map(&.as?(Wireland::RelayPole)).compact.each { |pole| pole.as(Wireland::RelayPole).off }
-    components.map(&.as?(WC::InputOff)).compact.each(&.off)
-    components.map(&.as?(WC::InputOn)).compact.each(&.on)
-    components.map(&.as?(WC::InputToggleOff)).compact.each(&.off)
-    components.map(&.as?(WC::InputToggleOn)).compact.each(&.on)
-    components.map(&.as?(WC::OutputOff)).compact.each(&.off)
-    components.map(&.as?(WC::OutputOn)).compact.each(&.on)
+    components.map(&.as?(Wireland::Component::InputOff)).compact.each(&.off)
+    components.map(&.as?(Wireland::Component::InputOn)).compact.each(&.on)
+    components.map(&.as?(Wireland::Component::InputToggleOff)).compact.each(&.off)
+    components.map(&.as?(Wireland::Component::InputToggleOn)).compact.each(&.on)
+    components.map(&.as?(Wireland::Component::OutputOff)).compact.each(&.off)
+    components.map(&.as?(Wireland::Component::OutputOn)).compact.each(&.on)
     components.each(&.on_tick)
   end
 end

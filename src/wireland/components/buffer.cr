@@ -1,4 +1,4 @@
-class WC::Buffer < WC
+class Wireland::Component::Buffer < Wireland::Component
   def self.active?
     true
   end

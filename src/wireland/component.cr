@@ -1,13 +1,13 @@
 # A wire instruction like WIRE, ALTWIRE, JOIN, ETC
 class Wireland::Component
   # Holds a list of all classes inheriting this class
-  class_getter all : Array(WC.class) = [] of WC.class
+  class_getter all : Array(Wireland::Component.class) = [] of Wireland::Component.class
   # Empty list for easier definition for components
-  class_getter none : Array(WC.class) = [] of WC.class
+  class_getter none : Array(Wireland::Component.class) = [] of Wireland::Component.class
 
   # Adds all inheriting types to the class list
   macro inherited
-    WC.all << {{@type.id}}
+    Wireland::Component.all << {{@type.id}}
   end
 
   # Color of the component
@@ -33,16 +33,16 @@ class Wireland::Component
   end
 
   # List of `Component` classes that this component should not pulse out to.
-  def self.output_whitelist : Array(WC.class)
-    WC.all.reject do |c| 
-      c == WC::Start || 
-      c == WC::Buffer || 
-      c == WC::DiodeOut || 
-      c == WC::NotOut ||
-      c == WC::InputOn || 
-      c == WC::InputOff || 
-      c == WC::InputToggleOn || 
-      c == WC::InputToggleOff
+  def self.output_whitelist : Array(Wireland::Component.class)
+    Wireland::Component.all.reject do |c| 
+      c == Wireland::Component::Start || 
+      c == Wireland::Component::Buffer || 
+      c == Wireland::Component::DiodeOut || 
+      c == Wireland::Component::NotOut ||
+      c == Wireland::Component::InputOn || 
+      c == Wireland::Component::InputOff || 
+      c == Wireland::Component::InputToggleOn || 
+      c == Wireland::Component::InputToggleOff
     end
   end
 
@@ -171,3 +171,4 @@ class Wireland::Component
     pulse_out unless self.class.active? || pulses.size > 1
   end
 end
+

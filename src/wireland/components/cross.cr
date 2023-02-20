@@ -1,4 +1,4 @@
-class WC::Cross < WC
+class Wireland::Component::Cross < Wireland::Component
   # This can technically only have a total of 4 directions
   getter directions = {} of Wireland::Direction => UInt64
 
@@ -14,7 +14,7 @@ class WC::Cross < WC
       Wireland::Direction::Right => {x: 1, y: 0},
     }
 
-    one_way_connections = parent.components.select(&.is_a?(WC::Start | WC::Buffer | WC::DiodeOut | WC::NotOut | WC::InputOn | WC::InputOff | WC::InputToggleOn | WC::InputToggleOff)).select do |c|
+    one_way_connections = parent.components.select(&.is_a?(Wireland::Component::Start | Wireland::Component::Buffer | Wireland::Component::DiodeOut | Wireland::Component::NotOut | Wireland::Component::InputOn | Wireland::Component::InputOff | Wireland::Component::InputToggleOn | Wireland::Component::InputToggleOff)).select do |c|
       c.connects.includes? self.id
     end.map(&.id)
 

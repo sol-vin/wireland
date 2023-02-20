@@ -1,6 +1,4 @@
 module Wireland::DefaultColors
-  alias R = Raylib
-
   PINK     = R::Color.new(r: 0xF6, g: 0x75, b: 0x7A, a: 0xFF)
   RED      = R::Color.new(r: 0xE4, g: 0x3B, b: 0x44, a: 0xFF)
   DARK_RED = R::Color.new(r: 0x6E, g: 0x19, b: 0x23, a: 0xFF)
@@ -36,8 +34,6 @@ end
 
 struct Wireland::Palette
   alias DC = Wireland::DefaultColors
-  alias WC = Wireland::Component
-  alias R = Raylib
 
   DEFAULT = Wireland::Palette.new(
     start: DC::LIGHT_GREEN,
@@ -227,26 +223,26 @@ struct Wireland::Palette
     total = all.size
     raise "Duplicate color" if total != all.uniq.size
 
-    WC::Start.color = @start
-    WC::Buffer.color = @buffer
-    WC::Wire.color = @wire
-    WC::AltWire.color = @alt_wire
-    WC::Join.color = @join
-    WC::Cross.color = @cross
-    WC::Tunnel.color = @tunnel
-    WC::InputOn.color = @input_on
-    WC::InputOff.color = @input_off
-    WC::InputToggleOn.color = @input_toggle_on
-    WC::InputToggleOff.color = @input_toggle_off
-    WC::OutputOn.color = @output_on
-    WC::OutputOff.color = @output_off
-    WC::NotIn.color = @not_in
-    WC::NotOut.color = @not_out
-    WC::Switch.color = @switch
-    WC::NOPole.color = @no_pole
-    WC::NCPole.color = @nc_pole
-    WC::DiodeIn.color = @diode_in
-    WC::DiodeOut.color = @diode_out
-    WC::GPIO.color = @gpio
+    Wireland::Component::Start.color = @start
+    Wireland::Component::Buffer.color = @buffer
+    Wireland::Component::Wire.color = @wire
+    Wireland::Component::AltWire.color = @alt_wire
+    Wireland::Component::Join.color = @join
+    Wireland::Component::Cross.color = @cross
+    Wireland::Component::Tunnel.color = @tunnel
+    Wireland::Component::InputOn.color = @input_on
+    Wireland::Component::InputOff.color = @input_off
+    Wireland::Component::InputToggleOn.color = @input_toggle_on
+    Wireland::Component::InputToggleOff.color = @input_toggle_off
+    Wireland::Component::OutputOn.color = @output_on
+    Wireland::Component::OutputOff.color = @output_off
+    Wireland::Component::NotIn.color = @not_in
+    Wireland::Component::NotOut.color = @not_out
+    Wireland::Component::Switch.color = @switch
+    Wireland::Component::NOPole.color = @no_pole
+    Wireland::Component::NCPole.color = @nc_pole
+    Wireland::Component::DiodeIn.color = @diode_in
+    Wireland::Component::DiodeOut.color = @diode_out
+    Wireland::Component::GPIO.color = @gpio
   end
 end
