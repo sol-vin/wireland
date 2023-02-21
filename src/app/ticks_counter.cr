@@ -46,13 +46,13 @@ module Wireland::App::TicksCounter
       height: text_size
     )
 
-    if (text_length + text_size) > i_width
-      i_width = text_length + text_size + i_width*margin_x
+    if (text_length + text_size) > i_width-text_size
+      i_width = text_length + text_size + i_width*margin_x + 20
       width = i_width + i_width*margin_x
       x = Screen::WIDTH - width
       i_x = x + i_margin_x
-      clock_dst = R::Rectangle.new(
-        x: text_x - text_size,
+      icon_dst = R::Rectangle.new(
+        x: text_x - text_size - 10,
         y: text_y,
         width: text_size,
         height: text_size

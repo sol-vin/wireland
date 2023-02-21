@@ -49,6 +49,8 @@ module Wireland::App
   class_getter last_active_pulses = [] of UInt64
   class_getter last_pulses = [] of UInt64
 
+  class_getter font : R::Font = R::Font.new
+
   # Resets the simulation
   def self.reset
     Info.reset
@@ -118,8 +120,18 @@ module Wireland::App
     start_time = R.get_time
     load_circuit_file(circuit_file)
     @@camera.target.x = @@circuit_texture.width/2 * Scale::CIRCUIT
-    @@camera.target.y = @@circuit_texture.width/2 * Scale::CIRCUIT
+    @@camera.target.y = @@circuit_texture.height/2 * Scale::CIRCUIT
     puts "Total time: #{R.get_time - start_time}"
+  end
+
+  def self.load_font
+    @@font = R.load_font_ex("rsrc/sim/font.ttf", 128, Pointer(LibC::Int).null, 0)
+
+    R.set_texture_filter(@@font.texture, R::TextureFilter::Anisotropic16x)
+  end
+
+  def self.unload_font
+    R.unload_font(@@font)
   end
 
   # Move the circuit forward a tick
@@ -271,11 +283,15 @@ module Wireland::App
     offset = title_size + 20
 
     text_length = R.measure_text(title, title_size)
-    R.draw_text(
+    R.draw_text_ex(
+      @@font,
       title,
-      center_x - text_length/2,
-      rect[:y] + 10,
+      V2.new(
+        x: center_x - text_length/2,
+        y: rect[:y] + 10
+      ),
       title_size,
+      0,
       @@palette.bg
     )
 
@@ -286,7 +302,7 @@ module Wireland::App
     end
 
     R.draw_text_ex(
-      R.get_font_default,
+      @@font,
       text,
       V2.new(x: rect[:x] + 30, y: rect[:y] + offset),
       text_size,
@@ -304,6 +320,7 @@ module Wireland::App
     R.init_window(Screen::WIDTH, Screen::HEIGHT, "wireland")
     R.set_target_fps(60)
 
+    load_font
     TicksCounter.load
     Menu.load
     Mouse.load
@@ -313,10 +330,10 @@ module Wireland::App
       handle_dropped_files
 
       if is_circuit_loaded?
-        Keys.update
         Info.update
 
         if !Info.show? && !Help.show?
+          Keys.update
           Mouse.handle_camera
           Mouse.handle_io
         end
@@ -351,6 +368,7 @@ module Wireland::App
     TicksCounter.unload
     Menu.unload
     Mouse.unload
+    unload_font
     R.close_window
   end
 end
