@@ -4,15 +4,11 @@ module Wireland::App::Info
   MARGIN = 20
   SPACING = 1.0
 
-  NAME_TEXT_SIZE = 60
-  NAME_BG_LINE_THICKNESS = 7
+  BG_WIDTH = Screen::WIDTH/2
+  BG_HEIGHT = Screen::HEIGHT/2
+  BG_X = BG_WIDTH/2
+  BG_Y = BG_HEIGHT/2
 
-  STATS_TEXT_SIZE = (NAME_TEXT_SIZE - MARGIN/2) / 2
-  STATS_LINE_SPACING = MARGIN/2
-
-  CONNECTION_SIZE = 50
-  CONNECTION_BG_LINE_THICKNESS = 3.5
-  CONNECTION_TEXT_SIZE = 15
 
   # Draws an info box when id is valid
   def self.draw
@@ -37,15 +33,12 @@ module Wireland::App::Info
       #   text += "\nHIGH: #{App.last_pulses.includes? id}"
       # end
 
-      width = Screen::WIDTH/2
-      height = Screen::HEIGHT/2
-
 
       bg_rect = R::Rectangle.new(
-        x:      width/2,
-        y:      height/2,
-        width:  width,
-        height: height,
+        x:      BG_X,
+        y:      BG_Y,
+        width:  BG_WIDTH,
+        height: BG_HEIGHT,
       )
 
       R.draw_rectangle(
@@ -61,6 +54,9 @@ module Wireland::App::Info
       _draw_connections_out(id, name_rect.x, name_rect.y + name_rect.height + MARGIN/2)
     end
   end
+
+  NAME_TEXT_SIZE = 60
+  NAME_BG_LINE_THICKNESS = 7
 
   private def self._draw_name(id, x, y) : R::Rectangle
     name = App.circuit[id].class.to_s.split("::").last
@@ -105,6 +101,9 @@ module Wireland::App::Info
 
     name_lines
   end
+
+  STATS_TEXT_SIZE = (NAME_TEXT_SIZE - MARGIN/2) / 2
+  STATS_LINE_SPACING = MARGIN/2
 
   private def self._draw_stats(id, x, y)
     id_text = "ID: 0x#{id.to_s(16).upcase}"
@@ -161,13 +160,25 @@ module Wireland::App::Info
   private def self._draw_conductive
   end
 
-  private def self._draw_connection(id, x, y, index = 0)
-    bg_rect = R::Rectangle.new(
+  # Connections
+  CONNECTION_SIZE = 50
+  CONNECTION_BG_LINE_THICKNESS = 3.5
+  CONNECTION_TEXT_SIZE = 15
+  CONNECTION_RANGE = (0..6)
+
+
+
+  private def self._get_connection_rect(x, y, index = 0) : R::Rectangle
+    R::Rectangle.new(
       x:      x + (index * (MARGIN + CONNECTION_SIZE)),
       y:      y,
       width:  CONNECTION_SIZE,
       height: CONNECTION_SIZE
     )
+  end
+
+  private def self._draw_connection(id, x, y, index = 0)
+    bg_rect = _get_connection_rect(x, y, index)
 
     R.draw_rectangle_rec(
       bg_rect,
@@ -243,10 +254,52 @@ module Wireland::App::Info
       App.palette.bg
     )
 
-    App.circuit[id].connects.each_with_index do |c_id, index|
-      _draw_connection(c_id, bg_rect.x + bg_rect.width + MARGIN, y, index)
+    closest = _get_connection_rect(bg_rect.x + bg_rect.width, y, CONNECTION_RANGE.begin)
+    farthest = _get_connection_rect(bg_rect.x + bg_rect.width, y, CONNECTION_RANGE.end)
+
+    connections_rect = R::Rectangle.new(
+      x: closest.x,
+      y: closest.y,
+      width: (farthest.x + farthest.width) - closest.x,
+      height: (farthest.y + farthest.height) - closest.y,
+    )
+
+    button_spacing = (BG_X + BG_WIDTH) - (connections_rect.x + connections_rect.width)
+    connections_rect.x += button_spacing/2
+
+    if App.circuit[id].connects.size > CONNECTION_RANGE.size
+      button_margin = MARGIN/4
+      button_size = (button_spacing/2) - button_margin*2
+      
+      button_rect = R::Rectangle.new(
+        x: bg_rect.x + bg_rect.width + button_margin,
+        y: bg_rect.y + CONNECTION_SIZE/2 - button_size/2,
+        width: button_size,
+        height: button_size
+      )
+
+      R.draw_rectangle_rec(
+        button_rect,
+        App.palette.alt_wire
+      )
+
+      button_rect = R::Rectangle.new(
+        x: connections_rect.x + connections_rect.width + button_margin,
+        y: bg_rect.y + CONNECTION_SIZE/2 - button_size/2,
+        width: button_size,
+        height: button_size
+      )
+
+      R.draw_rectangle_rec(
+        button_rect,
+        App.palette.alt_wire
+      )
     end
 
+
+    App.circuit[id].connects[0..6].each_with_index do |c_id, index|
+      _draw_connection(c_id, connections_rect.x, connections_rect.y, index)
+    end
   end
 
   private def self._draw_buffer_states
@@ -266,6 +319,10 @@ module Wireland::App::Info
     !@@id.nil?
   end
 
+  private def self._handle_interact
+
+  end
+
   # When a component is right clicked, display a box.
   def self.update
     if !show? && R.mouse_button_released?(Mouse::INFO) && !Help.show?
@@ -274,6 +331,8 @@ module Wireland::App::Info
       if clicked
         @@id = clicked.id
       end
+    elsif show?
+      _handle_interact
     elsif [Mouse::CAMERA, Mouse::INFO].any? { |mb| R.mouse_button_released?(mb) }
       reset
     end
