@@ -9,6 +9,26 @@ module Wireland::App::Info
   BG_X = BG_WIDTH/2
   BG_Y = BG_HEIGHT/2
 
+  @@buttons = {} of R::Rectangle => Proc(Nil)
+  @@connections_page = 0
+
+  def self.set_id(new_id)
+    reset
+    @@id = new_id
+
+    if App.circuit[new_id].connects.size > CONNECTIONS_MAX
+      # Connection Buttons
+      buttons = _get_connections_button_rects
+      @@buttons[buttons[:prev]] = -> do
+        @@connections_page -= 1
+        @@connections_page = 0 if @@connections_page < 0
+      end
+
+      @@buttons[buttons[:next]] = -> do
+        @@connections_page += 1 if App.circuit[new_id].connects.size > (@@connections_page + 1) * CONNECTIONS_MAX
+      end
+    end
+  end
 
   # Draws an info box when id is valid
   def self.draw
@@ -149,6 +169,29 @@ module Wireland::App::Info
       SPACING,
       App.palette.bg
     )
+
+    
+    out_text = "Out: #{App.circuit[id].connects.size}"
+    out_text_length = R.measure_text_ex(App.font, size_text, STATS_TEXT_SIZE, SPACING).x
+
+    out_text_rect = R::Rectangle.new(
+      x:      x - out_text_length,
+      y:      size_text_rect.y + size_text_rect.height + STATS_LINE_SPACING,
+      width:  out_text_length,
+      height: STATS_TEXT_SIZE
+    )
+    
+    R.draw_text_ex(
+      App.font,
+      out_text,
+      V2.new(
+        x: out_text_rect.x,
+        y: out_text_rect.y
+      ),
+      STATS_TEXT_SIZE,
+      SPACING,
+      App.palette.bg
+    )
   end
 
   private def self._draw_active
@@ -164,8 +207,11 @@ module Wireland::App::Info
   CONNECTION_SIZE = 50
   CONNECTION_BG_LINE_THICKNESS = 3.5
   CONNECTION_TEXT_SIZE = 15
-  CONNECTION_RANGE = (0..6)
+  CONNECTIONS_MAX = 6
 
+  BUTTON_SPACING = 74
+  BUTTON_MARGIN = MARGIN/4
+  BUTTON_SIZE = (BUTTON_SPACING/2) - BUTTON_MARGIN*2
 
 
   private def self._get_connection_rect(x, y, index = 0) : R::Rectangle
@@ -175,6 +221,28 @@ module Wireland::App::Info
       width:  CONNECTION_SIZE,
       height: CONNECTION_SIZE
     )
+  end
+
+  private def self._get_button_rects(x ,y) : NamedTuple(prev: R::Rectangle, next: R::Rectangle)
+    prev_button_rect = R::Rectangle.new(
+      x: x + BUTTON_MARGIN,
+      y: y + CONNECTION_SIZE/2 - BUTTON_SIZE/2,
+      width: BUTTON_SIZE,
+      height: BUTTON_SIZE
+    )
+
+    next_button_rect = R::Rectangle.new(
+      x: BG_X + BG_WIDTH - BUTTON_MARGIN - BUTTON_SIZE,
+      y: y + CONNECTION_SIZE/2 - BUTTON_SIZE/2,
+      width: BUTTON_SIZE,
+      height: BUTTON_SIZE
+    )
+
+    {prev: prev_button_rect, next: next_button_rect}
+  end
+
+  private def self._get_connections_button_rects
+    _get_button_rects(BG_X + CONNECTION_SIZE + BUTTON_MARGIN, BG_Y + MARGIN + NAME_TEXT_SIZE + MARGIN/2 + CONNECTION_SIZE/2 - BUTTON_SIZE/2)
   end
 
   private def self._draw_connection(id, x, y, index = 0)
@@ -254,8 +322,8 @@ module Wireland::App::Info
       App.palette.bg
     )
 
-    closest = _get_connection_rect(bg_rect.x + bg_rect.width, y, CONNECTION_RANGE.begin)
-    farthest = _get_connection_rect(bg_rect.x + bg_rect.width, y, CONNECTION_RANGE.end)
+    closest = _get_connection_rect(bg_rect.x + bg_rect.width, y, 0)
+    farthest = _get_connection_rect(bg_rect.x + bg_rect.width, y, CONNECTIONS_MAX)
 
     connections_rect = R::Rectangle.new(
       x: closest.x,
@@ -264,42 +332,39 @@ module Wireland::App::Info
       height: (farthest.y + farthest.height) - closest.y,
     )
 
-    button_spacing = (BG_X + BG_WIDTH) - (connections_rect.x + connections_rect.width)
-    connections_rect.x += button_spacing/2
+    connections_rect.x += BUTTON_SPACING/2
 
-    if App.circuit[id].connects.size > CONNECTION_RANGE.size
-      button_margin = MARGIN/4
-      button_size = (button_spacing/2) - button_margin*2
-      
-      button_rect = R::Rectangle.new(
-        x: bg_rect.x + bg_rect.width + button_margin,
-        y: bg_rect.y + CONNECTION_SIZE/2 - button_size/2,
-        width: button_size,
-        height: button_size
-      )
+    if App.circuit[id].connects.size > CONNECTIONS_MAX
+      buttons = _get_connections_button_rects
 
       R.draw_rectangle_rec(
-        button_rect,
+        buttons[:prev],
         App.palette.alt_wire
       )
 
-      button_rect = R::Rectangle.new(
-        x: connections_rect.x + connections_rect.width + button_margin,
-        y: bg_rect.y + CONNECTION_SIZE/2 - button_size/2,
-        width: button_size,
-        height: button_size
-      )
-
       R.draw_rectangle_rec(
-        button_rect,
+        buttons[:next],
         App.palette.alt_wire
       )
     end
 
+    start = (CONNECTIONS_MAX * @@connections_page)
+    finish = (CONNECTIONS_MAX * (@@connections_page + 1))
 
-    App.circuit[id].connects[0..6].each_with_index do |c_id, index|
+    if finish >= App.circuit[id].connects.size
+      finish = App.circuit[id].connects.size - 1
+    end
+
+    App.circuit[id].connects[start..finish].each_with_index do |c_id, index|
       _draw_connection(c_id, connections_rect.x, connections_rect.y, index)
     end
+
+    # @@buttons.keys.each do |r|
+    #   R.draw_rectangle_rec(
+    #     r,
+    #     R.fade(R::RED, 0.5)
+    #   )
+    # end
   end
 
   private def self._draw_buffer_states
@@ -313,6 +378,9 @@ module Wireland::App::Info
 
   def self.reset
     @@id = nil
+
+    @@buttons.clear
+    @@connections_page = 0
   end
 
   def self.show?
@@ -320,7 +388,16 @@ module Wireland::App::Info
   end
 
   private def self._handle_interact
+    if R.mouse_button_released?(Mouse::INTERACT)
+      @@buttons.any? do |rect, event|
+        collides = R.check_collision_point_rec?(Mouse.position, rect)
+        if collides
+          event.call
+        end
 
+        collides
+      end
+    end
   end
 
   # When a component is right clicked, display a box.
@@ -329,12 +406,13 @@ module Wireland::App::Info
       clicked = Mouse.get_component
 
       if clicked
-        @@id = clicked.id
+        set_id(clicked.id)
       end
     elsif show?
       _handle_interact
-    elsif [Mouse::CAMERA, Mouse::INFO].any? { |mb| R.mouse_button_released?(mb) }
-      reset
+      if [Mouse::CAMERA, Mouse::INFO].any? { |mb| R.mouse_button_released?(mb) }
+        reset
+      end
     end
   end
 end
