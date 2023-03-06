@@ -42,8 +42,8 @@ module Wireland::App::TicksCounter
     icon_dst = R::Rectangle.new(
       x: i_x + i_margin_x,
       y: i_y + i_margin_y,
-      width: text_size,
-      height: text_size
+      width: text_size - i_margin_y,
+      height: text_size - i_margin_x
     )
 
     if (text_length + text_size) > i_width-text_size
@@ -69,7 +69,7 @@ module Wireland::App::TicksCounter
         width: @@play_texture.width,
         height: @@play_texture.height
       )
-      R.draw_texture_pro(@@play_texture, icon_src, icon_dst, V2.zero, 0, R::WHITE)
+      R.draw_texture_pro(@@play_texture, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
       small_text_size = text_size/8
 
       R.draw_text("X#{App.play_speeds[App.play_speed].to_s[0..4]}", icon_dst.x + text_size*0.1, icon_dst.y + text_size/2 - small_text_size/2, small_text_size, App.palette.wire)
@@ -80,7 +80,7 @@ module Wireland::App::TicksCounter
         width: @@tick_texture.width,
         height: @@tick_texture.height
       )
-      R.draw_texture_pro(@@tick_texture, icon_src, icon_dst, V2.zero, 0, R::WHITE)
+      R.draw_texture_pro(@@tick_texture, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
     end
   end
 end

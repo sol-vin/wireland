@@ -330,12 +330,13 @@ module Wireland::App
       handle_dropped_files
 
       if is_circuit_loaded?
-        Info.update
-
-        if !Info.show? && !Help.show?
-          Keys.update
-          Mouse.handle_camera
-          Mouse.handle_io
+        if !Help.show?
+          Info.update
+          if !Info.show?
+            Keys.update
+            Mouse.handle_camera
+            Mouse.handle_io
+          end
         end
       end
 
