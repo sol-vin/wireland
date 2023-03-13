@@ -4,7 +4,9 @@
 
 An esoteric logic simulator inspired by TTL.
 
+## Examples
 
+[4-bit Add/Sub Machine](https://www.youtube.com/watch?v=w-sriA5yIVI)
 
 ## Installation
 
