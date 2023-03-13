@@ -1,17 +1,5 @@
 module Wireland::App::TicksCounter
-  class_getter tick_texture = R::Texture.new
-  class_getter play_texture = R::Texture.new
 
-
-  def self.load
-    @@tick_texture = R.load_texture("rsrc/sim/clock.png")
-    @@play_texture = R.load_texture("rsrc/sim/play.png")
-  end
-
-  def self.unload
-    R.unload_texture(@@tick_texture)
-    R.unload_texture(@@play_texture)
-  end
 
   def self.draw
     scale_w = 0.12
@@ -66,10 +54,10 @@ module Wireland::App::TicksCounter
       icon_src = R::Rectangle.new(
         x: 0,
         y: 0,
-        width: @@play_texture.width,
-        height: @@play_texture.height
+        width: Assets::Textures.play.width,
+        height: Assets::Textures.play.height
       )
-      R.draw_texture_pro(@@play_texture, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
+      R.draw_texture_pro(Assets::Textures.play, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
       small_text_size = text_size/8
 
       R.draw_text("X#{App.play_speeds[App.play_speed].to_s[0..4]}", icon_dst.x + text_size*0.1, icon_dst.y + text_size/2 - small_text_size/2, small_text_size, App.palette.wire)
@@ -77,10 +65,10 @@ module Wireland::App::TicksCounter
       icon_src = R::Rectangle.new(
         x: 0,
         y: 0,
-        width: @@tick_texture.width,
-        height: @@tick_texture.height
+        width: Assets::Textures.tick.width,
+        height: Assets::Textures.tick.height
       )
-      R.draw_texture_pro(@@tick_texture, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
+      R.draw_texture_pro(Assets::Textures.tick, icon_src, icon_dst, V2.zero, 0, App.palette.bg)
     end
   end
 end

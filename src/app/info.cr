@@ -50,7 +50,8 @@ module Wireland::App::Info
 
   CONNECTIONS_START_X = NAME_X + CONNECTION_SIZE + CONNECTIONS_BUTTON_SPACING/2
 
-  CONNECTIONS_FARTHEST_X = CONNECTIONS_START_X + ((CONNECTIONS_MAX - 1) * (MARGIN + CONNECTION_SIZE))
+  CONNECTION_BUTTON_MARGIN = MARGIN * 0.75
+  CONNECTIONS_FARTHEST_X = CONNECTIONS_START_X + ((CONNECTIONS_MAX - 1) * (CONNECTION_BUTTON_MARGIN + CONNECTION_SIZE)) + MARGIN/2
 
   CONNECTION_BUTTON_NAMES = [
     :button0,
@@ -67,7 +68,7 @@ module Wireland::App::Info
   CONNECTIONS_BUTTON_SIZE    = (CONNECTIONS_BUTTON_SPACING/2) - CONNECTIONS_BUTTON_MARGIN*2
 
   CONNECTIONS_PREV_BUTTON_RECT = R::Rectangle.new(
-    x: BG_X + CONNECTION_SIZE + CONNECTIONS_BUTTON_MARGIN,
+    x: CONNECTIONS_X + CONNECTION_SIZE + CONNECTIONS_BUTTON_MARGIN,
     y: CONNECTIONS_Y + CONNECTION_SIZE/2 - CONNECTIONS_BUTTON_SIZE/2,
     width: CONNECTIONS_BUTTON_SIZE,
     height: CONNECTIONS_BUTTON_SIZE
@@ -153,7 +154,7 @@ module Wireland::App::Info
     if id = @@id
       name = App.circuit[id].class.to_s.split("::").last
 
-      name_length = R.measure_text_ex(App.font, name, NAME_TEXT_SIZE, SPACING).x
+      name_length = R.measure_text_ex(Assets.font, name, NAME_TEXT_SIZE, SPACING).x
 
       name_rect = R::Rectangle.new(
         x: BG_X + MARGIN,
@@ -180,7 +181,7 @@ module Wireland::App::Info
       )
 
       R.draw_text_ex(
-        App.font,
+        Assets.font,
         name,
         V2.new(
           x: name_rect.x,
@@ -196,7 +197,7 @@ module Wireland::App::Info
   private def self._draw_stats
     if id = @@id
       id_text = "ID: 0x#{id.to_s(16).upcase}"
-      id_text_length = R.measure_text_ex(App.font, id_text, STATS_TEXT_SIZE, SPACING).x
+      id_text_length = R.measure_text_ex(Assets.font, id_text, STATS_TEXT_SIZE, SPACING).x
 
       id_text_rect = R::Rectangle.new(
         x: STATS_X - id_text_length,
@@ -206,7 +207,7 @@ module Wireland::App::Info
       )
 
       R.draw_text_ex(
-        App.font,
+        Assets.font,
         id_text,
         V2.new(
           x: id_text_rect.x,
@@ -218,7 +219,7 @@ module Wireland::App::Info
       )
 
       size_text = "Size: #{App.circuit[id].size}"
-      size_text_length = R.measure_text_ex(App.font, size_text, STATS_TEXT_SIZE, SPACING).x
+      size_text_length = R.measure_text_ex(Assets.font, size_text, STATS_TEXT_SIZE, SPACING).x
 
       size_text_rect = R::Rectangle.new(
         x: STATS_X - size_text_length,
@@ -228,7 +229,7 @@ module Wireland::App::Info
       )
 
       R.draw_text_ex(
-        App.font,
+        Assets.font,
         size_text,
         V2.new(
           x: size_text_rect.x,
@@ -240,7 +241,7 @@ module Wireland::App::Info
       )
 
       out_text = "Out: #{App.circuit[id].connects.size}"
-      out_text_length = R.measure_text_ex(App.font, size_text, STATS_TEXT_SIZE, SPACING).x
+      out_text_length = R.measure_text_ex(Assets.font, size_text, STATS_TEXT_SIZE, SPACING).x
 
       out_text_rect = R::Rectangle.new(
         x: STATS_X - out_text_length,
@@ -250,7 +251,7 @@ module Wireland::App::Info
       )
 
       R.draw_text_ex(
-        App.font,
+        Assets.font,
         out_text,
         V2.new(
           x: out_text_rect.x,
@@ -276,7 +277,7 @@ module Wireland::App::Info
 
   private def self._get_connection_rect(index) : R::Rectangle
     R::Rectangle.new(
-      x: CONNECTIONS_START_X + (index * (MARGIN + CONNECTION_SIZE)),
+      x: CONNECTIONS_START_X + (index * (CONNECTION_BUTTON_MARGIN + CONNECTION_SIZE)) + MARGIN/2,
       y: CONNECTIONS_Y,
       width: CONNECTION_SIZE,
       height: CONNECTION_SIZE
@@ -298,7 +299,7 @@ module Wireland::App::Info
     )
 
     id_text = "0x#{id.to_s(16)}"
-    id_text_length = R.measure_text_ex(App.font, id_text, CONNECTION_TEXT_SIZE, SPACING).x
+    id_text_length = R.measure_text_ex(Assets.font, id_text, CONNECTION_TEXT_SIZE, SPACING).x
 
     id_text_rect = R::Rectangle.new(
       x: bg_rect.x + CONNECTION_SIZE/2 - id_text_length/2,
@@ -308,7 +309,7 @@ module Wireland::App::Info
     )
 
     R.draw_text_ex(
-      App.font,
+      Assets.font,
       id_text,
       V2.new(
         x: id_text_rect.x,
@@ -345,7 +346,7 @@ module Wireland::App::Info
       )
 
       out_text = App.circuit[id].is_a?(Component::Switch) ? "Poles" : "Out"
-      out_text_length = R.measure_text_ex(App.font, out_text, CONNECTION_TEXT_SIZE, SPACING).x
+      out_text_length = R.measure_text_ex(Assets.font, out_text, CONNECTION_TEXT_SIZE, SPACING).x
 
       out_text_rect = R::Rectangle.new(
         x: CONNECTIONS_X + CONNECTION_SIZE/2 - out_text_length/2,
@@ -355,7 +356,7 @@ module Wireland::App::Info
       )
 
       R.draw_text_ex(
-        App.font,
+        Assets.font,
         out_text,
         V2.new(
           x: out_text_rect.x,
@@ -370,8 +371,8 @@ module Wireland::App::Info
         play_texture_rect = R::Rectangle.new(
           x: 0,
           y: 0,
-          width: -TicksCounter.play_texture.width,
-          height: -TicksCounter.play_texture.height
+          width: -Assets::Textures.play.width,
+          height: -Assets::Textures.play.height
         )
 
         if @@connections_page != 0
@@ -381,7 +382,7 @@ module Wireland::App::Info
           )
 
           R.draw_texture_pro(
-            TicksCounter.play_texture,
+            Assets::Textures.play,
             play_texture_rect,
             CONNECTIONS_PREV_BUTTON_RECT,
             V2.zero,
@@ -390,7 +391,7 @@ module Wireland::App::Info
           )
         end
 
-        if @@connections_page != (items.size / CONNECTIONS_MAX)
+        if @@connections_page != (items.size / CONNECTIONS_MAX).to_i
           R.draw_rectangle_rec(
             CONNECTIONS_NEXT_BUTTON_RECT,
             App.palette.alt_wire
@@ -399,12 +400,12 @@ module Wireland::App::Info
           play_texture_rect = R::Rectangle.new(
             x: 0,
             y: 0,
-            width: TicksCounter.play_texture.width,
-            height: TicksCounter.play_texture.height
+            width: Assets::Textures.play.width,
+            height: Assets::Textures.play.height
           )
 
           R.draw_texture_pro(
-            TicksCounter.play_texture,
+            Assets::Textures.play,
             play_texture_rect,
             CONNECTIONS_NEXT_BUTTON_RECT,
             V2.zero,
