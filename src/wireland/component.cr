@@ -34,15 +34,15 @@ class Wireland::Component
 
   # List of `Component` classes that this component should not pulse out to.
   def self.output_whitelist : Array(Wireland::Component.class)
-    Wireland::Component.all.reject do |c| 
-      c == Wireland::Component::Start || 
-      c == Wireland::Component::Buffer || 
-      c == Wireland::Component::DiodeOut || 
-      c == Wireland::Component::NotOut ||
-      c == Wireland::Component::InputOn || 
-      c == Wireland::Component::InputOff || 
-      c == Wireland::Component::InputToggleOn || 
-      c == Wireland::Component::InputToggleOff
+    Wireland::Component.all.reject do |c|
+      c == Wireland::Component::Start ||
+        c == Wireland::Component::Buffer ||
+        c == Wireland::Component::DiodeOut ||
+        c == Wireland::Component::NotOut ||
+        c == Wireland::Component::InputOn ||
+        c == Wireland::Component::InputOff ||
+        c == Wireland::Component::InputToggleOn ||
+        c == Wireland::Component::InputToggleOff
     end
   end
 
@@ -73,7 +73,7 @@ class Wireland::Component
     raise "Out of bounds #{x}, #{y} : #{id}:#{self.class}" if x < 0 || y < 0 || x >= bounds[:width] || y >= bounds[:height]
     @data[x + y * bounds[:width]]
   end
-  
+
   def []?(x, y)
     return nil if x < 0 || y < 0 || x >= bounds[:width] || y >= bounds[:height]
     @data[x + y * bounds[:width]]
@@ -100,7 +100,7 @@ class Wireland::Component
     ps = [] of Point
     bounds[:width].times do |x|
       bounds[:height].times do |y|
-         ps << {x: bounds[:x] + x, y: bounds[:y] + y} if self[x, y]
+        ps << {x: bounds[:x] + x, y: bounds[:y] + y} if self[x, y]
       end
     end
     ps
@@ -124,7 +124,7 @@ class Wireland::Component
   def pulsed_by?(id)
     !!pulses[id]?
   end
-  
+
   def pulse_out
     connects.each do |com_id|
       # Pulse our connecting parts, but only if we haven't pulsed it already.
@@ -171,4 +171,3 @@ class Wireland::Component
     pulse_out unless self.class.active? || pulses.size > 1
   end
 end
-

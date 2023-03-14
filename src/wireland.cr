@@ -10,5 +10,3 @@ module Wireland
   alias Rectangle = NamedTuple(x: Int32, y: Int32, width: Int32, height: Int32)
   alias Point = NamedTuple(x: Int32, y: Int32)
 end
-
-

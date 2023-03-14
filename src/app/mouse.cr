@@ -5,10 +5,8 @@ module Wireland::App::Mouse
 
   SCALE = 2.0
 
-
   class_getter position = V2.zero
   @@previous_camera_mouse_drag_pos = V2.zero
-
 
   SMALL_CURSOR_ZOOM_LIMIT = 5.0
 

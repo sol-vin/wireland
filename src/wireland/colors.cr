@@ -32,9 +32,9 @@ module Wireland::DefaultColors
   BLACK = R::Color.new(r: 0x18, g: 0x14, b: 0x25, a: 0xFF)
 
   # SPECIAL
-  WILL_ACTIVE = R::Color.new(r: 0x0b, g: 0xff, b: 0xde, a: 0xFF)
+  WILL_ACTIVE        = R::Color.new(r: 0x0b, g: 0xff, b: 0xde, a: 0xFF)
   IS_AND_WILL_ACTIVE = R::Color.new(r: 0xff, g: 0x00, b: 0xd8, a: 0xFF)
-  IS_ACTIVE = R::Color.new(r: 0xff, g: 0x00, b: 0x00, a: 0xFF)
+  IS_ACTIVE          = R::Color.new(r: 0xff, g: 0x00, b: 0x00, a: 0xFF)
 
   HIGH = R::Color.new(r: 0x0b, g: 0xff, b: 0x00, a: 0xFF)
 end
@@ -215,7 +215,7 @@ struct Wireland::Palette
       @nc_pole,
       @diode_in,
       @diode_out,
-      @gpio
+      @gpio,
     ]
   end
 

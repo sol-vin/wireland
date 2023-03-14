@@ -352,7 +352,6 @@ module Wireland::App
 
     R.unload_texture(@@circuit_texture) if is_circuit_loaded?
 
-
     Assets::Textures.unload
     Assets.unload_font
     R.close_window

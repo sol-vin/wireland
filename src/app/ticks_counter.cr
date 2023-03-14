@@ -1,6 +1,4 @@
 module Wireland::App::TicksCounter
-
-
   def self.draw
     scale_w = 0.12
     scale_h = 0.07
@@ -34,7 +32,7 @@ module Wireland::App::TicksCounter
       height: text_size - i_margin_x
     )
 
-    if (text_length + text_size) > i_width-text_size
+    if (text_length + text_size) > i_width - text_size
       i_width = text_length + text_size + i_width*margin_x + 20
       width = i_width + i_width*margin_x
       x = Screen::WIDTH - width

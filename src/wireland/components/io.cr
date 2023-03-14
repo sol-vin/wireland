@@ -41,7 +41,7 @@ class Wireland::Component::InputOn < Wireland::Component
   include Wireland::IO
 
   @on = true
-  
+
   # def on_tick
   #   if on?
   #     parent.active_pulse(id, connects)
@@ -78,7 +78,6 @@ class Wireland::Component::InputOff < Wireland::Component
   #   end
   # end
 
-  
   def color
     if on?
       parent.palette.input_on
@@ -103,15 +102,14 @@ class Wireland::Component::InputToggleOn < Wireland::Component
 
   include Wireland::IO
 
-  @on = true 
-  
+  @on = true
+
   # def on_tick
   #   if on?
   #     parent.active_pulse(id, connects)
   #   end
   # end
 
-  
   def color
     if on?
       parent.palette.input_toggle_on
@@ -131,7 +129,7 @@ class Wireland::Component::InputToggleOff < Wireland::Component
   end
 
   include Wireland::IO
-  
+
   # def on_tick
   #   if on?
   #     parent.active_pulse(id, connects)

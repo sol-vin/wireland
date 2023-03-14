@@ -39,7 +39,6 @@ class Wireland::Circuit
     end
     # puts "Components shaped in #{R.get_time - start_time}"
 
-
     adjacent = [
       {x: 0, y: -1},
       {x: -1, y: 0},
@@ -53,8 +52,8 @@ class Wireland::Circuit
       # Select only components that are valid output destinations
       valid_components = components.select do |c|
         c.id != component.id &&
-        component.class.output_whitelist.includes?(c.class) &&
-        _rect_intersects?(c.bounds, component.bounds)
+          component.class.output_whitelist.includes?(c.class) &&
+          _rect_intersects?(c.bounds, component.bounds)
       end
 
       valid_components.each do |valid_component|
@@ -65,17 +64,17 @@ class Wireland::Circuit
         bottom_y = Math.min(valid_component.bounds[:y] + valid_component.bounds[:height], component.bounds[:y] + component.bounds[:height])
 
         intersection = {
-          x: left_x - 1,
-          y: top_y - 1,
-          width:right_x - left_x + 2,
-          height: bottom_y - top_y + 2
+          x:      left_x - 1,
+          y:      top_y - 1,
+          width:  right_x - left_x + 2,
+          height: bottom_y - top_y + 2,
         }
 
-        next if [intersection[:width], intersection[:height]].any?{|i| i <= 0}
+        next if [intersection[:width], intersection[:height]].any? { |i| i <= 0 }
 
-        neighbors = (intersection[:x]..(intersection[:x]+intersection[:width])).any? do |x|
-          (intersection[:y]..(intersection[:y]+intersection[:height])).any? do |y|
-            component.abs_data?(x, y) && adjacent.any? {|a_p| valid_component.abs_data?(x + a_p[:x], y + a_p[:y]) }
+        neighbors = (intersection[:x]..(intersection[:x] + intersection[:width])).any? do |x|
+          (intersection[:y]..(intersection[:y] + intersection[:height])).any? do |y|
+            component.abs_data?(x, y) && adjacent.any? { |a_p| valid_component.abs_data?(x + a_p[:x], y + a_p[:y]) }
           end
         end
 
@@ -83,13 +82,13 @@ class Wireland::Circuit
       end
     end
     # puts "Components connected in #{R.get_time - start_time}"
-    @last_id = components.sort { |a,b| b.id <=> a.id }[0].id
+    @last_id = components.sort { |a, b| b.id <=> a.id }[0].id
 
     @components = components
     components.each(&.setup)
     components
   end
-  
+
   private def _rect_intersects?(a : Rectangle, b : Rectangle)
     R.check_collision_recs?(
       R::Rectangle.new(
@@ -119,39 +118,38 @@ class Wireland::Circuit
       all_points = new_points + shape
 
       if component_class == Wireland::Component::Tunnel
-        connected_tunnels = xy_data.select{|xy| xy[:x] == point[:x] || xy[:y] == point[:y]}
-        connected_tunnels.each{|t| xy_data.delete t}
+        connected_tunnels = xy_data.select { |xy| xy[:x] == point[:x] || xy[:y] == point[:y] }
+        connected_tunnels.each { |t| xy_data.delete t }
         new_points.concat(connected_tunnels - all_points)
       else
         # Make the neighborhood and remove anything we already have in our list of points to explore.
         neighborhood = _make_neighborhood(point, component_class) - all_points
-        connected_pixels = xy_data.select{|xy| neighborhood.any?{|nxy| nxy == xy}}
-        connected_pixels.each{|p| xy_data.delete p}
+        connected_pixels = xy_data.select { |xy| neighborhood.any? { |nxy| nxy == xy } }
+        connected_pixels.each { |p| xy_data.delete p }
         new_points.concat(connected_pixels)
       end
     end
 
-
-    b_x = shape.min_by {|a| a[:x]}[:x]
-    b_y = shape.min_by {|a| a[:y]}[:y]
-    b_x_max = shape.max_by {|a| a[:x]}[:x]
-    b_y_max = shape.max_by {|a| a[:y]}[:y]
+    b_x = shape.min_by { |a| a[:x] }[:x]
+    b_y = shape.min_by { |a| a[:y] }[:y]
+    b_x_max = shape.max_by { |a| a[:x] }[:x]
+    b_y_max = shape.max_by { |a| a[:y] }[:y]
     b_width = b_x_max - b_x + 1
     b_height = b_y_max - b_y + 1
 
     shape_data = BitArray.new(b_width * b_height)
-    shape.each { |xy| shape_data[(xy[:x] - b_x) + (xy[:y] - b_y)  * b_width] = true } 
+    shape.each { |xy| shape_data[(xy[:x] - b_x) + (xy[:y] - b_y) * b_width] = true }
 
     # Output
     {
       bounds: {
-        x: b_x,
-        y: b_y,
-        width: b_width,
+        x:      b_x,
+        y:      b_y,
+        width:  b_width,
         height: b_height,
       },
 
-      data: shape_data
+      data: shape_data,
     }
   end
 
@@ -248,7 +246,7 @@ class Wireland::Circuit
     inputs = components.select(&.is_a?(Wireland::Component::InputOn | Wireland::Component::InputOff | Wireland::Component::InputToggleOn | Wireland::Component::InputToggleOff)).map(&.as(Wireland::IO))
     inputs.select(&.on?).each { |i| active_pulse(i.id, i.connects) }
     off_inputs = inputs.select(&.off?).map(&.id)
-    @active_pulses.reject!{|c| off_inputs.includes? c}
+    @active_pulses.reject! { |c| off_inputs.includes? c }
   end
 
   def pre_tick

@@ -1,7 +1,6 @@
 module Wireland::App::Assets::Textures
   class_getter logo = R::Texture.new
 
-
   class_getter tick = R::Texture.new
   class_getter play = R::Texture.new
 
@@ -9,11 +8,10 @@ module Wireland::App::Assets::Textures
   class_getter small_cursor = R::Texture.new
   class_getter selector = R::Texture.new
 
-
   @@previous_camera_mouse_drag_pos = V2.zero
 
-  PLAY_FILE = "rsrc/sim/play.png"
-  CLOCK_FILE = "rsrc/sim/clock.png"
+  PLAY_FILE         = "rsrc/sim/play.png"
+  CLOCK_FILE        = "rsrc/sim/clock.png"
   CURSOR_FILE       = "rsrc/sim/cursor.png"
   SMALL_CURSOR_FILE = "rsrc/sim/smallcursor.png"
   SELECTOR_FILE     = "rsrc/sim/selector.png"
@@ -59,8 +57,6 @@ module Wireland::App::Assets::Textures
     @@selector = R.load_texture_from_image(image)
     R.unload_image(image)
   end
-
-
 
   def self.update_logo(new_palette)
     image = R.load_image_from_texture(@@logo)
