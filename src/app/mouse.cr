@@ -3,6 +3,12 @@ module Wireland::App::Mouse
   INTERACT = R::MouseButton::Left
   INFO     = R::MouseButton::Right
 
+  ALL = [
+    CAMERA,
+    INTERACT,
+    INFO
+  ]
+
   SCALE = 2.0
 
   class_getter position = V2.zero

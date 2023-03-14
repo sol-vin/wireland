@@ -17,6 +17,10 @@ module Wireland::App::Help
     end
   end
 
+  def self.update
+    hide if Keys::ALL.any? {|k| R.key_released?(k) } || Mouse::ALL.any? { |m| R.mouse_button_released?(m) }
+  end
+
   @@show = false
 
   def self.show?

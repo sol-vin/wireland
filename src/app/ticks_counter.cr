@@ -1,17 +1,17 @@
 module Wireland::App::TicksCounter
-  def self.draw
-    scale_w = 0.12
-    scale_h = 0.07
-    margin_x = 0.05
-    margin_y = 0.1
+  SCALE_W = 0.12
+  SCALE_H = 0.07
+  MARGIN_X = 0.05
+  MARGIN_Y = 0.05
 
-    width = Screen::WIDTH * scale_w
-    height = Screen::HEIGHT * scale_h
+  def self.draw
+    width = Screen::WIDTH * SCALE_W
+    height = Screen::HEIGHT * SCALE_H
     x = Screen::WIDTH - width
     y = Screen::HEIGHT - height
 
-    i_width = width - width*margin_x
-    i_height = height - height*margin_y
+    i_width = width - width*MARGIN_X
+    i_height = height - height*MARGIN_Y
     i_margin_x = ((width - i_width)/2)
     i_margin_y = ((height - i_height)/2)
 
@@ -19,7 +19,7 @@ module Wireland::App::TicksCounter
     i_y = y + i_margin_y
 
     text = (App.circuit.ticks).to_s
-    text_size = i_height - i_height*margin_y
+    text_size = i_height - i_height*MARGIN_Y
     text_length = R.measure_text(text, text_size)
 
     text_x = i_x + i_width - text_length - i_margin_x*3
@@ -33,8 +33,8 @@ module Wireland::App::TicksCounter
     )
 
     if (text_length + text_size) > i_width - text_size
-      i_width = text_length + text_size + i_width*margin_x + 20
-      width = i_width + i_width*margin_x
+      i_width = text_length + text_size + i_width*MARGIN_X + 20
+      width = i_width + i_width*MARGIN_X
       x = Screen::WIDTH - width
       i_x = x + i_margin_x
       icon_dst = R::Rectangle.new(

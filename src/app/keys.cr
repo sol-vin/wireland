@@ -6,6 +6,15 @@ module Wireland::App::Keys
   RESET        = R::KeyboardKey::R
   PLAY         = R::KeyboardKey::Enter
 
+  ALL = [
+    HELP,
+    PULSES,
+    SOLID_PULSES,
+    TICK,
+    RESET,
+    PLAY
+  ]
+
   @@tick_hold_time = 0.0
   @@tick_long_hold_time = 0.0
   @@tick_long_hold = false

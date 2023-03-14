@@ -65,42 +65,6 @@ module Wireland::App
     !(@@circuit_texture.width == 0 && @@circuit_texture.height == 0)
   end
 
-  # Loads the circuit from a file
-  def self.load_circuit_file(file)
-    puts "Loading circuit from #{file}"
-    @@circuit = W::Circuit.new(file, @@palette)
-    puts "Loaded circuit from #{file}"
-    R.unload_texture(@@circuit_texture) if is_circuit_loaded?
-    @@circuit_texture = R.load_texture(file)
-
-    puts "Resetting circuit"
-    reset
-  end
-
-  # Handles when files are dropped into the window, specifically .pal and .png files.
-  def self.handle_dropped_files
-    if R.file_dropped?
-      Loading.draw
-      dropped_files = R.load_dropped_files
-      # Go through all the files dropped
-      files = [] of String
-      dropped_files.count.times do |i|
-        files << String.new dropped_files.paths[i]
-      end
-      # Unload the files afterwards
-      R.unload_dropped_files(dropped_files)
-
-      # Find the first palette file
-      if palette_file = files.find { |f| /\.pal$/ =~ f }
-        load_palette(palette_file)
-      end
-
-      # Find the first png file
-      if circuit_file = files.find { |f| /\.png$/ =~ f }
-        load_circuit(circuit_file)
-      end
-    end
-  end
 
   def self.load_palette(palette_file)
     new_palette = W::Palette.new(palette_file)
@@ -111,12 +75,19 @@ module Wireland::App
     Mouse.setup
   end
 
-  def self.load_circuit(circuit_file)
+  def self.load_circuit(file)
     # Load the file into texture memory.
     @@camera.zoom = Screen::Zoom::DEFAULT
 
     start_time = R.get_time
-    load_circuit_file(circuit_file)
+    puts "Loading circuit from #{file}"
+    @@circuit = W::Circuit.new(file, @@palette)
+    puts "Loaded circuit from #{file}"
+    R.unload_texture(@@circuit_texture) if is_circuit_loaded?
+    @@circuit_texture = R.load_texture(file)
+
+    puts "Resetting circuit"
+    reset
     @@camera.target.x = @@circuit_texture.width/2 * Scale::CIRCUIT
     @@camera.target.y = @@circuit_texture.height/2 * Scale::CIRCUIT
     puts "Total time: #{R.get_time - start_time}"
@@ -314,10 +285,12 @@ module Wireland::App
 
     until R.close_window?
       Mouse.update
-      handle_dropped_files
+      Loader.update
 
       if is_circuit_loaded?
-        if !Help.show?
+        if Help.show?
+          Help.update
+        else
           Info.update
           if !Info.show?
             Keys.update
