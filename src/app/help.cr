@@ -13,7 +13,7 @@ module Wireland::App::Help
 
   def self.draw
     if show? && !Info.show?
-      App.draw_box(Help::TITLE, Help::TEXT)
+      App.draw_box((Screen::WIDTH/2).to_i, (Screen::HEIGHT/2).to_i, Help::TITLE, Help::TEXT)
     end
   end
 

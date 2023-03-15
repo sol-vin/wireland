@@ -4,10 +4,10 @@ module Wireland::App::Info
   MARGIN  =  20
   SPACING = 1.0
 
-  BG_WIDTH  = Screen::WIDTH/2
-  BG_HEIGHT = Screen::HEIGHT/2
-  BG_X      = BG_WIDTH/2
-  BG_Y      = BG_HEIGHT/2
+  BG_WIDTH  = Screen::WIDTH/2 + MARGIN*2
+  BG_HEIGHT = Screen::HEIGHT/4 + MARGIN
+  BG_X      = BG_WIDTH/2 - MARGIN
+  BG_Y      = Screen::HEIGHT/2 - BG_HEIGHT/2 - MARGIN
 
   BG_RECT = R::Rectangle.new(
     x: BG_X,
@@ -20,8 +20,8 @@ module Wireland::App::Info
   NAME_TEXT_SIZE         = 60
   NAME_BG_LINE_THICKNESS =  7
 
-  NAME_X      = BG_X + MARGIN
-  NAME_Y      = BG_Y + MARGIN
+  NAME_X      = BG_X + MARGIN*2
+  NAME_Y      = BG_Y + MARGIN*2
   NAME_WIDTH  = BG_WIDTH*0.75
   NAME_HEIGHT = NAME_TEXT_SIZE
 
@@ -40,7 +40,7 @@ module Wireland::App::Info
   STATS_Y = NAME_Y
 
   # Connections
-  CONNECTIONS_X = NAME_X
+  CONNECTIONS_X = NAME_X - MARGIN
   CONNECTIONS_Y = NAME_Y + NAME_HEIGHT + MARGIN
 
   CONNECTION_SIZE              =  50
@@ -48,10 +48,10 @@ module Wireland::App::Info
   CONNECTION_TEXT_SIZE         =  15
   CONNECTIONS_MAX              =   7
 
-  CONNECTIONS_START_X = NAME_X + CONNECTION_SIZE + CONNECTIONS_BUTTON_SPACING/2
+  CONNECTIONS_START_X = NAME_X + CONNECTION_SIZE + CONNECTIONS_BUTTON_SPACING/2 - MARGIN
 
   CONNECTION_BUTTON_MARGIN = MARGIN * 0.75
-  CONNECTIONS_FARTHEST_X   = CONNECTIONS_START_X + ((CONNECTIONS_MAX - 1) * (CONNECTION_BUTTON_MARGIN + CONNECTION_SIZE)) + MARGIN/2
+  CONNECTIONS_FARTHEST_X   = CONNECTIONS_START_X + ((CONNECTIONS_MAX - 1) * (CONNECTION_BUTTON_MARGIN + CONNECTION_SIZE)) + MARGIN/2 - MARGIN
 
   CONNECTION_BUTTON_NAMES = [
     :button0,
@@ -75,7 +75,7 @@ module Wireland::App::Info
   )
 
   CONNECTIONS_NEXT_BUTTON_RECT = R::Rectangle.new(
-    x: BG_X + BG_WIDTH - CONNECTIONS_BUTTON_MARGIN - CONNECTIONS_BUTTON_SIZE,
+    x: BG_X + BG_WIDTH - CONNECTIONS_BUTTON_MARGIN - CONNECTIONS_BUTTON_SIZE - MARGIN,
     y: CONNECTIONS_Y + CONNECTION_SIZE/2 - CONNECTIONS_BUTTON_SIZE/2,
     width: CONNECTIONS_BUTTON_SIZE,
     height: CONNECTIONS_BUTTON_SIZE
@@ -91,8 +91,8 @@ module Wireland::App::Info
       @@buttons.delete(name)
     end
     if id = @@id
-      start = ((CONNECTIONS_MAX - 1) * @@connections_page)
-      finish = ((CONNECTIONS_MAX - 1) * (@@connections_page + 1))
+      start = ((CONNECTIONS_MAX - 1) * @@connections_page) + @@connections_page
+      finish = ((CONNECTIONS_MAX - 1) * (@@connections_page + 1)) + @@connections_page
 
       list = App.circuit[id].connects
       if switch = App.circuit[id].as? Component::Switch
@@ -144,6 +144,17 @@ module Wireland::App::Info
         App.palette.wire
       )
 
+      R.draw_rectangle_lines_ex(
+        R::Rectangle.new(
+        x: BG_X + MARGIN/2,
+        y: BG_Y + MARGIN/2,
+        width: BG_WIDTH - MARGIN,
+        height: BG_HEIGHT - MARGIN
+        ),
+        MARGIN/4,
+        App.palette.alt_wire
+      )
+
       _draw_name
       _draw_stats
       _draw_connections_out
@@ -156,18 +167,11 @@ module Wireland::App::Info
 
       name_length = R.measure_text_ex(Assets.font, name, NAME_TEXT_SIZE, SPACING).x
 
-      name_rect = R::Rectangle.new(
-        x: BG_X + MARGIN,
-        y: BG_Y + MARGIN,
-        width: name_length,
-        height: NAME_TEXT_SIZE,
-      )
-
       name_lines = R::Rectangle.new(
-        x: name_rect.x - NAME_BG_LINE_THICKNESS*2,
-        y: name_rect.y - NAME_BG_LINE_THICKNESS*2,
-        width: name_rect.width + NAME_BG_LINE_THICKNESS*3,
-        height: name_rect.height + NAME_BG_LINE_THICKNESS*4,
+        x: NAME_X - NAME_BG_LINE_THICKNESS*2,
+        y: NAME_Y - NAME_BG_LINE_THICKNESS*2,
+        width: name_length + NAME_BG_LINE_THICKNESS*3,
+        height: NAME_HEIGHT + NAME_BG_LINE_THICKNESS*4,
       )
 
       color = App.circuit[id].class.color
@@ -184,8 +188,8 @@ module Wireland::App::Info
         Assets.font,
         name,
         V2.new(
-          x: name_rect.x,
-          y: name_rect.y
+          x: NAME_X,
+          y: NAME_Y
         ),
         NAME_TEXT_SIZE,
         SPACING,
@@ -241,7 +245,7 @@ module Wireland::App::Info
       )
 
       out_text = "Out: #{App.circuit[id].connects.size}"
-      out_text_length = R.measure_text_ex(Assets.font, size_text, STATS_TEXT_SIZE, SPACING).x
+      out_text_length = R.measure_text_ex(Assets.font, out_text, STATS_TEXT_SIZE, SPACING).x
 
       out_text_rect = R::Rectangle.new(
         x: STATS_X - out_text_length,
@@ -415,9 +419,8 @@ module Wireland::App::Info
         end
       end
 
-      start = ((CONNECTIONS_MAX - 1) * @@connections_page)
-      finish = ((CONNECTIONS_MAX - 1) * (@@connections_page + 1))
-
+      start = ((CONNECTIONS_MAX - 1) * @@connections_page) + @@connections_page
+      finish = ((CONNECTIONS_MAX - 1) * (@@connections_page + 1)) + @@connections_page
       if finish >= items.size
         finish = items.size - 1
       end

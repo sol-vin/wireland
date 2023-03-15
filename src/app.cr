@@ -214,16 +214,16 @@ module Wireland::App
     end
   end
 
-  def self.draw_box(title : String, text : String)
+  def self.draw_box(width : Int32, height : Int32, title : String = "", text : String = "")
     max_text_size = 30
-    width = Screen::WIDTH/2
-    height = Screen::HEIGHT/2
+
+    margin = 4
 
     rect = {
-      x:      width/2,
-      y:      height/2,
-      width:  width,
-      height: height,
+      x:      width/2 - margin,
+      y:      height/2 - margin,
+      width:  width + margin*2,
+      height: height + margin*2,
     }
 
     R.draw_rectangle(
@@ -232,6 +232,17 @@ module Wireland::App
       width,
       height,
       @@palette.wire
+    )
+
+    R.draw_rectangle_lines_ex(
+      R::Rectangle.new(
+      x: rect[:x] + margin/2,
+      y: rect[:y] + margin/2,
+      width: width - margin,
+      height: height - margin
+      ),
+      margin/4,
+      @@palette.alt_wire
     )
 
     center_x = Screen::WIDTH/2
@@ -247,7 +258,7 @@ module Wireland::App
       title,
       V2.new(
         x: center_x - text_length/2,
-        y: rect[:y] + 10
+        y: rect[:y] + margin * 2
       ),
       title_size,
       0,
@@ -263,7 +274,7 @@ module Wireland::App
     R.draw_text_ex(
       Assets.font,
       text,
-      V2.new(x: rect[:x] + 30, y: rect[:y] + offset),
+      V2.new(x: rect[:x] + margin*2, y: rect[:y] + offset),
       text_size,
       1.0,
       @@palette.bg
