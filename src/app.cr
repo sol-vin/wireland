@@ -49,6 +49,8 @@ module Wireland::App
   class_getter last_active_pulses = [] of UInt64
   class_getter last_pulses = [] of UInt64
 
+  @@loaded_circuit_file = ""
+
   # Resets the simulation
   def self.reset
     Info.reset
@@ -73,11 +75,16 @@ module Wireland::App
 
     @@palette = new_palette
     Mouse.setup
+
+    load_circuit(@@loaded_circuit_file) unless @@loaded_circuit_file.empty?
   end
 
   def self.load_circuit(file)
     # Load the file into texture memory.
     @@camera.zoom = Screen::Zoom::DEFAULT
+
+    @@loaded_circuit_file = file
+    @@play = false
 
     start_time = R.get_time
     puts "Loading circuit from #{file}"
