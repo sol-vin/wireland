@@ -46,12 +46,14 @@ class Wireland::Component
     end
   end
 
+  # TODO: REMOVE THIS, PASS THIS IN AS ARG INSTEAD
   # Link to the parent circuit
   getter parent : Wireland::Circuit
 
   # What this component is connected out to.
   property connects = [] of UInt64
 
+  # TODO: CHANGE THIS TO BOOL
   # The list of pulses incoming to this component from which component id.
   property pulses = [] of UInt64
 
@@ -120,6 +122,7 @@ class Wireland::Component
     pulses.size == 0
   end
 
+  # TODO: DELETE THIS, ITS UNUSED
   # Was this component pulsed by a component with `id`?
   def pulsed_by?(id)
     !!pulses[id]?
@@ -168,6 +171,6 @@ class Wireland::Component
 
   # What should be done when this part receives a new charge from a new source
   def on_pulse(from_id : UInt64)
-    pulse_out unless self.class.active? || pulses.size > 1
+    pulse_out unless self.class.active? || high?
   end
 end
