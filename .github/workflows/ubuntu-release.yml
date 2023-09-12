@@ -1,0 +1,37 @@
+name: Ubuntu - Release(v*)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  ubuntu-release:
+    name: "Ubuntu - Release(v*)"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
+    steps:
+      - name: Download source
+        uses: actions/checkout@v2
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+      - name: Install Crystal libs
+        run: shards install
+      - name: raylib-cr post-install
+        run: sh ./lib/raylib-cr/rsrc/install-lib.sh
+      - name: Build project
+        run: shards build --release
+      - name: Copy Rsrc
+        run: |
+          git lfs fetch
+          git lfs checkout
+          cp -r rsrc bin
+          rm -rf bin/rsrc/_dev
+      - name: Zip files
+        run: zip -r ubuntu-release.zip bin/**
+
+      - uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: "ubuntu-release.zip"

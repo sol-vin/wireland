@@ -1,5 +1,5 @@
 name: wireland
-version: 0.1.0
+version: 0.0.1
 
 authors:
   - Ian Rash <ian@sol.vin>
@@ -12,6 +12,6 @@ dependencies:
   raylib-cr:
     github: sol-vin/raylib-cr
 
-crystal: 1.6.2
+crystal: 1.9.2
 
 license: MIT

@@ -1,0 +1,17 @@
+name: Ubuntu - Build
+on: [push, pull_request]
+jobs:
+  ubuntu-build:
+    name: Ubuntu - Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v2
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+      - name: Install Crystal libs
+        run: shards install
+      - name: raylib-cr post-install
+        run: sh ./lib/raylib-cr/rsrc/install-lib.sh
+      - name: Build project
+        run: shards build
