@@ -1,9 +1,9 @@
-name: Windows - Build
+name: Windows - Test
 on: [push, pull_request]
 
 jobs:
   windows-build:
-    name: Windows - Build
+    name: Windows - Test
     runs-on: windows-latest
     steps:
       - name: Download source
