@@ -3,7 +3,7 @@ name: Ubuntu - Pre Release(latest)
 on:
   push:
     branches:
-      - "master"
+      - "main"
 
 jobs:
   ubuntu-pre-release:

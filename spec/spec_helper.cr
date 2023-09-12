@@ -1,8 +1,6 @@
 require "spec"
-require "../src/wireland/direction"
-require "../src/wireland/circuit"
-require "../src/wireland/component"
-require "../src/wireland/components/**"
-require "../src/wireland/colors"
+require "../src/wireland"
+require "../src/wireland/**"
 
-R.set_trace_log_level R::TraceLogLevel::Fatal
+
+Wireland::R.set_trace_log_level Wireland::R::TraceLogLevel::Fatal
