@@ -8,8 +8,6 @@ module Wireland::App::Assets::Textures
   class_getter small_cursor = R::Texture.new
   class_getter selector = R::Texture.new
 
-  @@previous_camera_mouse_drag_pos = V2.zero
-
   PLAY_FILE         = "rsrc/sim/play.png"
   CLOCK_FILE        = "rsrc/sim/clock.png"
   CURSOR_FILE       = "rsrc/sim/cursor.png"

@@ -147,7 +147,7 @@ class Wireland::Component
     if conductive? && !pulses.includes? from_id
       # Add pulse to list of pulses in.
       pulses << from_id
-      # Run the on_new_pulse event
+      # Run the on_pulse event
       on_pulse(from_id)
     end
   end
@@ -171,6 +171,6 @@ class Wireland::Component
 
   # What should be done when this part receives a new charge from a new source
   def on_pulse(from_id : UInt64)
-    pulse_out unless self.class.active? || high?
+    pulse_out unless self.class.active? || pulses.size > 1 # TODO: WHY pulses.size > 1 and not high?, using high? breaks this :(
   end
 end
