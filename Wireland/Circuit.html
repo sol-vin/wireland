@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="wireland">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="wireland">
+  <title>Wireland::Circuit - wireland main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          wireland
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="wireland/Wireland" data-name="wireland">
+      <a href="../Wireland.html">Wireland</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="wireland/Wireland/App" data-name="wireland::app">
+      <a href="../Wireland/App.html">App</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Assets" data-name="wireland::app::assets">
+      <a href="../Wireland/App/Assets.html">Assets</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Assets/Textures" data-name="wireland::app::assets::textures">
+      <a href="../Wireland/App/Assets/Textures.html">Textures</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Help" data-name="wireland::app::help">
+      <a href="../Wireland/App/Help.html">Help</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Info" data-name="wireland::app::info">
+      <a href="../Wireland/App/Info.html">Info</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Info/ButtonEvent" data-name="wireland::app::info::buttonevent">
+      <a href="../Wireland/App/Info/ButtonEvent.html">ButtonEvent</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Keys" data-name="wireland::app::keys">
+      <a href="../Wireland/App/Keys.html">Keys</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loader" data-name="wireland::app::loader">
+      <a href="../Wireland/App/Loader.html">Loader</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loading" data-name="wireland::app::loading">
+      <a href="../Wireland/App/Loading.html">Loading</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Menu" data-name="wireland::app::menu">
+      <a href="../Wireland/App/Menu.html">Menu</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Mouse" data-name="wireland::app::mouse">
+      <a href="../Wireland/App/Mouse.html">Mouse</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Scale" data-name="wireland::app::scale">
+      <a href="../Wireland/App/Scale.html">Scale</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Screen" data-name="wireland::app::screen">
+      <a href="../Wireland/App/Screen.html">Screen</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Screen/Zoom" data-name="wireland::app::screen::zoom">
+      <a href="../Wireland/App/Screen/Zoom.html">Zoom</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/TicksCounter" data-name="wireland::app::tickscounter">
+      <a href="../Wireland/App/TicksCounter.html">TicksCounter</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/W" data-name="wireland::app::w">
+      <a href="../Wireland/App/W.html">W</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" current" data-id="wireland/Wireland/Circuit" data-name="wireland::circuit">
+      <a href="../Wireland/Circuit.html">Circuit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/Component" data-name="wireland::component">
+      <a href="../Wireland/Component.html">Component</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Component/AltWire" data-name="wireland::component::altwire">
+      <a href="../Wireland/Component/AltWire.html">AltWire</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Buffer" data-name="wireland::component::buffer">
+      <a href="../Wireland/Component/Buffer.html">Buffer</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Cross" data-name="wireland::component::cross">
+      <a href="../Wireland/Component/Cross.html">Cross</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeIn" data-name="wireland::component::diodein">
+      <a href="../Wireland/Component/DiodeIn.html">DiodeIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeOut" data-name="wireland::component::diodeout">
+      <a href="../Wireland/Component/DiodeOut.html">DiodeOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/GPIO" data-name="wireland::component::gpio">
+      <a href="../Wireland/Component/GPIO.html">GPIO</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOff" data-name="wireland::component::inputoff">
+      <a href="../Wireland/Component/InputOff.html">InputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOn" data-name="wireland::component::inputon">
+      <a href="../Wireland/Component/InputOn.html">InputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOff" data-name="wireland::component::inputtoggleoff">
+      <a href="../Wireland/Component/InputToggleOff.html">InputToggleOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOn" data-name="wireland::component::inputtoggleon">
+      <a href="../Wireland/Component/InputToggleOn.html">InputToggleOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Join" data-name="wireland::component::join">
+      <a href="../Wireland/Component/Join.html">Join</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NCPole" data-name="wireland::component::ncpole">
+      <a href="../Wireland/Component/NCPole.html">NCPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NOPole" data-name="wireland::component::nopole">
+      <a href="../Wireland/Component/NOPole.html">NOPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotIn" data-name="wireland::component::notin">
+      <a href="../Wireland/Component/NotIn.html">NotIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotOut" data-name="wireland::component::notout">
+      <a href="../Wireland/Component/NotOut.html">NotOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOff" data-name="wireland::component::outputoff">
+      <a href="../Wireland/Component/OutputOff.html">OutputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOn" data-name="wireland::component::outputon">
+      <a href="../Wireland/Component/OutputOn.html">OutputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Start" data-name="wireland::component::start">
+      <a href="../Wireland/Component/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Switch" data-name="wireland::component::switch">
+      <a href="../Wireland/Component/Switch.html">Switch</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Tunnel" data-name="wireland::component::tunnel">
+      <a href="../Wireland/Component/Tunnel.html">Tunnel</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Wire" data-name="wireland::component::wire">
+      <a href="../Wireland/Component/Wire.html">Wire</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/DefaultColors" data-name="wireland::defaultcolors">
+      <a href="../Wireland/DefaultColors.html">DefaultColors</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Direction" data-name="wireland::direction">
+      <a href="../Wireland/Direction.html">Direction</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/IO" data-name="wireland::io">
+      <a href="../Wireland/IO.html">IO</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/Palette" data-name="wireland::palette">
+      <a href="../Wireland/Palette.html">Palette</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Palette/DC" data-name="wireland::palette::dc">
+      <a href="../Wireland/Palette/DC.html">DC</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Point" data-name="wireland::point">
+      <a href="../Wireland/Point.html">Point</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/R" data-name="wireland::r">
+      <a href="../Wireland/R.html">R</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Rectangle" data-name="wireland::rectangle">
+      <a href="../Wireland/Rectangle.html">Rectangle</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/RelayPole" data-name="wireland::relaypole">
+      <a href="../Wireland/RelayPole.html">RelayPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/V2" data-name="wireland::v2">
+      <a href="../Wireland/V2.html">V2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Wireland::Circuit
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Wireland/Circuit.html">Wireland::Circuit</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>The whole simulated program</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L5" target="_blank">
+        wireland/circuit.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28filename%3AString%2Cpalette_file%3AString%29-class-method" class="signature"><strong>.new</strong>(filename : String, palette_file : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28filename%3AString%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-class-method" class="signature"><strong>.new</strong>(filename : String, palette : Wireland::Palette = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28image%3AR%3A%3AImage%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-class-method" class="signature"><strong>.new</strong>(image : R::Image, palette : Wireland::Palette = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28index%29-instance-method" class="signature"><strong>#[]</strong>(index)</a>
+        
+          <div class="summary"><p>Gets a component at index</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%3F%28index%29-instance-method" class="signature"><strong>#[]?</strong>(index)</a>
+        
+          <div class="summary"><p>Gets a component at index but with a question mark.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#active_pulse%28id%2Cto%3AArray%28UInt64%29%29-instance-method" class="signature"><strong>#active_pulse</strong>(id, to : Array(UInt64))</a>
+        
+          <div class="summary"><p>Queues up a list of active pulses for the next tick.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#active_pulse%28id%2Cto%3AUInt64%29-instance-method" class="signature"><strong>#active_pulse</strong>(id, to : UInt64)</a>
+        
+          <div class="summary"><p>Queues up an active pulses for the next tick.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#active_pulses%3AHash%28UInt64%2CArray%28UInt64%29%29-instance-method" class="signature"><strong>#active_pulses</strong> : Hash(UInt64, Array(UInt64))</a>
+        
+          <div class="summary"><p>List of pulses that need to</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#components%3AArray%28Wireland%3A%3AComponent%29-instance-method" class="signature"><strong>#components</strong> : Array(Wireland::Component)</a>
+        
+          <div class="summary"><p>List of all components in this circuit</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#components%3D%28components%3AArray%28Wireland%3A%3AComponent%29%29-instance-method" class="signature"><strong>#components=</strong>(components : Array(Wireland::Component))</a>
+        
+          <div class="summary"><p>List of all components in this circuit</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#height%3AInt32-instance-method" class="signature"><strong>#height</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#height%3D%28height%3AInt32%29-instance-method" class="signature"><strong>#height=</strong>(height : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#increase_ticks-instance-method" class="signature"><strong>#increase_ticks</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#last_id%3AUInt64-instance-method" class="signature"><strong>#last_id</strong> : UInt64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load%28image%3AR%3A%3AImage%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-instance-method" class="signature"><strong>#load</strong>(image : R::Image, palette : Wireland::Palette = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#mid_tick-instance-method" class="signature"><strong>#mid_tick</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#palette%3AWireland%3A%3APalette-instance-method" class="signature"><strong>#palette</strong> : Wireland::Palette</a>
+        
+          <div class="summary"><p>Palette of colors that will be loaded into our component classes.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#palette%3D%28palette%3AWireland%3A%3APalette%29-instance-method" class="signature"><strong>#palette=</strong>(palette : Wireland::Palette)</a>
+        
+          <div class="summary"><p>Palette of colors that will be loaded into our component classes.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#post_tick-instance-method" class="signature"><strong>#post_tick</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pre_tick-instance-method" class="signature"><strong>#pre_tick</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pulse_inputs-instance-method" class="signature"><strong>#pulse_inputs</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset-instance-method" class="signature"><strong>#reset</strong></a>
+        
+          <div class="summary"><p>Resets the circuit to tick 0</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tick-instance-method" class="signature"><strong>#tick</strong></a>
+        
+          <div class="summary"><p>Main logic route for the circuit</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ticks%3AInt32%7CUInt128-instance-method" class="signature"><strong>#ticks</strong> : Int32 | UInt128</a>
+        
+          <div class="summary"><p>Number of ticks that have run since the circuit started.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ticks%3D%28ticks%3AInt32%7CUInt128%29-instance-method" class="signature"><strong>#ticks=</strong>(ticks : Int32 | UInt128)</a>
+        
+          <div class="summary"><p>Number of ticks that have run since the circuit started.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#width%3AInt32-instance-method" class="signature"><strong>#width</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#width%3D%28width%3AInt32%29-instance-method" class="signature"><strong>#width=</strong>(width : Int32)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(filename:String,palette_file:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(filename : String, palette_file : String)
+
+        <a class="method-permalink" href="#new%28filename%3AString%2Cpalette_file%3AString%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L198" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(filename:String,palette:Wireland::Palette=Wireland::Palette::DEFAULT)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(filename : String, palette : <a href="../Wireland/Palette.html">Wireland::Palette</a> = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)
+
+        <a class="method-permalink" href="#new%28filename%3AString%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L205" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(image:R::Image,palette:Wireland::Palette=Wireland::Palette::DEFAULT)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(image : R::Image, palette : <a href="../Wireland/Palette.html">Wireland::Palette</a> = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)
+
+        <a class="method-permalink" href="#new%28image%3AR%3A%3AImage%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L212" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>
+
+        <a class="method-permalink" href="#new-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="[](index)-instance-method">
+      <div class="signature">
+        
+        def <strong>[]</strong>(index)
+
+        <a class="method-permalink" href="#%5B%5D%28index%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a component at index</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L218" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="[]?(index)-instance-method">
+      <div class="signature">
+        
+        def <strong>[]?</strong>(index)
+
+        <a class="method-permalink" href="#%5B%5D%3F%28index%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a component at index but with a question mark. :)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L223" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="active_pulse(id,to:Array(UInt64))-instance-method">
+      <div class="signature">
+        
+        def <strong>active_pulse</strong>(id, to : Array(UInt64))
+
+        <a class="method-permalink" href="#active_pulse%28id%2Cto%3AArray%28UInt64%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Queues up a list of active pulses for the next tick. Used by active components.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L228" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="active_pulse(id,to:UInt64)-instance-method">
+      <div class="signature">
+        
+        def <strong>active_pulse</strong>(id, to : UInt64)
+
+        <a class="method-permalink" href="#active_pulse%28id%2Cto%3AUInt64%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Queues up an active pulses for the next tick. Used by active components.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L237" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="active_pulses:Hash(UInt64,Array(UInt64))-instance-method">
+      <div class="signature">
+        
+        def <strong>active_pulses</strong> : Hash(UInt64, Array(UInt64))
+
+        <a class="method-permalink" href="#active_pulses%3AHash%28UInt64%2CArray%28UInt64%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>List of pulses that need to</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L193" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="components:Array(Wireland::Component)-instance-method">
+      <div class="signature">
+        
+        def <strong>components</strong> : Array(<a href="../Wireland/Component.html">Wireland::Component</a>)
+
+        <a class="method-permalink" href="#components%3AArray%28Wireland%3A%3AComponent%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>List of all components in this circuit</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="components=(components:Array(Wireland::Component))-instance-method">
+      <div class="signature">
+        
+        def <strong>components=</strong>(components : Array(<a href="../Wireland/Component.html">Wireland::Component</a>))
+
+        <a class="method-permalink" href="#components%3D%28components%3AArray%28Wireland%3A%3AComponent%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>List of all components in this circuit</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="height:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>height</strong> : Int32
+
+        <a class="method-permalink" href="#height%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L188" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="height=(height:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>height=</strong>(height : Int32)
+
+        <a class="method-permalink" href="#height%3D%28height%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L188" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="increase_ticks-instance-method">
+      <div class="signature">
+        
+        def <strong>increase_ticks</strong>
+
+        <a class="method-permalink" href="#increase_ticks-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L283" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="last_id:UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>last_id</strong> : UInt64
+
+        <a class="method-permalink" href="#last_id%3AUInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L190" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load(image:R::Image,palette:Wireland::Palette=Wireland::Palette::DEFAULT)-instance-method">
+      <div class="signature">
+        
+        def <strong>load</strong>(image : R::Image, palette : <a href="../Wireland/Palette.html">Wireland::Palette</a> = <span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span><span class="t">::</span><span class="t">DEFAULT</span>)
+
+        <a class="method-permalink" href="#load%28image%3AR%3A%3AImage%2Cpalette%3AWireland%3A%3APalette%3DWireland%3A%3APalette%3A%3ADEFAULT%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="mid_tick-instance-method">
+      <div class="signature">
+        
+        def <strong>mid_tick</strong>
+
+        <a class="method-permalink" href="#mid_tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L260" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="palette:Wireland::Palette-instance-method">
+      <div class="signature">
+        
+        def <strong>palette</strong> : <a href="../Wireland/Palette.html">Wireland::Palette</a>
+
+        <a class="method-permalink" href="#palette%3AWireland%3A%3APalette-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Palette of colors that will be loaded into our component classes.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L180" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="palette=(palette:Wireland::Palette)-instance-method">
+      <div class="signature">
+        
+        def <strong>palette=</strong>(palette : <a href="../Wireland/Palette.html">Wireland::Palette</a>)
+
+        <a class="method-permalink" href="#palette%3D%28palette%3AWireland%3A%3APalette%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Palette of colors that will be loaded into our component classes.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L180" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="post_tick-instance-method">
+      <div class="signature">
+        
+        def <strong>post_tick</strong>
+
+        <a class="method-permalink" href="#post_tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L272" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pre_tick-instance-method">
+      <div class="signature">
+        
+        def <strong>pre_tick</strong>
+
+        <a class="method-permalink" href="#pre_tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L252" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pulse_inputs-instance-method">
+      <div class="signature">
+        
+        def <strong>pulse_inputs</strong>
+
+        <a class="method-permalink" href="#pulse_inputs-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L245" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset-instance-method">
+      <div class="signature">
+        
+        def <strong>reset</strong>
+
+        <a class="method-permalink" href="#reset-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Resets the circuit to tick 0</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L297" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tick-instance-method">
+      <div class="signature">
+        
+        def <strong>tick</strong>
+
+        <a class="method-permalink" href="#tick-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Main logic route for the circuit</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L288" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ticks:Int32|UInt128-instance-method">
+      <div class="signature">
+        
+        def <strong>ticks</strong> : Int32 | UInt128
+
+        <a class="method-permalink" href="#ticks%3AInt32%7CUInt128-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Number of ticks that have run since the circuit started.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L185" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ticks=(ticks:Int32|UInt128)-instance-method">
+      <div class="signature">
+        
+        def <strong>ticks=</strong>(ticks : Int32 | UInt128)
+
+        <a class="method-permalink" href="#ticks%3D%28ticks%3AInt32%7CUInt128%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Number of ticks that have run since the circuit started.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L185" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="width:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>width</strong> : Int32
+
+        <a class="method-permalink" href="#width%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L187" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="width=(width:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>width=</strong>(width : Int32)
+
+        <a class="method-permalink" href="#width%3D%28width%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/circuit.cr#L187" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="wireland">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="wireland">
+  <title>Wireland::Palette - wireland main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          wireland
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="wireland/Wireland" data-name="wireland">
+      <a href="../Wireland.html">Wireland</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="wireland/Wireland/App" data-name="wireland::app">
+      <a href="../Wireland/App.html">App</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Assets" data-name="wireland::app::assets">
+      <a href="../Wireland/App/Assets.html">Assets</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Assets/Textures" data-name="wireland::app::assets::textures">
+      <a href="../Wireland/App/Assets/Textures.html">Textures</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Help" data-name="wireland::app::help">
+      <a href="../Wireland/App/Help.html">Help</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Info" data-name="wireland::app::info">
+      <a href="../Wireland/App/Info.html">Info</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Info/ButtonEvent" data-name="wireland::app::info::buttonevent">
+      <a href="../Wireland/App/Info/ButtonEvent.html">ButtonEvent</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Keys" data-name="wireland::app::keys">
+      <a href="../Wireland/App/Keys.html">Keys</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loader" data-name="wireland::app::loader">
+      <a href="../Wireland/App/Loader.html">Loader</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loading" data-name="wireland::app::loading">
+      <a href="../Wireland/App/Loading.html">Loading</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Menu" data-name="wireland::app::menu">
+      <a href="../Wireland/App/Menu.html">Menu</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Mouse" data-name="wireland::app::mouse">
+      <a href="../Wireland/App/Mouse.html">Mouse</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Scale" data-name="wireland::app::scale">
+      <a href="../Wireland/App/Scale.html">Scale</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Screen" data-name="wireland::app::screen">
+      <a href="../Wireland/App/Screen.html">Screen</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Screen/Zoom" data-name="wireland::app::screen::zoom">
+      <a href="../Wireland/App/Screen/Zoom.html">Zoom</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/TicksCounter" data-name="wireland::app::tickscounter">
+      <a href="../Wireland/App/TicksCounter.html">TicksCounter</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/W" data-name="wireland::app::w">
+      <a href="../Wireland/App/W.html">W</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Circuit" data-name="wireland::circuit">
+      <a href="../Wireland/Circuit.html">Circuit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/Component" data-name="wireland::component">
+      <a href="../Wireland/Component.html">Component</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Component/AltWire" data-name="wireland::component::altwire">
+      <a href="../Wireland/Component/AltWire.html">AltWire</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Buffer" data-name="wireland::component::buffer">
+      <a href="../Wireland/Component/Buffer.html">Buffer</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Cross" data-name="wireland::component::cross">
+      <a href="../Wireland/Component/Cross.html">Cross</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeIn" data-name="wireland::component::diodein">
+      <a href="../Wireland/Component/DiodeIn.html">DiodeIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeOut" data-name="wireland::component::diodeout">
+      <a href="../Wireland/Component/DiodeOut.html">DiodeOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/GPIO" data-name="wireland::component::gpio">
+      <a href="../Wireland/Component/GPIO.html">GPIO</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOff" data-name="wireland::component::inputoff">
+      <a href="../Wireland/Component/InputOff.html">InputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOn" data-name="wireland::component::inputon">
+      <a href="../Wireland/Component/InputOn.html">InputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOff" data-name="wireland::component::inputtoggleoff">
+      <a href="../Wireland/Component/InputToggleOff.html">InputToggleOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOn" data-name="wireland::component::inputtoggleon">
+      <a href="../Wireland/Component/InputToggleOn.html">InputToggleOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Join" data-name="wireland::component::join">
+      <a href="../Wireland/Component/Join.html">Join</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NCPole" data-name="wireland::component::ncpole">
+      <a href="../Wireland/Component/NCPole.html">NCPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NOPole" data-name="wireland::component::nopole">
+      <a href="../Wireland/Component/NOPole.html">NOPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotIn" data-name="wireland::component::notin">
+      <a href="../Wireland/Component/NotIn.html">NotIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotOut" data-name="wireland::component::notout">
+      <a href="../Wireland/Component/NotOut.html">NotOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOff" data-name="wireland::component::outputoff">
+      <a href="../Wireland/Component/OutputOff.html">OutputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOn" data-name="wireland::component::outputon">
+      <a href="../Wireland/Component/OutputOn.html">OutputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Start" data-name="wireland::component::start">
+      <a href="../Wireland/Component/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Switch" data-name="wireland::component::switch">
+      <a href="../Wireland/Component/Switch.html">Switch</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Tunnel" data-name="wireland::component::tunnel">
+      <a href="../Wireland/Component/Tunnel.html">Tunnel</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Wire" data-name="wireland::component::wire">
+      <a href="../Wireland/Component/Wire.html">Wire</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/DefaultColors" data-name="wireland::defaultcolors">
+      <a href="../Wireland/DefaultColors.html">DefaultColors</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Direction" data-name="wireland::direction">
+      <a href="../Wireland/Direction.html">Direction</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/IO" data-name="wireland::io">
+      <a href="../Wireland/IO.html">IO</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="wireland/Wireland/Palette" data-name="wireland::palette">
+      <a href="../Wireland/Palette.html">Palette</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Palette/DC" data-name="wireland::palette::dc">
+      <a href="../Wireland/Palette/DC.html">DC</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Point" data-name="wireland::point">
+      <a href="../Wireland/Point.html">Point</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/R" data-name="wireland::r">
+      <a href="../Wireland/R.html">R</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Rectangle" data-name="wireland::rectangle">
+      <a href="../Wireland/Rectangle.html">Rectangle</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/RelayPole" data-name="wireland::relaypole">
+      <a href="../Wireland/RelayPole.html">RelayPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/V2" data-name="wireland::v2">
+      <a href="../Wireland/V2.html">V2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> Wireland::Palette
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Wireland/Palette.html">Wireland::Palette</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L42" target="_blank">
+        wireland/colors.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="DEFAULT">
+        <strong>DEFAULT</strong> = <code><span class="t">Wireland</span><span class="t">::</span><span class="t">Palette</span>.new(start: <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_GREEN</span>, buffer: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BLUE</span>, wire: <span class="t">DC</span><span class="t">::</span><span class="t">WHITE</span>, alt_wire: <span class="t">DC</span><span class="t">::</span><span class="t">GREY</span>, join: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BROWN</span>, cross: <span class="t">DC</span><span class="t">::</span><span class="t">BROWN</span>, tunnel: <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_ORANGE</span>, input_on: <span class="t">DC</span><span class="t">::</span><span class="t">ORANGE</span>, input_off: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_ORANGE</span>, input_toggle_on: <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_PURPLE</span>, input_toggle_off: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_PURPLE</span>, output_on: <span class="t">DC</span><span class="t">::</span><span class="t">YELLOW</span>, output_off: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_YELLOW</span>, not_in: <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_BLUE</span>, not_out: <span class="t">DC</span><span class="t">::</span><span class="t">BLUE</span>, switch: <span class="t">DC</span><span class="t">::</span><span class="t">PINK</span>, no_pole: <span class="t">DC</span><span class="t">::</span><span class="t">RED</span>, nc_pole: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_RED</span>, diode_in: <span class="t">DC</span><span class="t">::</span><span class="t">GREEN</span>, diode_out: <span class="t">DC</span><span class="t">::</span><span class="t">DARK_GREEN</span>, gpio: <span class="t">DC</span><span class="t">::</span><span class="t">PURPLE</span>, bg: <span class="t">DC</span><span class="t">::</span><span class="t">BLACK</span>)</code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28filename%3AString%29-class-method" class="signature"><strong>.new</strong>(filename : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28start%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_GREEN%2Cbuffer%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_BLUE%2Cwire%3ARaylib%3A%3AColor%3DDC%3A%3AWHITE%2Calt_wire%3ARaylib%3A%3AColor%3DDC%3A%3AGREY%2Cjoin%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_BROWN%2Ccross%3ARaylib%3A%3AColor%3DDC%3A%3ABROWN%2Ctunnel%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_BROWN%2Cinput_on%3ARaylib%3A%3AColor%3DDC%3A%3AORANGE%2Cinput_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_ORANGE%2Cinput_toggle_on%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_PURPLE%2Cinput_toggle_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_PURPLE%2Coutput_on%3ARaylib%3A%3AColor%3DDC%3A%3AYELLOW%2Coutput_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_YELLOW%2Cnot_in%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_BLUE%2Cnot_out%3ARaylib%3A%3AColor%3DDC%3A%3ABLUE%2Cswitch%3ARaylib%3A%3AColor%3DDC%3A%3APINK%2Cno_pole%3ARaylib%3A%3AColor%3DDC%3A%3ARED%2Cnc_pole%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_RED%2Cdiode_in%3ARaylib%3A%3AColor%3DDC%3A%3AGREEN%2Cdiode_out%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_GREEN%2Cgpio%3ARaylib%3A%3AColor%3DDC%3A%3APURPLE%2Cbg%3ARaylib%3A%3AColor%3DDC%3A%3ABLACK%29-class-method" class="signature"><strong>.new</strong>(start : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_GREEN</span>, buffer : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BLUE</span>, wire : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">WHITE</span>, alt_wire : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">GREY</span>, join : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BROWN</span>, cross : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BROWN</span>, tunnel : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_BROWN</span>, input_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">ORANGE</span>, input_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_ORANGE</span>, input_toggle_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_PURPLE</span>, input_toggle_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_PURPLE</span>, output_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">YELLOW</span>, output_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_YELLOW</span>, not_in : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_BLUE</span>, not_out : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BLUE</span>, switch : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">PINK</span>, no_pole : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">RED</span>, nc_pole : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_RED</span>, diode_in : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">GREEN</span>, diode_out : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_GREEN</span>, gpio : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">PURPLE</span>, bg : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BLACK</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#all-instance-method" class="signature"><strong>#all</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#alt_wire%3AR%3A%3AColor-instance-method" class="signature"><strong>#alt_wire</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#bg%3AR%3A%3AColor-instance-method" class="signature"><strong>#bg</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#buffer%3AR%3A%3AColor-instance-method" class="signature"><strong>#buffer</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cross%3AR%3A%3AColor-instance-method" class="signature"><strong>#cross</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#diode_in%3AR%3A%3AColor-instance-method" class="signature"><strong>#diode_in</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#diode_out%3AR%3A%3AColor-instance-method" class="signature"><strong>#diode_out</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#gpio%3AR%3A%3AColor-instance-method" class="signature"><strong>#gpio</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#high%3AR%3A%3AColor-instance-method" class="signature"><strong>#high</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#input_off%3AR%3A%3AColor-instance-method" class="signature"><strong>#input_off</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#input_on%3AR%3A%3AColor-instance-method" class="signature"><strong>#input_on</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#input_toggle_off%3AR%3A%3AColor-instance-method" class="signature"><strong>#input_toggle_off</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#input_toggle_on%3AR%3A%3AColor-instance-method" class="signature"><strong>#input_toggle_on</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#is_active%3AR%3A%3AColor-instance-method" class="signature"><strong>#is_active</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#is_and_will_active%3AR%3A%3AColor-instance-method" class="signature"><strong>#is_and_will_active</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#join%3AR%3A%3AColor-instance-method" class="signature"><strong>#join</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_into_components-instance-method" class="signature"><strong>#load_into_components</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#nc_pole%3AR%3A%3AColor-instance-method" class="signature"><strong>#nc_pole</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#no_pole%3AR%3A%3AColor-instance-method" class="signature"><strong>#no_pole</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#not_in%3AR%3A%3AColor-instance-method" class="signature"><strong>#not_in</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#not_out%3AR%3A%3AColor-instance-method" class="signature"><strong>#not_out</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#output_off%3AR%3A%3AColor-instance-method" class="signature"><strong>#output_off</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#output_on%3AR%3A%3AColor-instance-method" class="signature"><strong>#output_on</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start%3AR%3A%3AColor-instance-method" class="signature"><strong>#start</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#switch%3AR%3A%3AColor-instance-method" class="signature"><strong>#switch</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tunnel%3AR%3A%3AColor-instance-method" class="signature"><strong>#tunnel</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#will_active%3AR%3A%3AColor-instance-method" class="signature"><strong>#will_active</strong> : R::Color</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wire%3AR%3A%3AColor-instance-method" class="signature"><strong>#wire</strong> : R::Color</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(filename:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(filename : String)
+
+        <a class="method-permalink" href="#new%28filename%3AString%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L123" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(start:Raylib::Color=DC::LIGHT_GREEN,buffer:Raylib::Color=DC::DARK_BLUE,wire:Raylib::Color=DC::WHITE,alt_wire:Raylib::Color=DC::GREY,join:Raylib::Color=DC::DARK_BROWN,cross:Raylib::Color=DC::BROWN,tunnel:Raylib::Color=DC::LIGHT_BROWN,input_on:Raylib::Color=DC::ORANGE,input_off:Raylib::Color=DC::DARK_ORANGE,input_toggle_on:Raylib::Color=DC::LIGHT_PURPLE,input_toggle_off:Raylib::Color=DC::DARK_PURPLE,output_on:Raylib::Color=DC::YELLOW,output_off:Raylib::Color=DC::DARK_YELLOW,not_in:Raylib::Color=DC::LIGHT_BLUE,not_out:Raylib::Color=DC::BLUE,switch:Raylib::Color=DC::PINK,no_pole:Raylib::Color=DC::RED,nc_pole:Raylib::Color=DC::DARK_RED,diode_in:Raylib::Color=DC::GREEN,diode_out:Raylib::Color=DC::DARK_GREEN,gpio:Raylib::Color=DC::PURPLE,bg:Raylib::Color=DC::BLACK)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(start : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_GREEN</span>, buffer : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BLUE</span>, wire : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">WHITE</span>, alt_wire : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">GREY</span>, join : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_BROWN</span>, cross : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BROWN</span>, tunnel : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_BROWN</span>, input_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">ORANGE</span>, input_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_ORANGE</span>, input_toggle_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_PURPLE</span>, input_toggle_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_PURPLE</span>, output_on : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">YELLOW</span>, output_off : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_YELLOW</span>, not_in : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">LIGHT_BLUE</span>, not_out : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BLUE</span>, switch : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">PINK</span>, no_pole : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">RED</span>, nc_pole : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_RED</span>, diode_in : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">GREEN</span>, diode_out : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">DARK_GREEN</span>, gpio : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">PURPLE</span>, bg : Raylib::Color = <span class="t">DC</span><span class="t">::</span><span class="t">BLACK</span>)
+
+        <a class="method-permalink" href="#new%28start%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_GREEN%2Cbuffer%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_BLUE%2Cwire%3ARaylib%3A%3AColor%3DDC%3A%3AWHITE%2Calt_wire%3ARaylib%3A%3AColor%3DDC%3A%3AGREY%2Cjoin%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_BROWN%2Ccross%3ARaylib%3A%3AColor%3DDC%3A%3ABROWN%2Ctunnel%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_BROWN%2Cinput_on%3ARaylib%3A%3AColor%3DDC%3A%3AORANGE%2Cinput_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_ORANGE%2Cinput_toggle_on%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_PURPLE%2Cinput_toggle_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_PURPLE%2Coutput_on%3ARaylib%3A%3AColor%3DDC%3A%3AYELLOW%2Coutput_off%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_YELLOW%2Cnot_in%3ARaylib%3A%3AColor%3DDC%3A%3ALIGHT_BLUE%2Cnot_out%3ARaylib%3A%3AColor%3DDC%3A%3ABLUE%2Cswitch%3ARaylib%3A%3AColor%3DDC%3A%3APINK%2Cno_pole%3ARaylib%3A%3AColor%3DDC%3A%3ARED%2Cnc_pole%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_RED%2Cdiode_in%3ARaylib%3A%3AColor%3DDC%3A%3AGREEN%2Cdiode_out%3ARaylib%3A%3AColor%3DDC%3A%3ADARK_GREEN%2Cgpio%3ARaylib%3A%3AColor%3DDC%3A%3APURPLE%2Cbg%3ARaylib%3A%3AColor%3DDC%3A%3ABLACK%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L97" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="all-instance-method">
+      <div class="signature">
+        
+        def <strong>all</strong>
+
+        <a class="method-permalink" href="#all-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L196" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="alt_wire:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>alt_wire</strong> : R::Color
+
+        <a class="method-permalink" href="#alt_wire%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L73" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="bg:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>bg</strong> : R::Color
+
+        <a class="method-permalink" href="#bg%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L91" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="buffer:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>buffer</strong> : R::Color
+
+        <a class="method-permalink" href="#buffer%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L71" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cross:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>cross</strong> : R::Color
+
+        <a class="method-permalink" href="#cross%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="diode_in:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>diode_in</strong> : R::Color
+
+        <a class="method-permalink" href="#diode_in%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L88" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="diode_out:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>diode_out</strong> : R::Color
+
+        <a class="method-permalink" href="#diode_out%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L89" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="gpio:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>gpio</strong> : R::Color
+
+        <a class="method-permalink" href="#gpio%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L90" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="high:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>high</strong> : R::Color
+
+        <a class="method-permalink" href="#high%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L95" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="input_off:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>input_off</strong> : R::Color
+
+        <a class="method-permalink" href="#input_off%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="input_on:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>input_on</strong> : R::Color
+
+        <a class="method-permalink" href="#input_on%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="input_toggle_off:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>input_toggle_off</strong> : R::Color
+
+        <a class="method-permalink" href="#input_toggle_off%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L80" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="input_toggle_on:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>input_toggle_on</strong> : R::Color
+
+        <a class="method-permalink" href="#input_toggle_on%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L79" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="is_active:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>is_active</strong> : R::Color
+
+        <a class="method-permalink" href="#is_active%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L94" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="is_and_will_active:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>is_and_will_active</strong> : R::Color
+
+        <a class="method-permalink" href="#is_and_will_active%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L93" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="join:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>join</strong> : R::Color
+
+        <a class="method-permalink" href="#join%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_into_components-instance-method">
+      <div class="signature">
+        
+        def <strong>load_into_components</strong>
+
+        <a class="method-permalink" href="#load_into_components-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L240" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="nc_pole:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>nc_pole</strong> : R::Color
+
+        <a class="method-permalink" href="#nc_pole%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L87" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="no_pole:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>no_pole</strong> : R::Color
+
+        <a class="method-permalink" href="#no_pole%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L86" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="not_in:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>not_in</strong> : R::Color
+
+        <a class="method-permalink" href="#not_in%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L83" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="not_out:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>not_out</strong> : R::Color
+
+        <a class="method-permalink" href="#not_out%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L84" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="output_off:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>output_off</strong> : R::Color
+
+        <a class="method-permalink" href="#output_off%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="output_on:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>output_on</strong> : R::Color
+
+        <a class="method-permalink" href="#output_on%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>start</strong> : R::Color
+
+        <a class="method-permalink" href="#start%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="switch:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>switch</strong> : R::Color
+
+        <a class="method-permalink" href="#switch%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L85" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tunnel:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>tunnel</strong> : R::Color
+
+        <a class="method-permalink" href="#tunnel%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="will_active:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>will_active</strong> : R::Color
+
+        <a class="method-permalink" href="#will_active%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L92" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wire:R::Color-instance-method">
+      <div class="signature">
+        
+        def <strong>wire</strong> : R::Color
+
+        <a class="method-permalink" href="#wire%3AR%3A%3AColor-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/wireland/colors.cr#L72" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

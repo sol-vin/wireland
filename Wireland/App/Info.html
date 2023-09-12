@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="wireland">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="wireland">
+  <title>Wireland::App::Info - wireland main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          wireland
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="wireland/Wireland" data-name="wireland">
+      <a href="../../Wireland.html">Wireland</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="wireland/Wireland/App" data-name="wireland::app">
+      <a href="../../Wireland/App.html">App</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Assets" data-name="wireland::app::assets">
+      <a href="../../Wireland/App/Assets.html">Assets</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Assets/Textures" data-name="wireland::app::assets::textures">
+      <a href="../../Wireland/App/Assets/Textures.html">Textures</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Help" data-name="wireland::app::help">
+      <a href="../../Wireland/App/Help.html">Help</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="wireland/Wireland/App/Info" data-name="wireland::app::info">
+      <a href="../../Wireland/App/Info.html">Info</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Info/ButtonEvent" data-name="wireland::app::info::buttonevent">
+      <a href="../../Wireland/App/Info/ButtonEvent.html">ButtonEvent</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Keys" data-name="wireland::app::keys">
+      <a href="../../Wireland/App/Keys.html">Keys</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loader" data-name="wireland::app::loader">
+      <a href="../../Wireland/App/Loader.html">Loader</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Loading" data-name="wireland::app::loading">
+      <a href="../../Wireland/App/Loading.html">Loading</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Menu" data-name="wireland::app::menu">
+      <a href="../../Wireland/App/Menu.html">Menu</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Mouse" data-name="wireland::app::mouse">
+      <a href="../../Wireland/App/Mouse.html">Mouse</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/Scale" data-name="wireland::app::scale">
+      <a href="../../Wireland/App/Scale.html">Scale</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/App/Screen" data-name="wireland::app::screen">
+      <a href="../../Wireland/App/Screen.html">Screen</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/App/Screen/Zoom" data-name="wireland::app::screen::zoom">
+      <a href="../../Wireland/App/Screen/Zoom.html">Zoom</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/TicksCounter" data-name="wireland::app::tickscounter">
+      <a href="../../Wireland/App/TicksCounter.html">TicksCounter</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/App/W" data-name="wireland::app::w">
+      <a href="../../Wireland/App/W.html">W</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Circuit" data-name="wireland::circuit">
+      <a href="../../Wireland/Circuit.html">Circuit</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/Component" data-name="wireland::component">
+      <a href="../../Wireland/Component.html">Component</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Component/AltWire" data-name="wireland::component::altwire">
+      <a href="../../Wireland/Component/AltWire.html">AltWire</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Buffer" data-name="wireland::component::buffer">
+      <a href="../../Wireland/Component/Buffer.html">Buffer</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Cross" data-name="wireland::component::cross">
+      <a href="../../Wireland/Component/Cross.html">Cross</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeIn" data-name="wireland::component::diodein">
+      <a href="../../Wireland/Component/DiodeIn.html">DiodeIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/DiodeOut" data-name="wireland::component::diodeout">
+      <a href="../../Wireland/Component/DiodeOut.html">DiodeOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/GPIO" data-name="wireland::component::gpio">
+      <a href="../../Wireland/Component/GPIO.html">GPIO</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOff" data-name="wireland::component::inputoff">
+      <a href="../../Wireland/Component/InputOff.html">InputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputOn" data-name="wireland::component::inputon">
+      <a href="../../Wireland/Component/InputOn.html">InputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOff" data-name="wireland::component::inputtoggleoff">
+      <a href="../../Wireland/Component/InputToggleOff.html">InputToggleOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/InputToggleOn" data-name="wireland::component::inputtoggleon">
+      <a href="../../Wireland/Component/InputToggleOn.html">InputToggleOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Join" data-name="wireland::component::join">
+      <a href="../../Wireland/Component/Join.html">Join</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NCPole" data-name="wireland::component::ncpole">
+      <a href="../../Wireland/Component/NCPole.html">NCPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NOPole" data-name="wireland::component::nopole">
+      <a href="../../Wireland/Component/NOPole.html">NOPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotIn" data-name="wireland::component::notin">
+      <a href="../../Wireland/Component/NotIn.html">NotIn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/NotOut" data-name="wireland::component::notout">
+      <a href="../../Wireland/Component/NotOut.html">NotOut</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOff" data-name="wireland::component::outputoff">
+      <a href="../../Wireland/Component/OutputOff.html">OutputOff</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/OutputOn" data-name="wireland::component::outputon">
+      <a href="../../Wireland/Component/OutputOn.html">OutputOn</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Start" data-name="wireland::component::start">
+      <a href="../../Wireland/Component/Start.html">Start</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Switch" data-name="wireland::component::switch">
+      <a href="../../Wireland/Component/Switch.html">Switch</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Tunnel" data-name="wireland::component::tunnel">
+      <a href="../../Wireland/Component/Tunnel.html">Tunnel</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Component/Wire" data-name="wireland::component::wire">
+      <a href="../../Wireland/Component/Wire.html">Wire</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/DefaultColors" data-name="wireland::defaultcolors">
+      <a href="../../Wireland/DefaultColors.html">DefaultColors</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Direction" data-name="wireland::direction">
+      <a href="../../Wireland/Direction.html">Direction</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/IO" data-name="wireland::io">
+      <a href="../../Wireland/IO.html">IO</a>
+      
+    </li>
+  
+  <li class="parent " data-id="wireland/Wireland/Palette" data-name="wireland::palette">
+      <a href="../../Wireland/Palette.html">Palette</a>
+      
+        <ul>
+  
+  <li class=" " data-id="wireland/Wireland/Palette/DC" data-name="wireland::palette::dc">
+      <a href="../../Wireland/Palette/DC.html">DC</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Point" data-name="wireland::point">
+      <a href="../../Wireland/Point.html">Point</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/R" data-name="wireland::r">
+      <a href="../../Wireland/R.html">R</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/Rectangle" data-name="wireland::rectangle">
+      <a href="../../Wireland/Rectangle.html">Rectangle</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/RelayPole" data-name="wireland::relaypole">
+      <a href="../../Wireland/RelayPole.html">RelayPole</a>
+      
+    </li>
+  
+  <li class=" " data-id="wireland/Wireland/V2" data-name="wireland::v2">
+      <a href="../../Wireland/V2.html">V2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> Wireland::App::Info
+
+</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L1" target="_blank">
+        app/info.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="BG_HEIGHT">
+        <strong>BG_HEIGHT</strong> = <code>(<span class="t">Screen</span><span class="t">::</span><span class="t">HEIGHT</span> <span class="o">/</span> <span class="n">4</span>) <span class="o">+</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="BG_RECT">
+        <strong>BG_RECT</strong> = <code><span class="t">R</span><span class="t">::</span><span class="t">Rectangle</span>.new(x: <span class="t">BG_X</span>, y: <span class="t">BG_Y</span>, width: <span class="t">BG_WIDTH</span>, height: <span class="t">BG_HEIGHT</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="BG_WIDTH">
+        <strong>BG_WIDTH</strong> = <code>(<span class="t">Screen</span><span class="t">::</span><span class="t">WIDTH</span> <span class="o">/</span> <span class="n">2</span>) <span class="o">+</span> (<span class="t">MARGIN</span> <span class="o">*</span> <span class="n">2</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="BG_X">
+        <strong>BG_X</strong> = <code>(<span class="t">BG_WIDTH</span> <span class="o">/</span> <span class="n">2</span>) <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="BG_Y">
+        <strong>BG_Y</strong> = <code>((<span class="t">Screen</span><span class="t">::</span><span class="t">HEIGHT</span> <span class="o">/</span> <span class="n">2</span>) <span class="o">-</span> (<span class="t">BG_HEIGHT</span> <span class="o">/</span> <span class="n">2</span>)) <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTION_BG_LINE_THICKNESS">
+        <strong>CONNECTION_BG_LINE_THICKNESS</strong> = <code><span class="n">3.5</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTION_BUTTON_MARGIN">
+        <strong>CONNECTION_BUTTON_MARGIN</strong> = <code><span class="t">MARGIN</span> <span class="o">*</span> <span class="n">0.75</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTION_BUTTON_NAMES">
+        <strong>CONNECTION_BUTTON_NAMES</strong> = <code>[<span class="n">:button0</span>, <span class="n">:button1</span>, <span class="n">:button2</span>, <span class="n">:button3</span>, <span class="n">:button4</span>, <span class="n">:button5</span>, <span class="n">:button6</span>]</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTION_SIZE">
+        <strong>CONNECTION_SIZE</strong> = <code><span class="n">50</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTION_TEXT_SIZE">
+        <strong>CONNECTION_TEXT_SIZE</strong> = <code><span class="n">15</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_BUTTON_MARGIN">
+        <strong>CONNECTIONS_BUTTON_MARGIN</strong> = <code><span class="t">MARGIN</span> <span class="o">/</span> <span class="n">4</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_BUTTON_SIZE">
+        <strong>CONNECTIONS_BUTTON_SIZE</strong> = <code>(<span class="t">CONNECTIONS_BUTTON_SPACING</span> <span class="o">/</span> <span class="n">2</span>) <span class="o">-</span> (<span class="t">CONNECTIONS_BUTTON_MARGIN</span> <span class="o">*</span> <span class="n">2</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_BUTTON_SPACING">
+        <strong>CONNECTIONS_BUTTON_SPACING</strong> = <code><span class="n">74</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_FARTHEST_X">
+        <strong>CONNECTIONS_FARTHEST_X</strong> = <code>((<span class="t">CONNECTIONS_START_X</span> <span class="o">+</span> ((<span class="t">CONNECTIONS_MAX</span> <span class="o">-</span> <span class="n">1</span>) <span class="o">*</span> (<span class="t">CONNECTION_BUTTON_MARGIN</span> <span class="o">+</span> <span class="t">CONNECTION_SIZE</span>))) <span class="o">+</span> (<span class="t">MARGIN</span> <span class="o">/</span> <span class="n">2</span>)) <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_MAX">
+        <strong>CONNECTIONS_MAX</strong> = <code><span class="n">7</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_NEXT_BUTTON_RECT">
+        <strong>CONNECTIONS_NEXT_BUTTON_RECT</strong> = <code><span class="t">R</span><span class="t">::</span><span class="t">Rectangle</span>.new(x: (((<span class="t">BG_X</span> <span class="o">+</span> <span class="t">BG_WIDTH</span>) <span class="o">-</span> <span class="t">CONNECTIONS_BUTTON_MARGIN</span>) <span class="o">-</span> <span class="t">CONNECTIONS_BUTTON_SIZE</span>) <span class="o">-</span> <span class="t">MARGIN</span>, y: (<span class="t">CONNECTIONS_Y</span> <span class="o">+</span> (<span class="t">CONNECTION_SIZE</span> <span class="o">/</span> <span class="n">2</span>)) <span class="o">-</span> (<span class="t">CONNECTIONS_BUTTON_SIZE</span> <span class="o">/</span> <span class="n">2</span>), width: <span class="t">CONNECTIONS_BUTTON_SIZE</span>, height: <span class="t">CONNECTIONS_BUTTON_SIZE</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_PREV_BUTTON_RECT">
+        <strong>CONNECTIONS_PREV_BUTTON_RECT</strong> = <code><span class="t">R</span><span class="t">::</span><span class="t">Rectangle</span>.new(x: (<span class="t">CONNECTIONS_X</span> <span class="o">+</span> <span class="t">CONNECTION_SIZE</span>) <span class="o">+</span> <span class="t">CONNECTIONS_BUTTON_MARGIN</span>, y: (<span class="t">CONNECTIONS_Y</span> <span class="o">+</span> (<span class="t">CONNECTION_SIZE</span> <span class="o">/</span> <span class="n">2</span>)) <span class="o">-</span> (<span class="t">CONNECTIONS_BUTTON_SIZE</span> <span class="o">/</span> <span class="n">2</span>), width: <span class="t">CONNECTIONS_BUTTON_SIZE</span>, height: <span class="t">CONNECTIONS_BUTTON_SIZE</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_START_X">
+        <strong>CONNECTIONS_START_X</strong> = <code>((<span class="t">NAME_X</span> <span class="o">+</span> <span class="t">CONNECTION_SIZE</span>) <span class="o">+</span> (<span class="t">CONNECTIONS_BUTTON_SPACING</span> <span class="o">/</span> <span class="n">2</span>)) <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_X">
+        <strong>CONNECTIONS_X</strong> = <code><span class="t">NAME_X</span> <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Connections</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="CONNECTIONS_Y">
+        <strong>CONNECTIONS_Y</strong> = <code>(<span class="t">NAME_Y</span> <span class="o">+</span> <span class="t">NAME_HEIGHT</span>) <span class="o">+</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MARGIN">
+        <strong>MARGIN</strong> = <code><span class="n">20</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_BG_LINE_THICKNESS">
+        <strong>NAME_BG_LINE_THICKNESS</strong> = <code><span class="n">7</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_HEIGHT">
+        <strong>NAME_HEIGHT</strong> = <code><span class="t">NAME_TEXT_SIZE</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_RECT">
+        <strong>NAME_RECT</strong> = <code><span class="t">R</span><span class="t">::</span><span class="t">Rectangle</span>.new(x: <span class="t">NAME_X</span>, y: <span class="t">NAME_Y</span>, width: <span class="t">NAME_WIDTH</span>, height: <span class="t">NAME_HEIGHT</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_TEXT_SIZE">
+        <strong>NAME_TEXT_SIZE</strong> = <code><span class="n">60</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Name</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="NAME_WIDTH">
+        <strong>NAME_WIDTH</strong> = <code><span class="t">BG_WIDTH</span> <span class="o">*</span> <span class="n">0.75</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_X">
+        <strong>NAME_X</strong> = <code><span class="t">BG_X</span> <span class="o">+</span> (<span class="t">MARGIN</span> <span class="o">*</span> <span class="n">2</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NAME_Y">
+        <strong>NAME_Y</strong> = <code><span class="t">BG_Y</span> <span class="o">+</span> (<span class="t">MARGIN</span> <span class="o">*</span> <span class="n">2</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="SPACING">
+        <strong>SPACING</strong> = <code><span class="n">1.0</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="STATS_LINE_SPACING">
+        <strong>STATS_LINE_SPACING</strong> = <code><span class="t">MARGIN</span> <span class="o">/</span> <span class="n">2</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Stats</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="STATS_TEXT_SIZE">
+        <strong>STATS_TEXT_SIZE</strong> = <code>(<span class="t">NAME_TEXT_SIZE</span> <span class="o">-</span> <span class="t">STATS_LINE_SPACING</span>) <span class="o">/</span> <span class="n">3</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="STATS_X">
+        <strong>STATS_X</strong> = <code>(<span class="t">BG_X</span> <span class="o">+</span> <span class="t">BG_WIDTH</span>) <span class="o">-</span> <span class="t">MARGIN</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="STATS_Y">
+        <strong>STATS_Y</strong> = <code><span class="t">NAME_Y</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#draw-class-method" class="signature"><strong>.draw</strong></a>
+        
+          <div class="summary"><p>Draws an info box when id is valid</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id%3AUInt64%7CNil-class-method" class="signature"><strong>.id</strong> : UInt64 | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset-class-method" class="signature"><strong>.reset</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_id%28id%29-class-method" class="signature"><strong>.set_id</strong>(id)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#show%3F-class-method" class="signature"><strong>.show?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update-class-method" class="signature"><strong>.update</strong></a>
+        
+          <div class="summary"><p>When a component is right clicked, display a box.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="draw-class-method">
+      <div class="signature">
+        
+        def self.<strong>draw</strong>
+
+        <a class="method-permalink" href="#draw-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Draws an info box when id is valid</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L140" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id:UInt64|Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>id</strong> : UInt64 | Nil
+
+        <a class="method-permalink" href="#id%3AUInt64%7CNil-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset-class-method">
+      <div class="signature">
+        
+        def self.<strong>reset</strong>
+
+        <a class="method-permalink" href="#reset-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L447" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_id(id)-class-method">
+      <div class="signature">
+        
+        def self.<strong>set_id</strong>(id)
+
+        <a class="method-permalink" href="#set_id%28id%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L114" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="show?-class-method">
+      <div class="signature">
+        
+        def self.<strong>show?</strong>
+
+        <a class="method-permalink" href="#show%3F-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L454" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update-class-method">
+      <div class="signature">
+        
+        def self.<strong>update</strong>
+
+        <a class="method-permalink" href="#update-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>When a component is right clicked, display a box.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/sol-vin/wireland/blob/c7d93e236625725ec22a3cc9d4ff49e27be37277/src/app/info.cr#L472" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+</div>
+
+</body>
+</html>
